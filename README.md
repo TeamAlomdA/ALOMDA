@@ -1,10 +1,10 @@
 # <p align="center" > تنصيب سورس العمده
 # <p align="center" > ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 # <p align="center" > ⤈ ↫ كود التنصيب الاول مع المكاتب ↬ ⤈
-# <p align="center" > `git clone https://github.com/DevProxTEAM/ALOMDA.git;cd ALOMDA;chmod +x ALOMDA.sh;./ALOMDA.sh install`
+# <p align="center" > `git clone https://github.com/ALOMDATEAM/ALOMDA.git;cd ALOMDA;chmod +x ALOMDA.sh;./ALOMDA.sh install`
 # <p align="center" > ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 # <p align="center" > ⤈ ↫ كود التنصيب السريع من دون مكاتب ↬ ⤈
-# <p align="center" > `git clone https://github.com/DevProxTEAM/ALOMDA.git;cd ALOMDA;chmod +x ALOMDA.sh;./ALOMDA.sh`
+# <p align="center" > `git clone https://github.com/ALOMDATEAM/ALOMDA.git;cd ALOMDA;chmod +x ALOMDA.sh;./ALOMDA.sh`
 # <p align="center" > ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 # <p align="center" > قم بنسخ احدى اكواد التنصيب
 # <p align="center" > والصقه في الترمنال واضغط انتر
