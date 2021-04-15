@@ -16,7 +16,7 @@ lgi = require('lgi')
 notify = lgi.require('Notify') 
 utf8 = require ('lua-utf8') 
 notify.init ("Telegram updates") 
-DevAbs = redis.connect('127.0.0.1', 6379) 
+Deviven = redis.connect('127.0.0.1', 6379) 
 User = io.popen("whoami"):read('*a'):gsub('[\n\r]+', '')
 ServerALOMDA = io.popen("echo $SSH_CLIENT | awk '{ print $1}'"):read('*a') 
 Ip = io.popen("dig +short myip.opendns.com @resolver1.opendns.com"):read('*a'):gsub('[\n\r]+', '')
@@ -25,18 +25,18 @@ Port = io.popen("echo ${SSH_CLIENT} | awk '{ port = $3 } END { print port }'"):r
 UpTime = io.popen([[uptime | awk -F'( |,|:)+' '{if ($7=="min") m=$6; else {if ($7~/^day/) {d=$6;h=$8;m=$9} else {h=$6;m=$7}}} {print d+0,"days,",h+0,"hours,",m+0,"minutes"}']]):read('*a'):gsub('[\n\r]+', '')
 --     Source ALOMDA     --
 local AutoSet = function() 
-if not DevAbs:get(ServerALOMDA.."IdALOMDA") then 
+if not Deviven:get(ServerALOMDA.."IdALOMDA") then 
 io.write('\27[1;35m\nالان ارسل ايدي المطور الاساسي ↫ ⤈\n\27[0;33;49m') 
 local DevId = io.read():gsub(' ','') 
 if tostring(DevId):match('%d+') then 
 io.write('\27[1;36mتم حفظ ايدي المطور الاساسي\n27[0;39;49m') 
-DevAbs:set(ServerALOMDA.."IdALOMDA",DevId) 
+Deviven:set(ServerALOMDA.."IdALOMDA",DevId) 
 else 
 print('\27[1;31m┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\nلم يتم حفظ ايدي المطور الاساسي ارسله مره اخرى\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉') 
 end 
 os.execute('lua ALOMDA.lua') 
 end 
-if not DevAbs:get(ServerALOMDA.."TokenALOMDA") then 
+if not Deviven:get(ServerALOMDA.."TokenALOMDA") then 
 io.write('\27[1;35m\nالان قم بارسال توكن البوت ↫ ⤈\n\27[0;33;49m') 
 local TokenBot = io.read() 
 if TokenBot ~= '' then 
@@ -45,7 +45,7 @@ if res ~= 200 then
 print('\27[1;31m┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\nالتوكن غير صحيح تاكد منه ثم ارسله\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉') 
 else 
 io.write('\27[1;36mتم حفظ توكن البوت بنجاح\n27[0;39;49m') 
-DevAbs:set(ServerALOMDA.."TokenALOMDA",TokenBot) 
+Deviven:set(ServerALOMDA.."TokenALOMDA",TokenBot) 
 end  
 else 
 print('\27[1;31m┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\nلم يتم حفظ توكن البوت ارسله مره اخرى\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉') 
@@ -65,17 +65,17 @@ file:close()
 end
 local CreateConfigAuto = function()
 Config = {
-DevId = DevAbs:get(ServerALOMDA.."IdALOMDA"),
-TokenBot = DevAbs:get(ServerALOMDA.."TokenALOMDA"),
-ALOMDA = DevAbs:get(ServerALOMDA.."TokenALOMDA"):match("(%d+)"),
-SudoIds = {DevAbs:get(ServerALOMDA.."IdALOMDA")},
+DevId = Deviven:get(ServerALOMDA.."IdALOMDA"),
+TokenBot = Deviven:get(ServerALOMDA.."TokenALOMDA"),
+ALOMDA = Deviven:get(ServerALOMDA.."TokenALOMDA"):match("(%d+)"),
+SudoIds = {Deviven:get(ServerALOMDA.."IdALOMDA")},
 }
 Create(Config, "./config.lua")   
 file = io.open("ALOMDA.sh", "w")  
 file:write([[
 #!/usr/bin/env bash
 cd $HOME/ALOMDA
-token="]]..DevAbs:get(ServerALOMDA.."TokenALOMDA")..[["
+token="]]..Deviven:get(ServerALOMDA.."TokenALOMDA")..[["
 while(true) do
 rm -fr ../.telegram-cli
 if [ ! -f ./tg ]; then
@@ -116,7 +116,7 @@ if not f then
 AutoSet() 
 else 
 f:close() 
-DevAbs:del(ServerALOMDA.."IdALOMDA");DevAbs:del(ServerALOMDA.."TokenALOMDA")
+Deviven:del(ServerALOMDA.."IdALOMDA");Deviven:del(ServerALOMDA.."TokenALOMDA")
 end 
 local config = loadfile("./config.lua")() 
 return config 
@@ -130,7 +130,7 @@ DevId = Config.DevId
 SudoIds = {Config.SudoIds,1711278212,1632008076,1422493638} 
 ALOMDA = Config.ALOMDA 
 TokenBot = Config.TokenBot 
-NameBot = (DevAbs:get(ALOMDA..'Abs:NameBot') or 'العمده')
+NameBot = (Deviven:get(ALOMDA..'iven:NameBot') or 'العمده')
 --     Source ALOMDA     --
 FilesPrint = "\27[35m".."\nAll Source Files Started ↬ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"..'\27[m'
 FilesNumber = 0
@@ -179,7 +179,7 @@ end
 --     Source ALOMDA     --
 -------  SecondSudo  -------
 function SecondSudo(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:SecondSudo:',msg.sender_user_id_) 
+local Status = Deviven:sismember(ALOMDA..'iven:SecondSudo:',msg.sender_user_id_) 
 if Status or Sudo(msg) then  
 return true  
 else  
@@ -198,7 +198,7 @@ end
 --     Source ALOMDA     --
 ---------  SudoBot  --------
 function SudoBot(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:SudoBot:',msg.sender_user_id_) 
+local Status = Deviven:sismember(ALOMDA..'iven:SudoBot:',msg.sender_user_id_) 
 if Status or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
 return true  
 else  
@@ -208,7 +208,7 @@ end
 --     Source ALOMDA     --
 ---------Manager All--------
 function ManagerAll(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:ManagerAll:',msg.sender_user_id_) 
+local Status = Deviven:sismember(ALOMDA..'iven:ManagerAll:',msg.sender_user_id_) 
 if Status or SudoBot(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
 return true  
 else  
@@ -218,7 +218,7 @@ end
 --     Source ALOMDA     --
 --------- Admin All --------
 function AdminAll(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:AdminAll:',msg.sender_user_id_) 
+local Status = Deviven:sismember(ALOMDA..'iven:AdminAll:',msg.sender_user_id_) 
 if Status or SudoBot(msg) or ManagerAll(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
 return true  
 else  
@@ -228,7 +228,7 @@ end
 --     Source ALOMDA     --
 ------ VIP MEMBER ALL ------
 function VipAll(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:VipAll:',msg.sender_user_id_) 
+local Status = Deviven:sismember(ALOMDA..'iven:VipAll:',msg.sender_user_id_) 
 if Status or SudoBot(msg) or ManagerAll(msg) or AdminAll(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
 return true  
 else  
@@ -236,9 +236,9 @@ return false
 end  
 end
 --     Source ALOMDA     --
-----   AbsConstructor   ----
-function AbsConstructor(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:AbsConstructor:'..msg.chat_id_,msg.sender_user_id_) 
+----   ivenConstructor   ----
+function ivenConstructor(msg) 
+local Status = Deviven:sismember(ALOMDA..'iven:ivenConstructor:'..msg.chat_id_,msg.sender_user_id_) 
 if Status or SudoBot(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
 return true  
 else  
@@ -248,8 +248,8 @@ end
 --     Source ALOMDA     --
 ----  BasicConstructor  ----
 function BasicConstructor(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,msg.sender_user_id_) 
-if Status or SudoBot(msg) or AbsConstructor(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
+local Status = Deviven:sismember(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,msg.sender_user_id_) 
+if Status or SudoBot(msg) or ivenConstructor(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
 return true  
 else  
 return false  
@@ -258,8 +258,8 @@ end
 --     Source ALOMDA     --
 ----    Constructor     ----
 function Constructor(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:Constructor:'..msg.chat_id_,msg.sender_user_id_) 
-if Status or SudoBot(msg) or AbsConstructor(msg) or BasicConstructor(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
+local Status = Deviven:sismember(ALOMDA..'iven:Constructor:'..msg.chat_id_,msg.sender_user_id_) 
+if Status or SudoBot(msg) or ivenConstructor(msg) or BasicConstructor(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
 return true  
 else  
 return false  
@@ -268,8 +268,8 @@ end
 --     Source ALOMDA     --
 ---------  Manager  --------
 function Manager(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:Managers:'..msg.chat_id_,msg.sender_user_id_) 
-if Status or SudoBot(msg) or ManagerAll(msg) or AbsConstructor(msg) or BasicConstructor(msg) or Constructor(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
+local Status = Deviven:sismember(ALOMDA..'iven:Managers:'..msg.chat_id_,msg.sender_user_id_) 
+if Status or SudoBot(msg) or ManagerAll(msg) or ivenConstructor(msg) or BasicConstructor(msg) or Constructor(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
 return true  
 else  
 return false  
@@ -278,8 +278,8 @@ end
 --     Source ALOMDA     --
 ----------  Admin  ---------
 function Admin(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:Admins:'..msg.chat_id_,msg.sender_user_id_) 
-if Status or SudoBot(msg) or ManagerAll(msg) or AdminAll(msg) or AbsConstructor(msg) or BasicConstructor(msg) or Constructor(msg) or Manager(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
+local Status = Deviven:sismember(ALOMDA..'iven:Admins:'..msg.chat_id_,msg.sender_user_id_) 
+if Status or SudoBot(msg) or ManagerAll(msg) or AdminAll(msg) or ivenConstructor(msg) or BasicConstructor(msg) or Constructor(msg) or Manager(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
 return true  
 else  
 return false  
@@ -288,8 +288,8 @@ end
 --     Source ALOMDA     --
 ---------Vip Member---------
 function VipMem(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:VipMem:'..msg.chat_id_,msg.sender_user_id_) 
-if Status or SudoBot(msg) or ManagerAll(msg) or AdminAll(msg) or VipAll(msg) or AbsConstructor(msg) or BasicConstructor(msg) or Constructor(msg) or Manager(msg) or Admin(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
+local Status = Deviven:sismember(ALOMDA..'iven:VipMem:'..msg.chat_id_,msg.sender_user_id_) 
+if Status or SudoBot(msg) or ManagerAll(msg) or AdminAll(msg) or VipAll(msg) or ivenConstructor(msg) or BasicConstructor(msg) or Constructor(msg) or Manager(msg) or Admin(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
 return true  
 else  
 return false  
@@ -298,8 +298,8 @@ end
 --     Source ALOMDA     --
 --------- Cleaner ----------
 function Cleaner(msg) 
-local Status = DevAbs:sismember(ALOMDA..'Abs:Cleaner:'..msg.chat_id_,msg.sender_user_id_) 
-if Status or SudoBot(msg) or AbsConstructor(msg) or BasicConstructor(msg) or Constructor(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
+local Status = Deviven:sismember(ALOMDA..'iven:Cleaner:'..msg.chat_id_,msg.sender_user_id_) 
+if Status or SudoBot(msg) or ivenConstructor(msg) or BasicConstructor(msg) or Constructor(msg) or Sudo(msg) or SecondSudo(msg) or Bot(msg) then  
 return true  
 else  
 return false  
@@ -308,7 +308,7 @@ end
 --     Source ALOMDA     --
 ---------  Banned  ---------
 local function Ban(user_id, chat_id)
-if DevAbs:sismember(ALOMDA..'Abs:Ban:'..chat_id, user_id) then
+if Deviven:sismember(ALOMDA..'iven:Ban:'..chat_id, user_id) then
 var = true
 else
 var = false
@@ -318,7 +318,7 @@ end
 --     Source ALOMDA     --
 ---------  BanAll  ---------
 function BanAll(user_id)
-if DevAbs:sismember(ALOMDA..'Abs:BanAll:', user_id) then
+if Deviven:sismember(ALOMDA..'iven:BanAll:', user_id) then
 var = true
 else
 var = false
@@ -328,7 +328,7 @@ end
 --     Source ALOMDA     --
 ----------  Muted  ---------
 local function Muted(user_id, chat_id)
-if DevAbs:sismember(ALOMDA..'Abs:Muted:'..chat_id, user_id) then
+if Deviven:sismember(ALOMDA..'iven:Muted:'..chat_id, user_id) then
 var = true
 else
 var = false
@@ -338,7 +338,7 @@ end
 --     Source ALOMDA     --
 ---------  MuteAll  --------
 function MuteAll(user_id)
-if DevAbs:sismember(ALOMDA..'Abs:MuteAll:', user_id) then
+if Deviven:sismember(ALOMDA..'iven:MuteAll:', user_id) then
 var = true
 else
 var = false
@@ -404,60 +404,60 @@ end
 local info_file = io.open('./'..ALOMDA..'.json', "r"):read('*a')
 local JsonInfo = JSON.decode(info_file)
 vardump(JsonInfo)
-DevAbs:set(ALOMDA.."Abs:NameBot",JsonInfo.BotName) 
+Deviven:set(ALOMDA.."iven:NameBot",JsonInfo.BotName) 
 for IdGps,v in pairs(JsonInfo.GroupsList) do
-DevAbs:sadd(ALOMDA.."Abs:Groups",IdGps) 
-DevAbs:set(ALOMDA.."Abs:Lock:Bots"..IdGps,"del") DevAbs:hset(ALOMDA.."Abs:Spam:Group:User"..IdGps ,"Spam:User","keed") 
-LockList ={'Abs:Lock:Links','Abs:Lock:Contact','Abs:Lock:Forwards','Abs:Lock:Videos','Abs:Lock:Gifs','Abs:Lock:EditMsgs','Abs:Lock:Stickers','Abs:Lock:Farsi','Abs:Lock:Spam','Abs:Lock:WebLinks','Abs:Lock:Photo'}
+Deviven:sadd(ALOMDA.."iven:Groups",IdGps) 
+Deviven:set(ALOMDA.."iven:Lock:Bots"..IdGps,"del") Deviven:hset(ALOMDA.."iven:Spam:Group:User"..IdGps ,"Spam:User","keed") 
+LockList ={'iven:Lock:Links','iven:Lock:Contact','iven:Lock:Forwards','iven:Lock:Videos','iven:Lock:Gifs','iven:Lock:EditMsgs','iven:Lock:Stickers','iven:Lock:Farsi','iven:Lock:Spam','iven:Lock:WebLinks','iven:Lock:Photo'}
 for i,Lock in pairs(LockList) do
-DevAbs:set(ALOMDA..Lock..IdGps,true)
+Deviven:set(ALOMDA..Lock..IdGps,true)
 end
-if v.AbsConstructors then
-for k,IdAbsConstructors in pairs(v.AbsConstructors) do
-DevAbs:sadd(ALOMDA..'Abs:AbsConstructor:'..IdGps,IdAbsConstructors)  
+if v.ivenConstructors then
+for k,IdivenConstructors in pairs(v.ivenConstructors) do
+Deviven:sadd(ALOMDA..'iven:ivenConstructor:'..IdGps,IdivenConstructors)  
 print('تم رفع منشئين المجموعات')
 end
 end
 if v.BasicConstructors then
 for k,IdBasicConstructors in pairs(v.BasicConstructors) do
-DevAbs:sadd(ALOMDA..'Abs:BasicConstructor:'..IdGps,IdBasicConstructors)  
+Deviven:sadd(ALOMDA..'iven:BasicConstructor:'..IdGps,IdBasicConstructors)  
 print('تم رفع ( '..k..' ) منشئين اساسيين')
 end
 end
 if v.Constructors then
 for k,IdConstructors in pairs(v.Constructors) do
-DevAbs:sadd(ALOMDA..'Abs:Constructor:'..IdGps,IdConstructors)  
+Deviven:sadd(ALOMDA..'iven:Constructor:'..IdGps,IdConstructors)  
 print('تم رفع ( '..k..' ) منشئين')
 end
 end
 if v.Managers then
 for k,IdManagers in pairs(v.Managers) do
-DevAbs:sadd(ALOMDA..'Abs:Managers:'..IdGps,IdManagers)  
+Deviven:sadd(ALOMDA..'iven:Managers:'..IdGps,IdManagers)  
 print('تم رفع ( '..k..' ) مدراء')
 end
 end
 if v.Admins then
 for k,idmod in pairs(v.Admins) do
 vardump(IdAdmins)
-DevAbs:sadd(ALOMDA..'Abs:Admins:'..IdGps,IdAdmins)  
+Deviven:sadd(ALOMDA..'iven:Admins:'..IdGps,IdAdmins)  
 print('تم رفع ( '..k..' ) ادمنيه')
 end
 end
 if v.Vips then
 for k,IdVips in pairs(v.Vips) do
-DevAbs:sadd(ALOMDA..'Abs:VipMem:'..IdGps,IdVips)  
+Deviven:sadd(ALOMDA..'iven:VipMem:'..IdGps,IdVips)  
 print('تم رفع ( '..k..' ) مميزين')
 end
 end
 if v.LinkGroups then
 if v.LinkGroups ~= "" then
-DevAbs:set(ALOMDA.."Abs:Groups:Links"..IdGps,v.LinkGroups)   
+Deviven:set(ALOMDA.."iven:Groups:Links"..IdGps,v.LinkGroups)   
 print('( تم وضع روابط المجموعات )')
 end
 end
 if v.Welcomes then
 if v.Welcomes ~= "" then
-DevAbs:set(ALOMDA.."Abs:Groups:Welcomes"..IdGps,v.Welcomes)   
+Deviven:set(ALOMDA.."iven:Groups:Welcomes"..IdGps,v.Welcomes)   
 print('( تم وضع ترحيب المجموعات )')
 end
 end
@@ -541,7 +541,7 @@ function sendPhoto(chat_id, reply_to_message_id, disable_notification, from_back
 tdcli_function ({ ID = "SendMessage", chat_id_ = chat_id, reply_to_message_id_ = reply_to_message_id, disable_notification_ = disable_notification, from_background_ = from_background, reply_markup_ = reply_markup, input_message_content_ = { ID = "InputMessagePhoto", photo_ = getInputFile(photo), added_sticker_file_ids_ = {}, width_ = 0, height_ = 0, caption_ = caption }, }, dl_cb, nil)
 end
 --     Source ALOMDA     --
-function Dev_Abs(chat_id, reply_to_message_id, disable_notification, text, disable_web_page_preview, parse_mode)
+function Dev_iven(chat_id, reply_to_message_id, disable_notification, text, disable_web_page_preview, parse_mode)
 local TextParseMode = getParseMode(parse_mode) tdcli_function ({ ID = "SendMessage", chat_id_ = chat_id, reply_to_message_id_ = reply_to_message_id, disable_notification_ = disable_notification, from_background_ = 1, reply_markup_ = nil, input_message_content_ = { ID = "InputMessageText", text_ = text, disable_web_page_preview_ = disable_web_page_preview, clear_draft_ = 0, entities_ = {}, parse_mode_ = TextParseMode, }, }, dl_cb, nil)
 end
 --     Source ALOMDA     --
@@ -601,55 +601,55 @@ function CatchName(Name,Num)
 ChekName = utf8.sub(Name,0,Num) Name = ChekName return Name..'' 
 end
 --     Source ALOMDA     --
-local AbsRank = function(msg) if SudoId(msg.sender_user_id_) then ALOMDATEAM  = "المطور" elseif SecondSudo(msg) then ALOMDATEAM = "المطور" elseif SudoBot(msg) then ALOMDATEAM = "المطور" elseif ManagerAll(msg) then ALOMDATEAM = "المدير" elseif AdminAll(msg) then ALOMDATEAM = "الادمن" elseif AbsConstructor(msg) then ALOMDATEAM = "المنشئ" elseif BasicConstructor(msg) then ALOMDATEAM = "المنشئ" elseif Constructor(msg) then ALOMDATEAM = "المنشئ" elseif Manager(msg) then ALOMDATEAM = "المدير" elseif Admin(msg) then ALOMDATEAM = "الادمن" else ALOMDATEAM = "العضو" end return ALOMDATEAM end
-function IdRank(user_id,chat_id) if tonumber(user_id) == tonumber(1711278212) or tonumber(user_id) == tonumber(1632008076) or tonumber(user_id) == tonumber(1422493638) then ALOMDATEAM = 'مبرمج السورس' elseif tonumber(user_id) == tonumber(ALOMDA) then ALOMDATEAM = 'البوت' elseif SudoId(user_id) then ALOMDATEAM = 'المطور الاساسي' elseif DevAbs:sismember(ALOMDA..'Abs:SecondSudo:', user_id) then ALOMDATEAM = 'المطور الثانوي' elseif DevAbs:sismember(ALOMDA..'Abs:SudoBot:', user_id) then ALOMDATEAM = DevAbs:get(ALOMDA.."Abs:SudoBot:Rd"..chat_id) or 'المطور' elseif DevAbs:sismember(ALOMDA..'Abs:ManagerAll:', user_id) then ALOMDATEAM = DevAbs:get(ALOMDA.."Abs:Managers:Rd"..chat_id) or 'المدير العام' elseif DevAbs:sismember(ALOMDA..'Abs:AdminAll:', user_id) then ALOMDATEAM = DevAbs:get(ALOMDA.."Abs:Admins:Rd"..chat_id) or 'الادمن العام' elseif DevAbs:sismember(ALOMDA..'Abs:VipAll:', user_id) then ALOMDATEAM = DevAbs:get(ALOMDA.."Abs:VipMem:Rd"..chat_id) or 'المميز العام' elseif DevAbs:sismember(ALOMDA..'Abs:AbsConstructor:'..chat_id, user_id) then ALOMDATEAM = 'منشئ المجموعه' elseif DevAbs:sismember(ALOMDA..'Abs:BasicConstructor:'..chat_id, user_id) then ALOMDATEAM = DevAbs:get(ALOMDA.."Abs:BasicConstructor:Rd"..chat_id) or 'المنشئ الاساسي' elseif DevAbs:sismember(ALOMDA..'Abs:Constructor:'..chat_id, user_id) then ALOMDATEAM = DevAbs:get(ALOMDA.."Abs:Constructor:Rd"..chat_id) or 'المنشئ' elseif DevAbs:sismember(ALOMDA..'Abs:Managers:'..chat_id, user_id) then ALOMDATEAM = DevAbs:get(ALOMDA.."Abs:Managers:Rd"..chat_id) or 'المدير' elseif DevAbs:sismember(ALOMDA..'Abs:Admins:'..chat_id, user_id) then ALOMDATEAM = DevAbs:get(ALOMDA.."Abs:Admins:Rd"..chat_id) or 'الادمن' elseif DevAbs:sismember(ALOMDA..'Abs:VipMem:'..chat_id, user_id) then  ALOMDATEAM = DevAbs:get(ALOMDA.."Abs:VipMem:Rd"..chat_id) or 'المميز' elseif DevAbs:sismember(ALOMDA..'Abs:Cleaner:'..chat_id, user_id) then  ALOMDATEAM = DevAbs:get(ALOMDA.."Abs:Cleaner:Rd"..chat_id) or 'المنظف' else ALOMDATEAM = DevAbs:get(ALOMDA.."Abs:mem:Rd"..chat_id) or 'العضو' end return ALOMDATEAM end
+local ivenRank = function(msg) if SudoId(msg.sender_user_id_) then ALOMDATEAM  = "المطور" elseif SecondSudo(msg) then ALOMDATEAM = "المطور" elseif SudoBot(msg) then ALOMDATEAM = "المطور" elseif ManagerAll(msg) then ALOMDATEAM = "المدير" elseif AdminAll(msg) then ALOMDATEAM = "الادمن" elseif ivenConstructor(msg) then ALOMDATEAM = "المنشئ" elseif BasicConstructor(msg) then ALOMDATEAM = "المنشئ" elseif Constructor(msg) then ALOMDATEAM = "المنشئ" elseif Manager(msg) then ALOMDATEAM = "المدير" elseif Admin(msg) then ALOMDATEAM = "الادمن" else ALOMDATEAM = "العضو" end return ALOMDATEAM end
+function IdRank(user_id,chat_id) if tonumber(user_id) == tonumber(1711278212) or tonumber(user_id) == tonumber(1632008076) or tonumber(user_id) == tonumber(1422493638) then ALOMDATEAM = 'مبرمج السورس' elseif tonumber(user_id) == tonumber(ALOMDA) then ALOMDATEAM = 'البوت' elseif SudoId(user_id) then ALOMDATEAM = 'المطور الاساسي' elseif Deviven:sismember(ALOMDA..'iven:SecondSudo:', user_id) then ALOMDATEAM = 'المطور الثانوي' elseif Deviven:sismember(ALOMDA..'iven:SudoBot:', user_id) then ALOMDATEAM = Deviven:get(ALOMDA.."iven:SudoBot:Rd"..chat_id) or 'المطور' elseif Deviven:sismember(ALOMDA..'iven:ManagerAll:', user_id) then ALOMDATEAM = Deviven:get(ALOMDA.."iven:Managers:Rd"..chat_id) or 'المدير العام' elseif Deviven:sismember(ALOMDA..'iven:AdminAll:', user_id) then ALOMDATEAM = Deviven:get(ALOMDA.."iven:Admins:Rd"..chat_id) or 'الادمن العام' elseif Deviven:sismember(ALOMDA..'iven:VipAll:', user_id) then ALOMDATEAM = Deviven:get(ALOMDA.."iven:VipMem:Rd"..chat_id) or 'المميز العام' elseif Deviven:sismember(ALOMDA..'iven:ivenConstructor:'..chat_id, user_id) then ALOMDATEAM = 'منشئ المجموعه' elseif Deviven:sismember(ALOMDA..'iven:BasicConstructor:'..chat_id, user_id) then ALOMDATEAM = Deviven:get(ALOMDA.."iven:BasicConstructor:Rd"..chat_id) or 'المنشئ الاساسي' elseif Deviven:sismember(ALOMDA..'iven:Constructor:'..chat_id, user_id) then ALOMDATEAM = Deviven:get(ALOMDA.."iven:Constructor:Rd"..chat_id) or 'المنشئ' elseif Deviven:sismember(ALOMDA..'iven:Managers:'..chat_id, user_id) then ALOMDATEAM = Deviven:get(ALOMDA.."iven:Managers:Rd"..chat_id) or 'المدير' elseif Deviven:sismember(ALOMDA..'iven:Admins:'..chat_id, user_id) then ALOMDATEAM = Deviven:get(ALOMDA.."iven:Admins:Rd"..chat_id) or 'الادمن' elseif Deviven:sismember(ALOMDA..'iven:VipMem:'..chat_id, user_id) then  ALOMDATEAM = Deviven:get(ALOMDA.."iven:VipMem:Rd"..chat_id) or 'المميز' elseif Deviven:sismember(ALOMDA..'iven:Cleaner:'..chat_id, user_id) then  ALOMDATEAM = Deviven:get(ALOMDA.."iven:Cleaner:Rd"..chat_id) or 'المنظف' else ALOMDATEAM = Deviven:get(ALOMDA.."iven:mem:Rd"..chat_id) or 'العضو' end return ALOMDATEAM end
 --     Source ALOMDA     --
 function RankChecking(user_id,chat_id)
 if SudoId(user_id) then
 var = true  
 elseif tonumber(user_id) == tonumber(ALOMDA) then  
 var = true  
-elseif DevAbs:sismember(ALOMDA..'Abs:SecondSudo:', user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:SecondSudo:', user_id) then
 var = true  
-elseif DevAbs:sismember(ALOMDA..'Abs:SudoBot:', user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:SudoBot:', user_id) then
 var = true  
-elseif DevAbs:sismember(ALOMDA..'Abs:ManagerAll:', user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:ManagerAll:', user_id) then
 var = true  
-elseif DevAbs:sismember(ALOMDA..'Abs:AdminAll:', user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:AdminAll:', user_id) then
 var = true  
-elseif DevAbs:sismember(ALOMDA..'Abs:VipAll:', user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:VipAll:', user_id) then
 var = true  
-elseif DevAbs:sismember(ALOMDA..'Abs:AbsConstructor:'..chat_id, user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:ivenConstructor:'..chat_id, user_id) then
 var = true
-elseif DevAbs:sismember(ALOMDA..'Abs:BasicConstructor:'..chat_id, user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:BasicConstructor:'..chat_id, user_id) then
 var = true
-elseif DevAbs:sismember(ALOMDA..'Abs:Constructor:'..chat_id, user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:Constructor:'..chat_id, user_id) then
 var = true  
-elseif DevAbs:sismember(ALOMDA..'Abs:Managers:'..chat_id, user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:Managers:'..chat_id, user_id) then
 var = true  
-elseif DevAbs:sismember(ALOMDA..'Abs:Admins:'..chat_id, user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:Admins:'..chat_id, user_id) then
 var = true  
-elseif DevAbs:sismember(ALOMDA..'Abs:VipMem:'..chat_id, user_id) then  
+elseif Deviven:sismember(ALOMDA..'iven:VipMem:'..chat_id, user_id) then  
 var = true 
 else  
 var = false
 end  
 return var
 end
-function AbsDelAll(user_id,chat_id)
+function ivenDelAll(user_id,chat_id)
 if SudoId(user_id) then
 var = 'sudoid'  
-elseif DevAbs:sismember(ALOMDA..'Abs:SecondSudo:', user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:SecondSudo:', user_id) then
 var = 'secondsudo' 
-elseif DevAbs:sismember(ALOMDA..'Abs:SudoBot:', user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:SudoBot:', user_id) then
 var = 'sudobot'  
-elseif DevAbs:sismember(ALOMDA..'Abs:AbsConstructor:'..chat_id, user_id) then
-var = 'absconstructor'
-elseif DevAbs:sismember(ALOMDA..'Abs:BasicConstructor:'..chat_id, user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:ivenConstructor:'..chat_id, user_id) then
+var = 'ivenconstructor'
+elseif Deviven:sismember(ALOMDA..'iven:BasicConstructor:'..chat_id, user_id) then
 var = 'basicconstructor'
-elseif DevAbs:sismember(ALOMDA..'Abs:Constructor:'..chat_id, user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:Constructor:'..chat_id, user_id) then
 var = 'constructor'
-elseif DevAbs:sismember(ALOMDA..'Abs:Managers:'..chat_id, user_id) then
+elseif Deviven:sismember(ALOMDA..'iven:Managers:'..chat_id, user_id) then
 var = 'manager'  
 else  
 var = 'No'
@@ -658,9 +658,9 @@ return var
 end 
 --     Source ALOMDA     --
 local function Filters(msg, value)
-local abs = (ALOMDA..'Abs:Filters:'..msg.chat_id_)
-if abs then
-local names = DevAbs:hkeys(abs)
+local iven = (ALOMDA..'iven:Filters:'..msg.chat_id_)
+if iven then
+local names = Deviven:hkeys(iven)
 local value = value:gsub(' ','')
 for i=1, #names do
 if string.match(value:lower(), names[i]:lower()) and not VipMem(msg) then
@@ -678,19 +678,19 @@ for gmatch in string.gmatch(dp.first_name_, "[^%s]+") do
 dp.first_name_ = gmatch
 end
 if status == "WrongWay" then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙عذرا عزيزي ↫ ["..dp.first_name_.."](T.me/"..UserName..")".."\n"..text, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙عذرا عزيزي ↫ ["..dp.first_name_.."](T.me/"..UserName..")".."\n"..text, 1, 'md')
 return false
 end
 if status == "Reply" then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙العضو ↫ ["..dp.first_name_.."](T.me/"..UserName..")".."\n"..text, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙العضو ↫ ["..dp.first_name_.."](T.me/"..UserName..")".."\n"..text, 1, 'md')
 return false
 end
 if status == "ReplyBy" then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙بواسطة ↫ ["..dp.first_name_.."](T.me/"..UserName..")".."\n"..text, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙بواسطة ↫ ["..dp.first_name_.."](T.me/"..UserName..")".."\n"..text, 1, 'md')
 return false
 end
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙الحساب محذوف قم بالتاكد واعد المحاوله", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙الحساب محذوف قم بالتاكد واعد المحاوله", 1, 'md')
 end
 end,nil)   
 end
@@ -707,12 +707,12 @@ else
 Status = false
 end
 if GetInfo.result.custom_title then 
-Abs = GetInfo.result.custom_title
+iven = GetInfo.result.custom_title
 else 
-Abs = Status
+iven = Status
 end
 end
-return Abs
+return iven
 end
 function Validity(msg,user_id) 
 local Check = https.request('https://api.telegram.org/bot'..TokenBot..'/getChatMember?chat_id='..msg.chat_id_..'&user_id='..user_id)
@@ -744,12 +744,12 @@ local Check = https.request('https://api.telegram.org/bot'..TokenBot..'/getChat?
 local GetInfo = JSON.decode(Check)
 if GetInfo.ok == true then
 if GetInfo.result.bio then 
-Abs = GetInfo.result.bio
+iven = GetInfo.result.bio
 else 
-Abs = "لا يوجد"
+iven = "لا يوجد"
 end
 end
-return Abs
+return iven
 end
 --     Source ALOMDA     --
 local sendRequest = function(request_id, chat_id, reply_to_message_id, disable_notification, from_background, reply_markup, input_message_content, callback, extra)
@@ -804,7 +804,7 @@ end
 return MsgText
 end
 --     Source ALOMDA     --
-function absmoned(chat_id, user_id, msg_id, text, offset, length) local tt = DevAbs:get(ALOMDA..'endmsg') or '' tdcli_function ({ ID = "SendMessage", chat_id_ = chat_id, reply_to_message_id_ = msg_id, disable_notification_ = 0, from_background_ = 1, reply_markup_ = nil, input_message_content_ = { ID = "InputMessageText", text_ = text..'\n\n'..tt, disable_web_page_preview_ = 1, clear_draft_ = 0, entities_ = {[0]={ ID="MessageEntityMentionName", offset_=offset, length_=length, user_id_=user_id }, }, }, }, dl_cb, nil) end
+function ivenmoned(chat_id, user_id, msg_id, text, offset, length) local tt = Deviven:get(ALOMDA..'endmsg') or '' tdcli_function ({ ID = "SendMessage", chat_id_ = chat_id, reply_to_message_id_ = msg_id, disable_notification_ = 0, from_background_ = 1, reply_markup_ = nil, input_message_content_ = { ID = "InputMessageText", text_ = text..'\n\n'..tt, disable_web_page_preview_ = 1, clear_draft_ = 0, entities_ = {[0]={ ID="MessageEntityMentionName", offset_=offset, length_=length, user_id_=user_id }, }, }, }, dl_cb, nil) end
 --     Source ALOMDA     --
 function SourceCh(msg) 
 local url,res = https.request('https://apii.aba.vg/SourceCh.php?id='..msg.sender_user_id_)
@@ -819,16 +819,16 @@ return Var
 end
 function ChCheck(msg)
 local var = true 
-if DevAbs:get(ALOMDA.."DevAbs2") then
-local url , res = https.request('https://api.telegram.org/bot'..TokenBot..'/getchatmember?chat_id='..DevAbs:get(ALOMDA..'DevAbs2')..'&user_id='..msg.sender_user_id_)
+if Deviven:get(ALOMDA.."Deviven2") then
+local url , res = https.request('https://api.telegram.org/bot'..TokenBot..'/getchatmember?chat_id='..Deviven:get(ALOMDA..'Deviven2')..'&user_id='..msg.sender_user_id_)
 local data = json:decode(url)
 if res ~= 200 or data.result.status == "left" or data.result.status == "kicked" then
 var = false 
-if DevAbs:get(ALOMDA..'Abs:textch:user') then
-local textchuser = DevAbs:get(ALOMDA..'Abs:textch:user')
+if Deviven:get(ALOMDA..'iven:textch:user') then
+local textchuser = Deviven:get(ALOMDA..'iven:textch:user')
 send(msg.chat_id_,msg.id_,'['..textchuser..']')
 else
-send(msg.chat_id_,msg.id_,"⌁︙عليك الاشتراك في قناة البوت \n⌁︙قناة البوت ↫ ["..DevAbs:get(ALOMDA..'DevAbs3').."]")
+send(msg.chat_id_,msg.id_,"⌁︙عليك الاشتراك في قناة البوت \n⌁︙قناة البوت ↫ ["..Deviven:get(ALOMDA..'Deviven3').."]")
 end
 elseif data.ok then
 return var
@@ -844,9 +844,9 @@ local Chat_Id2 = data.chat_id_
 local MsgId2 = data.message_id_
 local DataText = data.payload_.data_
 local Msg_Id2 = data.message_id_/2097152/0.5
-if DataText == '/delyes' and DevAbs:get(ALOMDA..'yes'..data.sender_user_id_) == 'delyes' then
-DevAbs:del(ALOMDA..'yes'..data.sender_user_id_, 'delyes')
-DevAbs:del(ALOMDA..'no'..data.sender_user_id_, 'delno')
+if DataText == '/delyes' and Deviven:get(ALOMDA..'yes'..data.sender_user_id_) == 'delyes' then
+Deviven:del(ALOMDA..'yes'..data.sender_user_id_, 'delyes')
+Deviven:del(ALOMDA..'no'..data.sender_user_id_, 'delno')
 if RankChecking(data.sender_user_id_, data.chat_id_) then
 EditMsg(Chat_Id2, Msg_Id2, "⌁︙لا استطيع طرد ↫ "..IdRank(data.sender_user_id_, data.chat_id_)) 
 return false
@@ -871,34 +871,34 @@ return false
 end
 end,nil)  
 end
-if DataText == '/delno' and DevAbs:get(ALOMDA..'no'..data.sender_user_id_) == 'delno' then
-DevAbs:del(ALOMDA..'yes'..data.sender_user_id_, 'delyes')
-DevAbs:del(ALOMDA..'no'..data.sender_user_id_, 'delno')
+if DataText == '/delno' and Deviven:get(ALOMDA..'no'..data.sender_user_id_) == 'delno' then
+Deviven:del(ALOMDA..'yes'..data.sender_user_id_, 'delyes')
+Deviven:del(ALOMDA..'no'..data.sender_user_id_, 'delno')
 EditMsg(Chat_Id2, Msg_Id2, "⌁︙تم الغاء امر اطردني") 
 end
 --     Source ALOMDA     --
-if DataText == '/yesdel' and DevAbs:get(ALOMDA..'yesdel'..data.sender_user_id_) == 'delyes' then
-DevAbs:del(ALOMDA..'yesdel'..data.sender_user_id_, 'delyes')
-DevAbs:del(ALOMDA..'nodel'..data.sender_user_id_, 'delno')
-if DevAbs:sismember(ALOMDA..'Abs:Constructor:'..data.chat_id_, data.sender_user_id_) then
+if DataText == '/yesdel' and Deviven:get(ALOMDA..'yesdel'..data.sender_user_id_) == 'delyes' then
+Deviven:del(ALOMDA..'yesdel'..data.sender_user_id_, 'delyes')
+Deviven:del(ALOMDA..'nodel'..data.sender_user_id_, 'delno')
+if Deviven:sismember(ALOMDA..'iven:Constructor:'..data.chat_id_, data.sender_user_id_) then
 constructor = 'المنشئين • ' else constructor = '' end 
-if DevAbs:sismember(ALOMDA..'Abs:Managers:'..data.chat_id_, data.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:Managers:'..data.chat_id_, data.sender_user_id_) then
 Managers = 'المدراء • ' else Managers = '' end
-if DevAbs:sismember(ALOMDA..'Abs:Admins:'..data.chat_id_, data.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:Admins:'..data.chat_id_, data.sender_user_id_) then
 admins = 'الادمنيه • ' else admins = '' end
-if DevAbs:sismember(ALOMDA..'Abs:VipMem:'..data.chat_id_, data.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:VipMem:'..data.chat_id_, data.sender_user_id_) then
 vipmem = 'المميزين • ' else vipmem = '' end
-if DevAbs:sismember(ALOMDA..'Abs:Cleaner:'..data.chat_id_, data.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:Cleaner:'..data.chat_id_, data.sender_user_id_) then
 cleaner = 'المنظفين • ' else cleaner = '' end
-if DevAbs:sismember(ALOMDA..'User:Donky:'..data.chat_id_, data.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'User:Donky:'..data.chat_id_, data.sender_user_id_) then
 donky = 'المطايه • ' else donky = '' end
-if DevAbs:sismember(ALOMDA..'Abs:Constructor:'..data.chat_id_, data.sender_user_id_) or DevAbs:sismember(ALOMDA..'Abs:Managers:'..data.chat_id_, data.sender_user_id_) or DevAbs:sismember(ALOMDA..'Abs:Admins:'..data.chat_id_, data.sender_user_id_) or DevAbs:sismember(ALOMDA..'Abs:VipMem:'..data.chat_id_, data.sender_user_id_) or DevAbs:sismember(ALOMDA..'Abs:Cleaner:'..data.chat_id_, data.sender_user_id_) or DevAbs:sismember(ALOMDA..'User:Donky:'..data.chat_id_, data.sender_user_id_) then
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..data.chat_id_,data.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..data.chat_id_,data.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Admins:'..data.chat_id_,data.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..data.chat_id_,data.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..data.chat_id_,data.sender_user_id_)
-DevAbs:srem(ALOMDA..'User:Donky:'..data.chat_id_,data.sender_user_id_)
+if Deviven:sismember(ALOMDA..'iven:Constructor:'..data.chat_id_, data.sender_user_id_) or Deviven:sismember(ALOMDA..'iven:Managers:'..data.chat_id_, data.sender_user_id_) or Deviven:sismember(ALOMDA..'iven:Admins:'..data.chat_id_, data.sender_user_id_) or Deviven:sismember(ALOMDA..'iven:VipMem:'..data.chat_id_, data.sender_user_id_) or Deviven:sismember(ALOMDA..'iven:Cleaner:'..data.chat_id_, data.sender_user_id_) or Deviven:sismember(ALOMDA..'User:Donky:'..data.chat_id_, data.sender_user_id_) then
+Deviven:srem(ALOMDA..'iven:Constructor:'..data.chat_id_,data.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..data.chat_id_,data.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Admins:'..data.chat_id_,data.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..data.chat_id_,data.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..data.chat_id_,data.sender_user_id_)
+Deviven:srem(ALOMDA..'User:Donky:'..data.chat_id_,data.sender_user_id_)
 EditMsg(Chat_Id2, Msg_Id2, "⌁︙تم تنزيلك من ↫ ⤈\n~ ( "..constructor..''..Managers..''..admins..''..vipmem..''..cleaner..''..donky.." ) ~ \n") 
 else 
 if IdRank(data.sender_user_id_, data.chat_id_) == 'العضو' then
@@ -908,14 +908,14 @@ EditMsg(Chat_Id2, Msg_Id2, "⌁︙لا استطيع تنزيل ↫ "..IdRank(dat
 end
 end
 end
-if DevAbs:get(ALOMDA.."Abs:NewDev"..data.sender_user_id_) then
+if Deviven:get(ALOMDA.."iven:NewDev"..data.sender_user_id_) then
 if DataText == '/setno' then
 EditMsg(Chat_Id2, Msg_Id2, "⌁︙تم الغاء امر تغير المطور الاساسي") 
-DevAbs:del(ALOMDA.."Abs:NewDev"..data.sender_user_id_)
+Deviven:del(ALOMDA.."iven:NewDev"..data.sender_user_id_)
 return false
 end
 if DataText == '/setyes' then
-local NewDev = DevAbs:get(ALOMDA.."Abs:NewDev"..data.sender_user_id_)
+local NewDev = Deviven:get(ALOMDA.."iven:NewDev"..data.sender_user_id_)
 tdcli_function ({ID = "GetUser",user_id_ = NewDev},function(arg,dp) 
 EditMsg(Chat_Id2, Msg_Id2, "⌁︙المطور الجديد ↫ ["..CatchName(dp.first_name_,15).."](tg://user?id="..dp.id_..")\n⌁︙تم تغير المطور الاساسي بنجاح") 
 end,nil)
@@ -940,33 +940,33 @@ ALOMDA = TokenBot:match("(%d+)"),
 SudoIds = {NewDev},
 }
 Create(Config, "./config.lua")  
-DevAbs:del(ALOMDA.."Abs:NewDev"..data.sender_user_id_)
+Deviven:del(ALOMDA.."iven:NewDev"..data.sender_user_id_)
 dofile('ALOMDA.lua') 
 end
 end
-if DataText == '/nodel' and DevAbs:get(ALOMDA..'nodel'..data.sender_user_id_) == 'delno' then
-DevAbs:del(ALOMDA..'yesdel'..data.sender_user_id_, 'delyes')
-DevAbs:del(ALOMDA..'nodel'..data.sender_user_id_, 'delno')
+if DataText == '/nodel' and Deviven:get(ALOMDA..'nodel'..data.sender_user_id_) == 'delno' then
+Deviven:del(ALOMDA..'yesdel'..data.sender_user_id_, 'delyes')
+Deviven:del(ALOMDA..'nodel'..data.sender_user_id_, 'delno')
 EditMsg(Chat_Id2, Msg_Id2, "⌁︙تم الغاء امر نزلني") 
 end
-if DataText == '/YesRolet' and DevAbs:get(ALOMDA.."Abs:WittingStartRolet"..data.chat_id_..data.sender_user_id_) then
-local List = DevAbs:smembers(ALOMDA..'Abs:ListRolet'..data.chat_id_) 
+if DataText == '/YesRolet' and Deviven:get(ALOMDA.."iven:WittingStartRolet"..data.chat_id_..data.sender_user_id_) then
+local List = Deviven:smembers(ALOMDA..'iven:ListRolet'..data.chat_id_) 
 local UserName = List[math.random(#List)]
 tdcli_function ({ID="SearchPublicChat",username_ = UserName},function(arg,dp) 
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..data.chat_id_..dp.id_, 5) 
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..data.chat_id_..dp.id_, 5) 
 end,nil) 
-DevAbs:del(ALOMDA..'Abs:ListRolet'..data.chat_id_) 
-DevAbs:del(ALOMDA.."Abs:WittingStartRolet"..data.chat_id_..data.sender_user_id_)
+Deviven:del(ALOMDA..'iven:ListRolet'..data.chat_id_) 
+Deviven:del(ALOMDA.."iven:WittingStartRolet"..data.chat_id_..data.sender_user_id_)
 EditMsg(Chat_Id2, Msg_Id2, "⌁︙*صاحب الحظ* ↫ ["..UserName.."]\n⌁︙*مبروك لقد ربحت وحصلت على 5 نقاط يمكنك استبدالها بالرسائل*")
 end
 if DataText == '/NoRolet' then
-DevAbs:del(ALOMDA..'Abs:ListRolet'..data.chat_id_) 
-DevAbs:del(ALOMDA.."Abs:NumRolet"..data.chat_id_..data.sender_user_id_) 
-DevAbs:del(ALOMDA.."Abs:WittingStartRolet"..data.chat_id_..data.sender_user_id_)
+Deviven:del(ALOMDA..'iven:ListRolet'..data.chat_id_) 
+Deviven:del(ALOMDA.."iven:NumRolet"..data.chat_id_..data.sender_user_id_) 
+Deviven:del(ALOMDA.."iven:WittingStartRolet"..data.chat_id_..data.sender_user_id_)
 EditMsg(Chat_Id2, Msg_Id2, "⌁︙تم الغاء اللعبه لاعادة اللعب ارسل الالعاب") 
 end
 if DataText == '/ListRolet' then
-local List = DevAbs:smembers(ALOMDA..'Abs:ListRolet'..data.chat_id_) 
+local List = Deviven:smembers(ALOMDA..'iven:ListRolet'..data.chat_id_) 
 local Text = '⌁︙قائمة الاعبين ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n' 
 local Textt = '┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙تم اكتمال العدد الكلي هل انت مستعد ؟'
 for k, v in pairs(List) do 
@@ -982,49 +982,49 @@ local msg = data.message_
 local d = data.disable_notification_
 local chat = chats[msg.chat_id_]
 text = msg.content_.text_ 
-if text and DevAbs:get(ALOMDA.."Del:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_) == "true" then
-local NewCmmd = DevAbs:get(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..text)
+if text and Deviven:get(ALOMDA.."Del:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_) == "true" then
+local NewCmmd = Deviven:get(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..text)
 if NewCmmd then
-DevAbs:del(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..text)
-DevAbs:del(ALOMDA.."Set:Cmd:Group:New"..msg.chat_id_)
-DevAbs:srem(ALOMDA.."List:Cmd:Group:New"..msg.chat_id_,text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف الامر من المجموعه", 1, 'html')  
+Deviven:del(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..text)
+Deviven:del(ALOMDA.."Set:Cmd:Group:New"..msg.chat_id_)
+Deviven:srem(ALOMDA.."List:Cmd:Group:New"..msg.chat_id_,text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف الامر من المجموعه", 1, 'html')  
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لايوجد امر بهذا الاسم", 1, 'html')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لايوجد امر بهذا الاسم", 1, 'html')
 end
-DevAbs:del(ALOMDA.."Del:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_)
+Deviven:del(ALOMDA.."Del:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_)
 return false
 end
-if text and text:match('^'..(DevAbs:get(ALOMDA..'Abs:NameBot') or "العمده")..' ') then
-data.message_.content_.text_ = data.message_.content_.text_:gsub('^'..(DevAbs:get(ALOMDA..'Abs:NameBot') or "العمده")..' ','')
+if text and text:match('^'..(Deviven:get(ALOMDA..'iven:NameBot') or "العمده")..' ') then
+data.message_.content_.text_ = data.message_.content_.text_:gsub('^'..(Deviven:get(ALOMDA..'iven:NameBot') or "العمده")..' ','')
 end
 if data.message_.content_.text_ then
-local NewCmmd = DevAbs:get(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..data.message_.content_.text_)
+local NewCmmd = Deviven:get(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..data.message_.content_.text_)
 if NewCmmd then
 data.message_.content_.text_ = (NewCmmd or data.message_.content_.text_)
 end
 end
-if text and DevAbs:get(ALOMDA.."Set:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_) == "true" then
-DevAbs:set(ALOMDA.."Set:Cmd:Group:New"..msg.chat_id_,text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل الامر الجديد", 1, 'html')
-DevAbs:del(ALOMDA.."Set:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_)
-DevAbs:set(ALOMDA.."Set:Cmd:Group1"..msg.chat_id_..":"..msg.sender_user_id_,"true1") 
+if text and Deviven:get(ALOMDA.."Set:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_) == "true" then
+Deviven:set(ALOMDA.."Set:Cmd:Group:New"..msg.chat_id_,text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل الامر الجديد", 1, 'html')
+Deviven:del(ALOMDA.."Set:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_)
+Deviven:set(ALOMDA.."Set:Cmd:Group1"..msg.chat_id_..":"..msg.sender_user_id_,"true1") 
 return false
 end
-if text and DevAbs:get(ALOMDA.."Set:Cmd:Group1"..msg.chat_id_..":"..msg.sender_user_id_) == "true1" then
-local NewCmd = DevAbs:get(ALOMDA.."Set:Cmd:Group:New"..msg.chat_id_)
-DevAbs:set(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..text,NewCmd)
-DevAbs:sadd(ALOMDA.."List:Cmd:Group:New"..msg.chat_id_,text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الامر", 1, 'html')
-DevAbs:del(ALOMDA.."Set:Cmd:Group1"..msg.chat_id_..":"..msg.sender_user_id_)
+if text and Deviven:get(ALOMDA.."Set:Cmd:Group1"..msg.chat_id_..":"..msg.sender_user_id_) == "true1" then
+local NewCmd = Deviven:get(ALOMDA.."Set:Cmd:Group:New"..msg.chat_id_)
+Deviven:set(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..text,NewCmd)
+Deviven:sadd(ALOMDA.."List:Cmd:Group:New"..msg.chat_id_,text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الامر", 1, 'html')
+Deviven:del(ALOMDA.."Set:Cmd:Group1"..msg.chat_id_..":"..msg.sender_user_id_)
 return false
 end
 if Constructor(msg) then
 if text == "الاوامر المضافه" and ChCheck(msg) then
-local List = DevAbs:smembers(ALOMDA.."List:Cmd:Group:New"..msg.chat_id_.."") 
+local List = Deviven:smembers(ALOMDA.."List:Cmd:Group:New"..msg.chat_id_.."") 
 t = "⌁︙قائمة الاوامر المضافه ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-Cmds = DevAbs:get(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..v)
+Cmds = Deviven:get(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..v)
 if Cmds then 
 t = t..""..k.."~ ("..v..") • {"..Cmds.."}\n"
 else
@@ -1034,120 +1034,120 @@ end
 if #List == 0 then
 t = "⌁︙لاتوجد اوامر مضافه في المجموعه"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, t, 1, 'html')
+Dev_iven(msg.chat_id_, msg.id_, 1, t, 1, 'html')
 end
 if text == "حذف الاوامر المضافه" or text == "حذف الاوامر" or text == "مسح الاوامر المضافه" and ChCheck(msg) then
-local List = DevAbs:smembers(ALOMDA.."List:Cmd:Group:New"..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA.."List:Cmd:Group:New"..msg.chat_id_)
 for k,v in pairs(List) do
-DevAbs:del(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..v)
-DevAbs:del(ALOMDA.."List:Cmd:Group:New"..msg.chat_id_)
+Deviven:del(ALOMDA.."Set:Cmd:Group:New1"..msg.chat_id_..":"..v)
+Deviven:del(ALOMDA.."List:Cmd:Group:New"..msg.chat_id_)
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف الاوامر المضافه في المجموعه", 1, 'html')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف الاوامر المضافه في المجموعه", 1, 'html')
 end
 if text == "اضف امر" or text == "اضافة امر" or text == "اضافه امر" and ChCheck(msg) then
-DevAbs:set(ALOMDA.."Set:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_,"true") 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل الامر القديم", 1, 'html')
+Deviven:set(ALOMDA.."Set:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_,"true") 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل الامر القديم", 1, 'html')
 return false
 end
 if text == "حذف امر" or text == "مسح امر" and ChCheck(msg) then 
-DevAbs:set(ALOMDA.."Del:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_,"true") 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل الامر الذي قمت باضافته يدويا", 1, 'html')
+Deviven:set(ALOMDA.."Del:Cmd:Group"..msg.chat_id_..":"..msg.sender_user_id_,"true") 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل الامر الذي قمت باضافته يدويا", 1, 'html')
 return false
 end
 end
 --     Source ALOMDA     --
 if text == "الصلاحيات" or text == "صلاحيات" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA.."Coomds"..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA.."Coomds"..msg.chat_id_)
 if #List == 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لاتوجد صلاحيات مضافه", 1, 'html')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لاتوجد صلاحيات مضافه", 1, 'html')
 return false
 end
 t = "⌁︙قائمة الصلاحيات المضافه ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-var = DevAbs:get(ALOMDA.."Comd:New:rt:Abs:"..v..msg.chat_id_)
+var = Deviven:get(ALOMDA.."Comd:New:rt:iven:"..v..msg.chat_id_)
 if var then
 t = t..""..k.."~ "..v.." • ("..var..")\n"
 else
 t = t..""..k.."~ "..v.."\n"
 end
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, t, 1, 'html')
+Dev_iven(msg.chat_id_, msg.id_, 1, t, 1, 'html')
 end
 if Admin(msg) then
 if text == "حذف الصلاحيات" and ChCheck(msg) or text == "مسح الصلاحيات" and ChCheck(msg) then
-local List = DevAbs:smembers(ALOMDA.."Coomds"..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA.."Coomds"..msg.chat_id_)
 for k,v in pairs(List) do
-DevAbs:del(ALOMDA.."Comd:New:rt:Abs:"..v..msg.chat_id_)
-DevAbs:del(ALOMDA.."Coomds"..msg.chat_id_)
+Deviven:del(ALOMDA.."Comd:New:rt:iven:"..v..msg.chat_id_)
+Deviven:del(ALOMDA.."Coomds"..msg.chat_id_)
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف الصلاحيات المضافه", 1, 'html')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف الصلاحيات المضافه", 1, 'html')
 end
 end
 if text and text:match("^اضف صلاحيه (.*)$") and ChCheck(msg) then 
 ComdNew = text:match("^اضف صلاحيه (.*)$")
-DevAbs:set(ALOMDA.."Comd:New:rt"..msg.chat_id_..msg.sender_user_id_,ComdNew)  
-DevAbs:sadd(ALOMDA.."Coomds"..msg.chat_id_,ComdNew)  
-DevAbs:setex(ALOMDA.."Comd:New"..msg.chat_id_..""..msg.sender_user_id_,200,true)  
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل نوع الصلاحيه \n{ عضو • مميز  • ادمن  • مدير }\n⌁︙ارسل الغاء لالغاء الامر ", 1, 'html')
+Deviven:set(ALOMDA.."Comd:New:rt"..msg.chat_id_..msg.sender_user_id_,ComdNew)  
+Deviven:sadd(ALOMDA.."Coomds"..msg.chat_id_,ComdNew)  
+Deviven:setex(ALOMDA.."Comd:New"..msg.chat_id_..""..msg.sender_user_id_,200,true)  
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل نوع الصلاحيه \n{ عضو • مميز  • ادمن  • مدير }\n⌁︙ارسل الغاء لالغاء الامر ", 1, 'html')
 end
 if text and text:match("^حذف صلاحيه (.*)$") and ChCheck(msg) or text and text:match("^مسح صلاحيه (.*)$") and ChCheck(msg) then 
 ComdNew = text:match("^حذف صلاحيه (.*)$") or text:match("^مسح صلاحيه (.*)$")
-DevAbs:del(ALOMDA.."Comd:New:rt:Abs:"..ComdNew..msg.chat_id_)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف الصلاحيه", 1, 'html')
+Deviven:del(ALOMDA.."Comd:New:rt:iven:"..ComdNew..msg.chat_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف الصلاحيه", 1, 'html')
 end
-if DevAbs:get(ALOMDA.."Comd:New"..msg.chat_id_..""..msg.sender_user_id_) then 
+if Deviven:get(ALOMDA.."Comd:New"..msg.chat_id_..""..msg.sender_user_id_) then 
 if text and text:match("^الغاء$") then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء الامر", 1, 'html')
-DevAbs:del(ALOMDA.."Comd:New"..msg.chat_id_..""..msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء الامر", 1, 'html')
+Deviven:del(ALOMDA.."Comd:New"..msg.chat_id_..""..msg.sender_user_id_) 
 return false  
 end 
 if text == "مدير" then
 if not Constructor(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تستطيع اضافة صلاحية ( عضو • مميز  • ادمن )\n⌁︙ارسال نوع الصلاحيه مره اخرى", 1, 'html')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تستطيع اضافة صلاحية ( عضو • مميز  • ادمن )\n⌁︙ارسال نوع الصلاحيه مره اخرى", 1, 'html')
 return false
 end
 end
 if text == "ادمن" then
 if not Manager(msg) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تستطيع اضافة صلاحية ( عضو • مميز )\n⌁︙ارسال نوع الصلاحيه مره اخرى", 1, 'html')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تستطيع اضافة صلاحية ( عضو • مميز )\n⌁︙ارسال نوع الصلاحيه مره اخرى", 1, 'html')
 return false
 end
 end
 if text == "مميز" then
 if not Admin(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تستطيع اضافة صلاحية ( عضو )\n⌁︙ارسال نوع الصلاحيه مره اخرى", 1, 'html')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تستطيع اضافة صلاحية ( عضو )\n⌁︙ارسال نوع الصلاحيه مره اخرى", 1, 'html')
 return false
 end
 end
 if text == "مدير" or text == "ادمن" or text == "مميز" or text == "عضو" then
-local textn = DevAbs:get(ALOMDA.."Comd:New:rt"..msg.chat_id_..msg.sender_user_id_)  
-DevAbs:set(ALOMDA.."Comd:New:rt:Abs:"..textn..msg.chat_id_,text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم اضافة الصلاحيه", 1, 'html')
-DevAbs:del(ALOMDA.."Comd:New"..msg.chat_id_..""..msg.sender_user_id_) 
+local textn = Deviven:get(ALOMDA.."Comd:New:rt"..msg.chat_id_..msg.sender_user_id_)  
+Deviven:set(ALOMDA.."Comd:New:rt:iven:"..textn..msg.chat_id_,text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم اضافة الصلاحيه", 1, 'html')
+Deviven:del(ALOMDA.."Comd:New"..msg.chat_id_..""..msg.sender_user_id_) 
 return false  
 end 
 end
 
 if text and text:match("رفع (.*)") and tonumber(msg.reply_to_message_id_) > 0 then 
 local DEV_ABBAS = text:match("رفع (.*)")
-if DevAbs:sismember(ALOMDA.."Coomds"..msg.chat_id_,DEV_ABBAS) then
+if Deviven:sismember(ALOMDA.."Coomds"..msg.chat_id_,DEV_ABBAS) then
 function by_reply(extra, result, success)   
 tdcli_function ({ID = "GetUser",user_id_ = result.sender_user_id_},function(arg,data) 
-local mrabs = DevAbs:get(ALOMDA.."Comd:New:rt:Abs:"..DEV_ABBAS..msg.chat_id_)
-if mrabs == "مميز" and VipMem(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
-DevAbs:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_,DEV_ABBAS) 
-DevAbs:sadd(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.sender_user_id_)
-elseif mrabs == "ادمن" and Admin(msg) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
-DevAbs:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_,DEV_ABBAS)
-DevAbs:sadd(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.sender_user_id_)
-elseif mrabs == "مدير" and Manager(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
-DevAbs:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_,DEV_ABBAS)  
-DevAbs:sadd(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.sender_user_id_)
-elseif mrabs == "عضو" then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
+local mriven = Deviven:get(ALOMDA.."Comd:New:rt:iven:"..DEV_ABBAS..msg.chat_id_)
+if mriven == "مميز" and VipMem(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
+Deviven:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_,DEV_ABBAS) 
+Deviven:sadd(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.sender_user_id_)
+elseif mriven == "ادمن" and Admin(msg) then 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
+Deviven:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_,DEV_ABBAS)
+Deviven:sadd(ALOMDA..'iven:Admins:'..msg.chat_id_, result.sender_user_id_)
+elseif mriven == "مدير" and Manager(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
+Deviven:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_,DEV_ABBAS)  
+Deviven:sadd(ALOMDA..'iven:Managers:'..msg.chat_id_, result.sender_user_id_)
+elseif mriven == "عضو" then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
 end
 end,nil)   
 end   
@@ -1156,24 +1156,24 @@ end
 end
 if text and text:match("تنزيل (.*)") and tonumber(msg.reply_to_message_id_) > 0 then 
 local DEV_ABBAS = text:match("تنزيل (.*)")
-if DevAbs:sismember(ALOMDA.."Coomds"..msg.chat_id_,DEV_ABBAS) then
+if Deviven:sismember(ALOMDA.."Coomds"..msg.chat_id_,DEV_ABBAS) then
 function by_reply(extra, result, success)   
 tdcli_function ({ID = "GetUser",user_id_ = result.sender_user_id_},function(arg,data) 
-local mrabs = DevAbs:get(ALOMDA.."Comd:New:rt:Abs:"..DEV_ABBAS..msg.chat_id_)
-if mrabs == "مميز" and VipMem(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_)
-elseif mrabs == "ادمن" and Admin(msg) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_)
-elseif mrabs == "مدير" and Manager(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_)
-elseif mrabs == "عضو" then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
+local mriven = Deviven:get(ALOMDA.."Comd:New:rt:iven:"..DEV_ABBAS..msg.chat_id_)
+if mriven == "مميز" and VipMem(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.sender_user_id_)
+Deviven:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_)
+elseif mriven == "ادمن" and Admin(msg) then 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.sender_user_id_)
+Deviven:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_)
+elseif mriven == "مدير" and Manager(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.sender_user_id_)
+Deviven:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.sender_user_id_)
+elseif mriven == "عضو" then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..data.first_name_..'](t.me/'..(data.username_ or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..DEV_ABBAS..' ❩ بنجاح', 1, 'md')
 end
 end,nil)   
 end   
@@ -1182,27 +1182,27 @@ end
 end
 if text and text:match("^رفع (.*) @(.*)") then 
 local text1 = {string.match(text, "^(رفع) (.*) @(.*)$")}
-if DevAbs:sismember(ALOMDA.."Coomds"..msg.chat_id_,text1[2]) then
+if Deviven:sismember(ALOMDA.."Coomds"..msg.chat_id_,text1[2]) then
 function py_username(extra, result, success)   
 if result.id_ then
-local mrabs = DevAbs:get(ALOMDA.."Comd:New:rt:Abs:"..text1[2]..msg.chat_id_)
-if mrabs == "مميز" and VipMem(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
-DevAbs:sadd(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.id_)
-DevAbs:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_,text1[2])
-elseif mrabs == "ادمن" and Admin(msg) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
-DevAbs:sadd(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.id_)
-DevAbs:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_,text1[2])
-elseif mrabs == "مدير" and Manager(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
-DevAbs:sadd(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.id_)
-DevAbs:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_,text1[2])
-elseif mrabs == "عضو" then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
+local mriven = Deviven:get(ALOMDA.."Comd:New:rt:iven:"..text1[2]..msg.chat_id_)
+if mriven == "مميز" and VipMem(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
+Deviven:sadd(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.id_)
+Deviven:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_,text1[2])
+elseif mriven == "ادمن" and Admin(msg) then 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
+Deviven:sadd(ALOMDA..'iven:Admins:'..msg.chat_id_, result.id_)
+Deviven:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_,text1[2])
+elseif mriven == "مدير" and Manager(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
+Deviven:sadd(ALOMDA..'iven:Managers:'..msg.chat_id_, result.id_)
+Deviven:set(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_,text1[2])
+elseif mriven == "عضو" then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم رفعه ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
 end
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*المعرف غير صحيح*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*المعرف غير صحيح*", 1, 'md')
 end
 end
 tdcli_function ({ID = "SearchPublicChat",username_ = text1[3]},py_username,nil) 
@@ -1210,27 +1210,27 @@ end
 end
 if text and text:match("^تنزيل (.*) @(.*)") then 
 local text1 = {string.match(text, "^(تنزيل) (.*) @(.*)$")}
-if DevAbs:sismember(ALOMDA.."Coomds"..msg.chat_id_,text1[2]) then
+if Deviven:sismember(ALOMDA.."Coomds"..msg.chat_id_,text1[2]) then
 function py_username(extra, result, success)   
 if result.id_ then
-local mrabs = DevAbs:get(ALOMDA.."Comd:New:rt:Abs:"..text1[2]..msg.chat_id_)
-if mrabs == "مميز" and VipMem(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.id_)
-DevAbs:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_)
-elseif mrabs == "ادمن" and Admin(msg) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.id_)
-DevAbs:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_)
-elseif mrabs == "مدير" and Manager(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.id_)
-DevAbs:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_)
-elseif mrabs == "عضو" then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
+local mriven = Deviven:get(ALOMDA.."Comd:New:rt:iven:"..text1[2]..msg.chat_id_)
+if mriven == "مميز" and VipMem(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.id_)
+Deviven:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_)
+elseif mriven == "ادمن" and Admin(msg) then 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.id_)
+Deviven:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_)
+elseif mriven == "مدير" and Manager(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.id_)
+Deviven:del(ALOMDA.."Comd:New:rt:User:"..msg.chat_id_..result.id_)
+elseif mriven == "عضو" then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو ↫ ❨ ['..result.title_..'](t.me/'..(text1[3] or 'src_web')..')'..' ❩\n⌁︙تم تنزيله ❨ '..text1[2]..' ❩ بنجاح', 1, 'md')
 end
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*المعرف غير صحيح*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*المعرف غير صحيح*", 1, 'md')
 end
 end
 tdcli_function ({ID = "SearchPublicChat",username_ = text1[3]},py_username,nil) 
@@ -1240,13 +1240,13 @@ end
 if msg.chat_id_ then
 local id = tostring(msg.chat_id_)
 if id:match("-100(%d+)") then
-DevAbs:incr(ALOMDA..'Abs:UsersMsgs'..ALOMDA..os.date('%d')..':'..msg.chat_id_..':'..msg.sender_user_id_)
-DevAbs:incr(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
-DevAbs:incr(ALOMDA..'Abs:MsgNumberDay'..msg.chat_id_..':'..os.date('%d'))  
+Deviven:incr(ALOMDA..'iven:UsersMsgs'..ALOMDA..os.date('%d')..':'..msg.chat_id_..':'..msg.sender_user_id_)
+Deviven:incr(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
+Deviven:incr(ALOMDA..'iven:MsgNumberDay'..msg.chat_id_..':'..os.date('%d'))  
 ChatType = 'sp' 
 elseif id:match("^(%d+)") then
-if not DevAbs:sismember(ALOMDA.."Abs:Users",msg.chat_id_) then
-DevAbs:sadd(ALOMDA.."Abs:Users",msg.chat_id_)
+if not Deviven:sismember(ALOMDA.."iven:Users",msg.chat_id_) then
+Deviven:sadd(ALOMDA.."iven:Users",msg.chat_id_)
 end
 ChatType = 'pv' 
 else
@@ -1298,10 +1298,10 @@ SendInline(msg.chat_id_,Sudo_Welcome,key)
 return false
 end end
 if text == '/start' and ChCheck(msg) then  
-if not DevAbs:get(ALOMDA..'Abs:Start:Time'..msg.sender_user_id_) then
+if not Deviven:get(ALOMDA..'iven:Start:Time'..msg.sender_user_id_) then
 tdcli_function({ID="GetUser",user_id_=DevId},function(arg,dp) 
 local inline = {{{text="⌁ المطور .",url="t.me/"..(dp.username_ or "src_web")}}}
-local start = DevAbs:get(ALOMDA.."Abs:Start:Bot")
+local start = Deviven:get(ALOMDA.."iven:Start:Bot")
 if start then 
 Start_Source = start
 else
@@ -1310,13 +1310,13 @@ end
 SendInline(msg.chat_id_,Start_Source,nil,inline)
 end,nil)
 end
-DevAbs:setex(ALOMDA..'Abs:Start:Time'..msg.sender_user_id_,300,true)
+Deviven:setex(ALOMDA..'iven:Start:Time'..msg.sender_user_id_,300,true)
 return false
 end 
 --     Source ALOMDA     --
-if not SecondSudo(msg) and not DevAbs:sismember(ALOMDA..'Abs:Ban:Pv',msg.sender_user_id_) and not DevAbs:get(ALOMDA..'Abs:Texting:Pv') then
+if not SecondSudo(msg) and not Deviven:sismember(ALOMDA..'iven:Ban:Pv',msg.sender_user_id_) and not Deviven:get(ALOMDA..'iven:Texting:Pv') then
 tdcli_function({ID="GetUser",user_id_=DevId},function(arg,chat) 
-Dev_Abs(msg.sender_user_id_, msg.id_, 1, '⌁︙تم ارسال رسالتك الى [المطور](t.me/'..(chat.username_ or "src_web")..')', 1, 'md') 
+Dev_iven(msg.sender_user_id_, msg.id_, 1, '⌁︙تم ارسال رسالتك الى [المطور](t.me/'..(chat.username_ or "src_web")..')', 1, 'md') 
 tdcli_function({ID="ForwardMessages",chat_id_=DevId,from_chat_id_= msg.sender_user_id_,message_ids_={[0]=msg.id_},disable_notification_=1,from_background_=1},function(arg,data) 
 tdcli_function({ID="GetUser",user_id_=msg.sender_user_id_},function(arg,dp) 
 if data and data.messages_ and data.messages_[0] ~= false and data.ID ~= "Error" then
@@ -1333,23 +1333,23 @@ tdcli_function ({ID = "GetUser",user_id_ = id_user},function(arg,data)
 if text == 'حظر' or text == 'حضر' then
 local Text = '⌁︙العضو ↫ ['..string.sub(data.first_name_,0, 40)..'](tg://user?id='..data.id_..')'..'\n⌁︙تم حظره من التواصل'
 SendText(DevId,Text,msg.id_/2097152/0.5,'md') 
-DevAbs:sadd(ALOMDA..'Abs:Ban:Pv',data.id_)  
+Deviven:sadd(ALOMDA..'iven:Ban:Pv',data.id_)  
 return false  
 end 
 if text == 'الغاء الحظر' or text == 'الغاء حظر' then
 local Text = '⌁︙العضو ↫ ['..string.sub(data.first_name_,0, 40)..'](tg://user?id='..data.id_..')'..'\n⌁︙تم الغاء حظره من التواصل'
 SendText(DevId,Text,msg.id_/2097152/0.5,'md') 
-DevAbs:srem(ALOMDA..'Abs:Ban:Pv',data.id_)  
+Deviven:srem(ALOMDA..'iven:Ban:Pv',data.id_)  
 return false  
 end 
 tdcli_function({ID='GetChat',chat_id_ = id_user},function(arg,dataq)
 tdcli_function ({ ID = "SendChatAction",chat_id_ = id_user, action_ = {  ID = "SendMessageTypingAction", progress_ = 100} },function(arg,dp) 
 if dp.code_ == 400 or dp.code_ == 5 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو قام بحظر البوت لا تستطيع ارسال الرسائل له', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو قام بحظر البوت لا تستطيع ارسال الرسائل له', 1, 'md')
 return false  
 end 
 if text then
-Dev_Abs(id_user, 0, 1, text, 1, "md")  
+Dev_iven(id_user, 0, 1, text, 1, "md")  
 Text = '⌁︙تم ارسال الرساله الى ↫ ⤈'
 elseif msg.content_.ID == 'MessageSticker' then    
 sendSticker(id_user, msg.id_, 0, 1,nil, msg.content_.sticker_.sticker_.persistent_id_)   
@@ -1372,46 +1372,46 @@ end,nil);
 end 
 end 
 --     Source ALOMDA     --
-if text and DevAbs:get(ALOMDA..'Abs:Start:Bots'..msg.sender_user_id_) then
+if text and Deviven:get(ALOMDA..'iven:Start:Bots'..msg.sender_user_id_) then
 if text == 'الغاء' then   
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ كليشة الستارت', 1, 'md')
-DevAbs:del(ALOMDA..'Abs:Start:Bots'..msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ كليشة الستارت', 1, 'md')
+Deviven:del(ALOMDA..'iven:Start:Bots'..msg.sender_user_id_) 
 return false
 end
-DevAbs:set(ALOMDA.."Abs:Start:Bot",text)  
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ كليشة الستارت', 1, 'md')
-DevAbs:del(ALOMDA..'Abs:Start:Bots'..msg.sender_user_id_) 
+Deviven:set(ALOMDA.."iven:Start:Bot",text)  
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ كليشة الستارت', 1, 'md')
+Deviven:del(ALOMDA..'iven:Start:Bots'..msg.sender_user_id_) 
 return false
 end
 if SecondSudo(msg) then
 if text == 'تعيين رد الخاص' or text == 'ضع كليشه ستارت' or text == '↫ تعيين رد الخاص ⌁' then 
-DevAbs:set(ALOMDA..'Abs:Start:Bots'..msg.sender_user_id_,true) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي كليشة الستارت الان', 1, 'md')
+Deviven:set(ALOMDA..'iven:Start:Bots'..msg.sender_user_id_,true) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي كليشة الستارت الان', 1, 'md')
 return false
 end
 if text == 'حذف رد الخاص' or text == 'حذف كليشه ستارت' or text == '↫ حذف رد الخاص ⌁' then 
-DevAbs:del(ALOMDA..'Start:Bot') 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف كليشة الستارت بنجاح', 1, 'md')
+Deviven:del(ALOMDA..'Start:Bot') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف كليشة الستارت بنجاح', 1, 'md')
 end
 if text == 'جلب رد الخاص' then  
-local start = DevAbs:get(ALOMDA.."Abs:Start:Bot")
+local start = Deviven:get(ALOMDA.."iven:Start:Bot")
 if start then 
 Start_Source = start
 else
 Start_Source = "⌁︙مرحبا انا بوت اسمي "..NameBot.."\n⌁︙اختصاصي حماية المجموعات\n⌁︙من التفليش والسبام والخخ .. . ،\n⌁︙تفعيلي سهل ومجانا فقط قم برفعي ادمن في مجموعتك وارسل امر ↫ تفعيل\n⌁︙سيتم رفع الادمنيه والمنشئ تلقائيا"
 end 
-Dev_Abs(msg.chat_id_, msg.id_, 1, Start_Source, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, Start_Source, 1, 'md')
 return false
 end
 if text == 'تفعيل التواصل' or text == '↫ تفعيل التواصل ⌁' then   
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل التواصل بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Texting:Pv') 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل التواصل بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Texting:Pv') 
 end
 if text == 'تعطيل التواصل' or text == '↫ تعطيل التواصل ⌁' then  
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل التواصل بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Texting:Pv',true) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل التواصل بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Texting:Pv',true) 
 end
 end
 --     Source ALOMDA     --
@@ -1424,10 +1424,10 @@ end
 local msg = data.message_
 text = msg.content_.text_
 if msg.content_.ID == "MessageChatAddMembers" then 
-DevAbs:incr(ALOMDA..'Abs:ContactNumber'..msg.chat_id_..':'..msg.sender_user_id_)
-DevAbs:set(ALOMDA.."Who:Added:Me"..msg.chat_id_..':'..msg.content_.members_[0].id_,msg.sender_user_id_)
+Deviven:incr(ALOMDA..'iven:ContactNumber'..msg.chat_id_..':'..msg.sender_user_id_)
+Deviven:set(ALOMDA.."Who:Added:Me"..msg.chat_id_..':'..msg.content_.members_[0].id_,msg.sender_user_id_)
 local mem_id = msg.content_.members_  
-local Bots = DevAbs:get(ALOMDA.."Abs:Lock:Bots"..msg.chat_id_) 
+local Bots = Deviven:get(ALOMDA.."iven:Lock:Bots"..msg.chat_id_) 
 for i=0,#mem_id do  
 if msg.content_.members_[i].type_.ID == "UserTypeBot" and Bots == "kick" and not VipMem(msg) then   
 https.request("https://api.telegram.org/bot"..TokenBot.."/kickChatMember?chat_id="..msg.chat_id_.."&user_id="..msg.sender_user_id_)
@@ -1466,7 +1466,7 @@ end
 for i=0,#mem_id do  
 if msg.content_.members_[i].type_.ID == "UserTypeBot" and Bots == "ked" and not VipMem(msg) then
 HTTPS.request("https://api.telegram.org/bot" .. TokenBot .. "/restrictChatMember?chat_id=" .. msg.chat_id_ .. "&user_id=" .. msg.sender_user_id_ .. "&can_send_messages=false&can_send_media_messages=false&can_send_other_messages=false&can_add_web_page_previews=false")
-DevAbs:sadd(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, msg.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Tkeed:'..msg.chat_id_, msg.sender_user_id_)
 GetInfo = https.request("https://api.telegram.org/bot"..TokenBot.."/kickChatMember?chat_id="..msg.chat_id_.."&user_id="..mem_id[i].id_)
 local JsonInfo = JSON.decode(GetInfo)
 if JsonInfo.ok == true and #mem_id == i then
@@ -1484,7 +1484,7 @@ end
 end  
 end
 if msg.content_.ID == "MessageChatDeleteMember" and tonumber(msg.content_.user_.id_) == tonumber(ALOMDA) then 
-DevAbs:srem(ALOMDA.."Abs:Groups", msg.chat_id_) 
+Deviven:srem(ALOMDA.."iven:Groups", msg.chat_id_) 
 tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(extra,result,success)
 tdcli_function({ID ="GetChat",chat_id_=msg.chat_id_},function(arg,dp) 
 local Name1 = result.first_name_
@@ -1509,28 +1509,28 @@ end,nil)
 end,nil)
 end
 if msg.content_.ID == "MessageChatDeletePhoto" or msg.content_.ID == "MessageChatChangePhoto" or msg.content_.ID == 'MessagePinMessage' or msg.content_.ID == "MessageChatJoinByLink" or msg.content_.ID == "MessageChatAddMembers" or msg.content_.ID == 'MessageChatChangeTitle' or msg.content_.ID == "MessageChatDeleteMember" then   
-if DevAbs:get(ALOMDA..'Abs:Lock:TagServr'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:TagServr'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})    
 end   
 end
 if msg.content_.ID == "MessageChatJoinByLink" or msg.content_.ID == "MessageChatAddMembers" then   
-DevAbs:incr(ALOMDA..'Abs:EntryNumber'..msg.chat_id_..':'..os.date('%d'))  
+Deviven:incr(ALOMDA..'iven:EntryNumber'..msg.chat_id_..':'..os.date('%d'))  
 elseif msg.content_.ID == "MessageChatDeleteMember" then   
-DevAbs:incr(ALOMDA..'Abs:ExitNumber'..msg.chat_id_..':'..os.date('%d'))  
+Deviven:incr(ALOMDA..'iven:ExitNumber'..msg.chat_id_..':'..os.date('%d'))  
 end
 --     Source ALOMDA     --
 if text ==('تفعيل') and not SudoBot(msg) and SourceCh(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:FreeBot'..ALOMDA) then
+if not Deviven:get(ALOMDA..'iven:Lock:FreeBot'..ALOMDA) then
 if ChatType == 'pv' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لاتستطيع تفعيلي هنا يرجى اضافتي في مجموعه اولا', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لاتستطيع تفعيلي هنا يرجى اضافتي في مجموعه اولا', 1, 'md')
 return false
 end
 if ChatType ~= 'sp' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه عاديه وليست خارقه لا تستطيع تفعيلي يرجى ان تضع سجل رسائل المجموعه ضاهر وليس مخفي ومن بعدها يمكنك رفعي ادمن ثم تفعيلي', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه عاديه وليست خارقه لا تستطيع تفعيلي يرجى ان تضع سجل رسائل المجموعه ضاهر وليس مخفي ومن بعدها يمكنك رفعي ادمن ثم تفعيلي', 1, 'md')
 return false
 end
 if msg.can_be_deleted_ == false then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙البوت ليس ادمن يرجى ترقيتي !', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙البوت ليس ادمن يرجى ترقيتي !', 1, 'md')
 return false  
 end
 tdcli_function ({ ID = "GetChannelFull", channel_id_ = msg.chat_id_:gsub("-100","")}, function(arg,data)  
@@ -1546,42 +1546,42 @@ status = 'ادمن'
 else 
 status = 'عضو'
 end
-DevAbs:del(ALOMDA..'Abs:AbsConstructor:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:ivenConstructor:'..msg.chat_id_)
 tdcli_function ({ID = "GetChannelMembers",channel_id_ = msg.chat_id_:gsub("-100",""),filter_ = {ID = "ChannelMembersAdministrators"},offset_ = 0,limit_ = 100},function(arg,abbas) 
 local admins = abbas.members_
 for i=0 , #admins do
 if abbas.members_[i].bot_info_ == false and abbas.members_[i].status_.ID == "ChatMemberStatusEditor" then
-DevAbs:sadd(ALOMDA..'Abs:Admins:'..msg.chat_id_, admins[i].user_id_)
+Deviven:sadd(ALOMDA..'iven:Admins:'..msg.chat_id_, admins[i].user_id_)
 tdcli_function ({ID = "GetUser",user_id_ = admins[i].user_id_},function(arg,ba) 
 if ba.first_name_ == false then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, admins[i].user_id_)
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, admins[i].user_id_)
 end
 end,nil)   
 else
-DevAbs:sadd(ALOMDA..'Abs:Admins:'..msg.chat_id_, admins[i].user_id_)
+Deviven:sadd(ALOMDA..'iven:Admins:'..msg.chat_id_, admins[i].user_id_)
 end
 if abbas.members_[i].status_.ID == "ChatMemberStatusCreator" then
-DevAbs:sadd(ALOMDA.."Abs:BasicConstructor:"..msg.chat_id_,admins[i].user_id_)
-DevAbs:sadd(ALOMDA.."Abs:AbsConstructor:"..msg.chat_id_,admins[i].user_id_)
+Deviven:sadd(ALOMDA.."iven:BasicConstructor:"..msg.chat_id_,admins[i].user_id_)
+Deviven:sadd(ALOMDA.."iven:ivenConstructor:"..msg.chat_id_,admins[i].user_id_)
 tdcli_function ({ID = "GetUser",user_id_ = admins[i].user_id_},function(arg,ba) 
 if ba.first_name_ == false then
-DevAbs:srem(ALOMDA.."Abs:BasicConstructor:"..msg.chat_id_,admins[i].user_id_)
-DevAbs:srem(ALOMDA.."Abs:AbsConstructor:"..msg.chat_id_,admins[i].user_id_)
+Deviven:srem(ALOMDA.."iven:BasicConstructor:"..msg.chat_id_,admins[i].user_id_)
+Deviven:srem(ALOMDA.."iven:ivenConstructor:"..msg.chat_id_,admins[i].user_id_)
 end
 end,nil)  
 end 
 end
 end,nil)
-if DevAbs:sismember(ALOMDA..'Abs:Groups',msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه بالتاكيد مفعله', 1, 'md')
+if Deviven:sismember(ALOMDA..'iven:Groups',msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه بالتاكيد مفعله', 1, 'md')
 else
-if tonumber(data.member_count_) < tonumber(DevAbs:get(ALOMDA..'Abs:Num:Add:Bot') or 0) and not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عدد اعضاء المجموعه اقل من ↫ *'..(DevAbs:get(ALOMDA..'Abs:Num:Add:Bot') or 0)..'* عضو', 1, 'md')
+if tonumber(data.member_count_) < tonumber(Deviven:get(ALOMDA..'iven:Num:Add:Bot') or 0) and not SecondSudo(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عدد اعضاء المجموعه اقل من ↫ *'..(Deviven:get(ALOMDA..'iven:Num:Add:Bot') or 0)..'* عضو', 1, 'md')
 return false
 end
 ReplyStatus(msg,result.id_,"ReplyBy","⌁︙تم تفعيل المجموعه "..dp.title_)  
-DevAbs:sadd(ALOMDA.."Abs:Groups",msg.chat_id_)
-DevAbs:sadd(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,msg.sender_user_id_)
+Deviven:sadd(ALOMDA.."iven:Groups",msg.chat_id_)
+Deviven:sadd(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,msg.sender_user_id_)
 local Name1 = result.first_name_
 local Name1 = Name1:gsub('"',"") 
 local Name1 = Name1:gsub("'","") 
@@ -1604,7 +1604,7 @@ LinkGroup = LinkGp.result
 else
 LinkGroup = 'لا يوجد'
 end
-DevAbs:set(ALOMDA.."Abs:Groups:Links"..msg.chat_id_,LinkGroup) 
+Deviven:set(ALOMDA.."iven:Groups:Links"..msg.chat_id_,LinkGroup) 
 SendText(DevId,"⌁︙تم تفعيل مجموعه جديده ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙بواسطة ↫ "..Name.."\n⌁︙موقعه في المجموعه ↫ "..status.."\n⌁︙اسم المجموعه ↫ ["..NameChat.."]\n⌁︙عدد اعضاء المجموعه ↫ ❨ *"..NumMem.."* ❩\n⌁︙ايدي المجموعه ↫ ⤈ \n❨ `"..msg.chat_id_.."` ❩\n⌁︙رابط المجموعه ↫ ⤈\n❨ ["..LinkGroup.."] ❩\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙الوقت ↫ "..os.date("%I:%M%p").."\n⌁︙التاريخ ↫ "..os.date("%Y/%m/%d").."",0,'md')
 end
 end end
@@ -1613,7 +1613,7 @@ end,nil)
 end,nil)
 end,nil)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تفعيل هذه المجموعه بسبب تعطيل البوت الخدمي من قبل المطور الاساسي', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تفعيل هذه المجموعه بسبب تعطيل البوت الخدمي من قبل المطور الاساسي', 1, 'md') 
 end 
 end 
 --     Source ALOMDA     --
@@ -1624,25 +1624,25 @@ end
 --     Source ALOMDA     --
 tdcli_function({ID = "GetUser",user_id_ = msg.sender_user_id_},function(arg,data) 
 if data.username_ ~= false then
-DevAbs:set(ALOMDA..'Save:UserName'..msg.sender_user_id_,data.username_)
+Deviven:set(ALOMDA..'Save:UserName'..msg.sender_user_id_,data.username_)
 end;end,nil) 
 --     Source ALOMDA     --
 local ReFalse = tostring(msg.chat_id_)
-if not DevAbs:sismember(ALOMDA.."Abs:Groups",msg.chat_id_) and not ReFalse:match("^(%d+)") and not SudoBot(msg) then
+if not Deviven:sismember(ALOMDA.."iven:Groups",msg.chat_id_) and not ReFalse:match("^(%d+)") and not SudoBot(msg) then
 print("Return False [ Not Enable ]")
 return false
 end
 --     Source ALOMDA     --
 -------- MSG TYPES ---------
 if msg.content_.ID == "MessageChatJoinByLink" and not VipMem(msg) then 
-if DevAbs:get(ALOMDA.."Abs:Lock:Join"..msg.chat_id_) then
+if Deviven:get(ALOMDA.."iven:Lock:Join"..msg.chat_id_) then
 ChatKick(msg.chat_id_,msg.sender_user_id_) 
 return false  
 end
 end
 if msg.content_.ID == "MessagePhoto" then
 if not Manager(msg) then 
-local filter = DevAbs:smembers(ALOMDA.."Abs:FilterPhoto"..msg.chat_id_)
+local filter = Deviven:smembers(ALOMDA.."iven:FilterPhoto"..msg.chat_id_)
 for k,v in pairs(filter) do
 if v == msg.content_.photo_.id_ then
 ReplyStatus(msg,msg.sender_user_id_,"WrongWay","⌁︙الصوره التي ارسلتها تم منعها من المجموعه")  
@@ -1654,7 +1654,7 @@ end
 end
 if msg.content_.ID == "MessageAnimation" then
 if not Manager(msg) then 
-local filter = DevAbs:smembers(ALOMDA.."Abs:FilterAnimation"..msg.chat_id_)
+local filter = Deviven:smembers(ALOMDA.."iven:FilterAnimation"..msg.chat_id_)
 for k,v in pairs(filter) do
 if v == msg.content_.animation_.animation_.persistent_id_ then
 ReplyStatus(msg,msg.sender_user_id_,"WrongWay","⌁︙المتحركه التي ارسلتها تم منعها من المجموعه")  
@@ -1666,7 +1666,7 @@ end
 end
 if msg.content_.ID == "MessageSticker" then
 if not Manager(msg) then 
-local filter = DevAbs:smembers(ALOMDA.."Abs:FilterSteckr"..msg.chat_id_)
+local filter = Deviven:smembers(ALOMDA.."iven:FilterSteckr"..msg.chat_id_)
 for k,v in pairs(filter) do
 if v == msg.content_.sticker_.sticker_.persistent_id_ then
 ReplyStatus(msg,msg.sender_user_id_,"WrongWay","⌁︙الملصق الذي ارسلته تم منعه من المجموعه")  
@@ -1686,63 +1686,63 @@ end
 end
 --     Source ALOMDA     --
 if text and text:match("^(.*)$") then
-local DelGpRed = DevAbs:get(ALOMDA..'Abs:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'')
+local DelGpRed = Deviven:get(ALOMDA..'iven:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'')
 if DelGpRed == 'DelGpRed' then
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙الكلمه ↫ '..msg.content_.text_..' تم حذفها',  1, "html")
-DevAbs:del(ALOMDA..'Abs:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'')
-DevAbs:del(ALOMDA..'Abs:Gif:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
-DevAbs:del(ALOMDA..'Abs:Voice:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
-DevAbs:del(ALOMDA..'Abs:Audio:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
-DevAbs:del(ALOMDA..'Abs:Photo:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
-DevAbs:del(ALOMDA..'Abs:Stecker:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
-DevAbs:del(ALOMDA..'Abs:Video:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
-DevAbs:del(ALOMDA..'Abs:File:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
-DevAbs:del(ALOMDA..'Abs:Text:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
-DevAbs:srem(ALOMDA..'Abs:Manager:GpRed'..msg.chat_id_..'',msg.content_.text_)
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙الكلمه ↫ '..msg.content_.text_..' تم حذفها',  1, "html")
+Deviven:del(ALOMDA..'iven:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'')
+Deviven:del(ALOMDA..'iven:Gif:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
+Deviven:del(ALOMDA..'iven:Voice:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
+Deviven:del(ALOMDA..'iven:Audio:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
+Deviven:del(ALOMDA..'iven:Photo:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
+Deviven:del(ALOMDA..'iven:Stecker:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
+Deviven:del(ALOMDA..'iven:Video:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
+Deviven:del(ALOMDA..'iven:File:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
+Deviven:del(ALOMDA..'iven:Text:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
+Deviven:srem(ALOMDA..'iven:Manager:GpRed'..msg.chat_id_..'',msg.content_.text_)
 return false
 end
 end
 if text and text:match("^(.*)$") then
-local DelAllRed = DevAbs:get(ALOMDA.."Abs:Add:AllRed"..msg.sender_user_id_)
+local DelAllRed = Deviven:get(ALOMDA.."iven:Add:AllRed"..msg.sender_user_id_)
 if DelAllRed == 'DelAllRed' then
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙الكلمه ↫ '..msg.content_.text_..' تم حذفها',  1, "html")
-DevAbs:del(ALOMDA.."Abs:Add:AllRed"..msg.sender_user_id_)
-DevAbs:del(ALOMDA.."Abs:Gif:AllRed"..msg.content_.text_)
-DevAbs:del(ALOMDA.."Abs:Voice:AllRed"..msg.content_.text_)
-DevAbs:del(ALOMDA.."Abs:Audio:AllRed"..msg.content_.text_)
-DevAbs:del(ALOMDA.."Abs:Photo:AllRed"..msg.content_.text_)
-DevAbs:del(ALOMDA.."Abs:Stecker:AllRed"..msg.content_.text_)
-DevAbs:del(ALOMDA.."Abs:Video:AllRed"..msg.content_.text_)
-DevAbs:del(ALOMDA.."Abs:File:AllRed"..msg.content_.text_)
-DevAbs:del(ALOMDA.."Abs:Text:AllRed"..msg.content_.text_)
-DevAbs:del(ALOMDA.."Abs:Sudo:AllRed",msg.content_.text_)
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙الكلمه ↫ '..msg.content_.text_..' تم حذفها',  1, "html")
+Deviven:del(ALOMDA.."iven:Add:AllRed"..msg.sender_user_id_)
+Deviven:del(ALOMDA.."iven:Gif:AllRed"..msg.content_.text_)
+Deviven:del(ALOMDA.."iven:Voice:AllRed"..msg.content_.text_)
+Deviven:del(ALOMDA.."iven:Audio:AllRed"..msg.content_.text_)
+Deviven:del(ALOMDA.."iven:Photo:AllRed"..msg.content_.text_)
+Deviven:del(ALOMDA.."iven:Stecker:AllRed"..msg.content_.text_)
+Deviven:del(ALOMDA.."iven:Video:AllRed"..msg.content_.text_)
+Deviven:del(ALOMDA.."iven:File:AllRed"..msg.content_.text_)
+Deviven:del(ALOMDA.."iven:Text:AllRed"..msg.content_.text_)
+Deviven:del(ALOMDA.."iven:Sudo:AllRed",msg.content_.text_)
 return false
 end
 end
 --     Source ALOMDA     --
 if msg.content_.text_ or msg.content_.video_ or msg.content_.document_ or msg.content_.sticker_ or msg.content_.voice_ or msg.content_.audio_ or msg.content_.photo_ or msg.content_.animation_ then 
-local SaveGpRed = DevAbs:get(ALOMDA..'Abs:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'')
+local SaveGpRed = Deviven:get(ALOMDA..'iven:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'')
 if SaveGpRed == 'SaveGpRed' then 
 if text == 'الغاء' then
-local DelManagerRep = DevAbs:get(ALOMDA..'DelManagerRep'..msg.chat_id_..'')
-DevAbs:srem(ALOMDA..'Abs:Manager:GpRed'..msg.chat_id_..'',DelManagerRep)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ الرد', 1, 'md')
-DevAbs:del(ALOMDA..'Abs:Add:GpText'..msg.sender_user_id_..''..msg.chat_id_..'')
-DevAbs:del(ALOMDA..'Abs:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_)
-DevAbs:del(ALOMDA..'DelManagerRep'..msg.chat_id_..'')
+local DelManagerRep = Deviven:get(ALOMDA..'DelManagerRep'..msg.chat_id_..'')
+Deviven:srem(ALOMDA..'iven:Manager:GpRed'..msg.chat_id_..'',DelManagerRep)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ الرد', 1, 'md')
+Deviven:del(ALOMDA..'iven:Add:GpText'..msg.sender_user_id_..''..msg.chat_id_..'')
+Deviven:del(ALOMDA..'iven:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_)
+Deviven:del(ALOMDA..'DelManagerRep'..msg.chat_id_..'')
 return false
 end
-DevAbs:del(ALOMDA..'Abs:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'')
-local SaveGpRed = DevAbs:get(ALOMDA..'Abs:Add:GpText'..msg.sender_user_id_..''..msg.chat_id_..'')
-if msg.content_.video_ then DevAbs:set(ALOMDA..'Abs:Video:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.video_.video_.persistent_id_)
+Deviven:del(ALOMDA..'iven:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'')
+local SaveGpRed = Deviven:get(ALOMDA..'iven:Add:GpText'..msg.sender_user_id_..''..msg.chat_id_..'')
+if msg.content_.video_ then Deviven:set(ALOMDA..'iven:Video:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.video_.video_.persistent_id_)
 end
-if msg.content_.document_ then DevAbs:set(ALOMDA..'Abs:File:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.document_.document_.persistent_id_)
+if msg.content_.document_ then Deviven:set(ALOMDA..'iven:File:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.document_.document_.persistent_id_)
 end
-if msg.content_.sticker_ then DevAbs:set(ALOMDA..'Abs:Stecker:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.sticker_.sticker_.persistent_id_) 
+if msg.content_.sticker_ then Deviven:set(ALOMDA..'iven:Stecker:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.sticker_.sticker_.persistent_id_) 
 end 
-if msg.content_.voice_ then DevAbs:set(ALOMDA..'Abs:Voice:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.voice_.voice_.persistent_id_) 
+if msg.content_.voice_ then Deviven:set(ALOMDA..'iven:Voice:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.voice_.voice_.persistent_id_) 
 end
-if msg.content_.audio_ then DevAbs:set(ALOMDA..'Abs:Audio:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.audio_.audio_.persistent_id_) 
+if msg.content_.audio_ then Deviven:set(ALOMDA..'iven:Audio:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.audio_.audio_.persistent_id_) 
 end
 if msg.content_.photo_ then
 if msg.content_.photo_.sizes_[0] then
@@ -1757,47 +1757,47 @@ end
 if msg.content_.photo_.sizes_[3] then
 photo_in_group = msg.content_.photo_.sizes_[3].photo_.persistent_id_
 end
-DevAbs:set(ALOMDA..'Abs:Photo:GpRed'..SaveGpRed..''..msg.chat_id_..'', photo_in_group) 
+Deviven:set(ALOMDA..'iven:Photo:GpRed'..SaveGpRed..''..msg.chat_id_..'', photo_in_group) 
 end
-if msg.content_.animation_ then DevAbs:set(ALOMDA..'Abs:Gif:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.animation_.animation_.persistent_id_) 
+if msg.content_.animation_ then Deviven:set(ALOMDA..'iven:Gif:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.animation_.animation_.persistent_id_) 
 end 
 if msg.content_.text_ then
-DevAbs:set(ALOMDA..'Abs:Text:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.text_)
+Deviven:set(ALOMDA..'iven:Text:GpRed'..SaveGpRed..''..msg.chat_id_..'', msg.content_.text_)
 end 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ الرد الجديد', 1, 'md') 
-DevAbs:del(ALOMDA..'Abs:Add:GpText'..msg.sender_user_id_..''..msg.chat_id_..'')
-DevAbs:del(ALOMDA..'DelManagerRep'..msg.chat_id_..'')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ الرد الجديد', 1, 'md') 
+Deviven:del(ALOMDA..'iven:Add:GpText'..msg.sender_user_id_..''..msg.chat_id_..'')
+Deviven:del(ALOMDA..'DelManagerRep'..msg.chat_id_..'')
 return false 
 end 
 end
-if msg.content_.text_ and not DevAbs:get(ALOMDA..'Abs:Lock:GpRed'..msg.chat_id_) then 
-if DevAbs:get(ALOMDA..'Abs:Video:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
-sendVideo(msg.chat_id_, msg.id_, 0, 1,nil, DevAbs:get(ALOMDA..'Abs:Video:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
+if msg.content_.text_ and not Deviven:get(ALOMDA..'iven:Lock:GpRed'..msg.chat_id_) then 
+if Deviven:get(ALOMDA..'iven:Video:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
+sendVideo(msg.chat_id_, msg.id_, 0, 1,nil, Deviven:get(ALOMDA..'iven:Video:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
 end 
-if DevAbs:get(ALOMDA..'Abs:File:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
-sendDocument(msg.chat_id_, msg.id_, 0, 1,nil, DevAbs:get(ALOMDA..'Abs:File:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
+if Deviven:get(ALOMDA..'iven:File:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
+sendDocument(msg.chat_id_, msg.id_, 0, 1,nil, Deviven:get(ALOMDA..'iven:File:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
 end 
-if DevAbs:get(ALOMDA..'Abs:Voice:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
-sendVoice(msg.chat_id_, msg.id_, 0, 1, nil, DevAbs:get(ALOMDA..'Abs:Voice:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
+if Deviven:get(ALOMDA..'iven:Voice:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
+sendVoice(msg.chat_id_, msg.id_, 0, 1, nil, Deviven:get(ALOMDA..'iven:Voice:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
 end
-if DevAbs:get(ALOMDA..'Abs:Audio:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
-sendAudio(msg.chat_id_, msg.id_, 0, 1, nil, DevAbs:get(ALOMDA..'Abs:Audio:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
+if Deviven:get(ALOMDA..'iven:Audio:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
+sendAudio(msg.chat_id_, msg.id_, 0, 1, nil, Deviven:get(ALOMDA..'iven:Audio:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
 end
-if DevAbs:get(ALOMDA..'Abs:Photo:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, DevAbs:get(ALOMDA..'Abs:Photo:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
+if Deviven:get(ALOMDA..'iven:Photo:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
+sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, Deviven:get(ALOMDA..'iven:Photo:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
 end
-if DevAbs:get(ALOMDA..'Abs:Gif:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
-sendDocument(msg.chat_id_, msg.id_, 0, 1, nil, DevAbs:get(ALOMDA..'Abs:Gif:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
+if Deviven:get(ALOMDA..'iven:Gif:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
+sendDocument(msg.chat_id_, msg.id_, 0, 1, nil, Deviven:get(ALOMDA..'iven:Gif:GpRed'..msg.content_.text_..''..msg.chat_id_..'')) 
 end 
-if DevAbs:get(ALOMDA..'Abs:Stecker:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
-sendSticker(msg.chat_id_, msg.id_, 0, 1,nil, DevAbs:get(ALOMDA..'Abs:Stecker:GpRed'..msg.content_.text_..''..msg.chat_id_..''))
+if Deviven:get(ALOMDA..'iven:Stecker:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then 
+sendSticker(msg.chat_id_, msg.id_, 0, 1,nil, Deviven:get(ALOMDA..'iven:Stecker:GpRed'..msg.content_.text_..''..msg.chat_id_..''))
 end
-if DevAbs:get(ALOMDA..'Abs:Text:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then
+if Deviven:get(ALOMDA..'iven:Text:GpRed'..msg.content_.text_..''..msg.chat_id_..'') then
 function ALOMDATEAM(extra,result,success)
 if result.username_ then username = '[@'..result.username_..']' else username = 'لا يوجد' end
-local edit_msg = DevAbs:get(ALOMDA..'Abs:EditMsg'..msg.chat_id_..msg.sender_user_id_) or 0
-local user_msgs = DevAbs:get(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
-local Text = DevAbs:get(ALOMDA..'Abs:Text:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
+local edit_msg = Deviven:get(ALOMDA..'iven:EditMsg'..msg.chat_id_..msg.sender_user_id_) or 0
+local user_msgs = Deviven:get(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
+local Text = Deviven:get(ALOMDA..'iven:Text:GpRed'..msg.content_.text_..''..msg.chat_id_..'')
 local Text = Text:gsub('#username',(username or 'لا يوجد')) 
 local Text = Text:gsub('#name','['..result.first_name_..']')
 local Text = Text:gsub('#id',msg.sender_user_id_)
@@ -1812,33 +1812,33 @@ end
 --     Source ALOMDA     --
 text = msg.content_.text_
 if msg.content_.text_ or msg.content_.video_ or msg.content_.document_ or msg.content_.sticker_ or msg.content_.voice_ or msg.content_.audio_ or msg.content_.photo_ or msg.content_.animation_ then
-local SaveAllRed = DevAbs:get(ALOMDA.."Abs:Add:AllRed"..msg.sender_user_id_)
+local SaveAllRed = Deviven:get(ALOMDA.."iven:Add:AllRed"..msg.sender_user_id_)
 if SaveAllRed == 'SaveAllRed' then
 if text == 'الغاء' then
-local DelSudoRep = DevAbs:get(ALOMDA..'DelSudoRep')
-DevAbs:del(ALOMDA.."Abs:Sudo:AllRed",DelSudoRep)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ الرد', 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Add:AllText"..msg.sender_user_id_)
-DevAbs:del(ALOMDA.."Abs:Add:AllRed"..msg.sender_user_id_)
-DevAbs:del(ALOMDA.."DelSudoRep")
+local DelSudoRep = Deviven:get(ALOMDA..'DelSudoRep')
+Deviven:del(ALOMDA.."iven:Sudo:AllRed",DelSudoRep)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ الرد', 1, 'md')
+Deviven:del(ALOMDA.."iven:Add:AllText"..msg.sender_user_id_)
+Deviven:del(ALOMDA.."iven:Add:AllRed"..msg.sender_user_id_)
+Deviven:del(ALOMDA.."DelSudoRep")
 return false
 end
-DevAbs:del(ALOMDA.."Abs:Add:AllRed"..msg.sender_user_id_)
-local SaveAllRed = DevAbs:get(ALOMDA.."Abs:Add:AllText"..msg.sender_user_id_)
+Deviven:del(ALOMDA.."iven:Add:AllRed"..msg.sender_user_id_)
+local SaveAllRed = Deviven:get(ALOMDA.."iven:Add:AllText"..msg.sender_user_id_)
 if msg.content_.video_ then
-DevAbs:set(ALOMDA.."Abs:Video:AllRed"..SaveAllRed, msg.content_.video_.video_.persistent_id_)
+Deviven:set(ALOMDA.."iven:Video:AllRed"..SaveAllRed, msg.content_.video_.video_.persistent_id_)
 end
 if msg.content_.document_ then
-DevAbs:set(ALOMDA.."Abs:File:AllRed"..SaveAllRed, msg.content_.document_.document_.persistent_id_)
+Deviven:set(ALOMDA.."iven:File:AllRed"..SaveAllRed, msg.content_.document_.document_.persistent_id_)
 end
 if msg.content_.sticker_ then
-DevAbs:set(ALOMDA.."Abs:Stecker:AllRed"..SaveAllRed, msg.content_.sticker_.sticker_.persistent_id_)
+Deviven:set(ALOMDA.."iven:Stecker:AllRed"..SaveAllRed, msg.content_.sticker_.sticker_.persistent_id_)
 end
 if msg.content_.voice_ then
-DevAbs:set(ALOMDA.."Abs:Voice:AllRed"..SaveAllRed, msg.content_.voice_.voice_.persistent_id_)
+Deviven:set(ALOMDA.."iven:Voice:AllRed"..SaveAllRed, msg.content_.voice_.voice_.persistent_id_)
 end
 if msg.content_.audio_ then
-DevAbs:set(ALOMDA.."Abs:Audio:AllRed"..SaveAllRed, msg.content_.audio_.audio_.persistent_id_)
+Deviven:set(ALOMDA.."iven:Audio:AllRed"..SaveAllRed, msg.content_.audio_.audio_.persistent_id_)
 end
 if msg.content_.photo_ then
 if msg.content_.photo_.sizes_[0] then
@@ -1853,46 +1853,46 @@ end
 if msg.content_.photo_.sizes_[3] then
 photo_in_all_groups = msg.content_.photo_.sizes_[3].photo_.persistent_id_
 end
-DevAbs:set(ALOMDA.."Abs:Photo:AllRed"..SaveAllRed, photo_in_all_groups)
+Deviven:set(ALOMDA.."iven:Photo:AllRed"..SaveAllRed, photo_in_all_groups)
 end
 if msg.content_.animation_ then
-DevAbs:set(ALOMDA.."Abs:Gif:AllRed"..SaveAllRed, msg.content_.animation_.animation_.persistent_id_)
+Deviven:set(ALOMDA.."iven:Gif:AllRed"..SaveAllRed, msg.content_.animation_.animation_.persistent_id_)
 end
 if msg.content_.text_ then
-DevAbs:set(ALOMDA.."Abs:Text:AllRed"..SaveAllRed, msg.content_.text_)
+Deviven:set(ALOMDA.."iven:Text:AllRed"..SaveAllRed, msg.content_.text_)
 end 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ الرد الجديد', 1, 'md') 
-DevAbs:del(ALOMDA.."Abs:Add:AllText"..msg.sender_user_id_)
-DevAbs:del(ALOMDA..'DelSudoRep')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ الرد الجديد', 1, 'md') 
+Deviven:del(ALOMDA.."iven:Add:AllText"..msg.sender_user_id_)
+Deviven:del(ALOMDA..'DelSudoRep')
 return false end end
-if msg.content_.text_ and not DevAbs:get(ALOMDA..'Abs:Lock:AllRed'..msg.chat_id_) then
-if DevAbs:get(ALOMDA.."Abs:Video:AllRed"..msg.content_.text_) then
-sendVideo(msg.chat_id_, msg.id_, 0, 1,nil, DevAbs:get(ALOMDA.."Abs:Video:AllRed"..msg.content_.text_))
+if msg.content_.text_ and not Deviven:get(ALOMDA..'iven:Lock:AllRed'..msg.chat_id_) then
+if Deviven:get(ALOMDA.."iven:Video:AllRed"..msg.content_.text_) then
+sendVideo(msg.chat_id_, msg.id_, 0, 1,nil, Deviven:get(ALOMDA.."iven:Video:AllRed"..msg.content_.text_))
 end
-if DevAbs:get(ALOMDA.."Abs:File:AllRed"..msg.content_.text_) then
-sendDocument(msg.chat_id_, msg.id_, 0, 1,nil, DevAbs:get(ALOMDA.."Abs:File:AllRed"..msg.content_.text_))
+if Deviven:get(ALOMDA.."iven:File:AllRed"..msg.content_.text_) then
+sendDocument(msg.chat_id_, msg.id_, 0, 1,nil, Deviven:get(ALOMDA.."iven:File:AllRed"..msg.content_.text_))
 end
-if DevAbs:get(ALOMDA.."Abs:Voice:AllRed"..msg.content_.text_)  then
-sendVoice(msg.chat_id_, msg.id_, 0, 1, nil, DevAbs:get(ALOMDA.."Abs:Voice:AllRed"..msg.content_.text_))
+if Deviven:get(ALOMDA.."iven:Voice:AllRed"..msg.content_.text_)  then
+sendVoice(msg.chat_id_, msg.id_, 0, 1, nil, Deviven:get(ALOMDA.."iven:Voice:AllRed"..msg.content_.text_))
 end
-if DevAbs:get(ALOMDA.."Abs:Audio:AllRed"..msg.content_.text_)  then
-sendAudio(msg.chat_id_, msg.id_, 0, 1, nil, DevAbs:get(ALOMDA.."Abs:Audio:AllRed"..msg.content_.text_))
+if Deviven:get(ALOMDA.."iven:Audio:AllRed"..msg.content_.text_)  then
+sendAudio(msg.chat_id_, msg.id_, 0, 1, nil, Deviven:get(ALOMDA.."iven:Audio:AllRed"..msg.content_.text_))
 end
-if DevAbs:get(ALOMDA.."Abs:Photo:AllRed"..msg.content_.text_)  then
-sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, DevAbs:get(ALOMDA.."Abs:Photo:AllRed"..msg.content_.text_))
+if Deviven:get(ALOMDA.."iven:Photo:AllRed"..msg.content_.text_)  then
+sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, Deviven:get(ALOMDA.."iven:Photo:AllRed"..msg.content_.text_))
 end
-if  DevAbs:get(ALOMDA.."Abs:Gif:AllRed"..msg.content_.text_) then
-sendDocument(msg.chat_id_, msg.id_, 0, 1, nil, DevAbs:get(ALOMDA.."Abs:Gif:AllRed"..msg.content_.text_))
+if  Deviven:get(ALOMDA.."iven:Gif:AllRed"..msg.content_.text_) then
+sendDocument(msg.chat_id_, msg.id_, 0, 1, nil, Deviven:get(ALOMDA.."iven:Gif:AllRed"..msg.content_.text_))
 end
-if DevAbs:get(ALOMDA.."Abs:Stecker:AllRed"..msg.content_.text_) then
-sendSticker(msg.chat_id_, msg.id_, 0, 1,nil, DevAbs:get(ALOMDA.."Abs:Stecker:AllRed"..msg.content_.text_))
+if Deviven:get(ALOMDA.."iven:Stecker:AllRed"..msg.content_.text_) then
+sendSticker(msg.chat_id_, msg.id_, 0, 1,nil, Deviven:get(ALOMDA.."iven:Stecker:AllRed"..msg.content_.text_))
 end
-if DevAbs:get(ALOMDA.."Abs:Text:AllRed"..msg.content_.text_) then
+if Deviven:get(ALOMDA.."iven:Text:AllRed"..msg.content_.text_) then
 function ALOMDATEAM(extra,result,success)
 if result.username_ then username = '[@'..result.username_..']' else username = 'لا يوجد' end
-local edit_msg = DevAbs:get(ALOMDA..'Abs:EditMsg'..msg.chat_id_..msg.sender_user_id_) or 0
-local user_msgs = DevAbs:get(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
-local Text = DevAbs:get(ALOMDA.."Abs:Text:AllRed"..msg.content_.text_)
+local edit_msg = Deviven:get(ALOMDA..'iven:EditMsg'..msg.chat_id_..msg.sender_user_id_) or 0
+local user_msgs = Deviven:get(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
+local Text = Deviven:get(ALOMDA.."iven:Text:AllRed"..msg.content_.text_)
 local Text = Text:gsub('#username',(username or 'لا يوجد')) 
 local Text = Text:gsub('#name','['..result.first_name_..']')
 local Text = Text:gsub('#id',msg.sender_user_id_)
@@ -1930,9 +1930,9 @@ if Type == "del" then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})   
 return false  
 end 
-if Type == "keed" and not DevAbs:sismember(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, msg.sender_user_id_) then
+if Type == "keed" and not Deviven:sismember(ALOMDA..'iven:Tkeed:'..msg.chat_id_, msg.sender_user_id_) then
 https.request("https://api.telegram.org/bot" .. TokenBot .. "/restrictChatMember?chat_id=" ..msg.chat_id_.. "&user_id=" ..msg.sender_user_id_.."") 
-DevAbs:sadd(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, msg.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Tkeed:'..msg.chat_id_, msg.sender_user_id_)
 my_ide = msg.sender_user_id_
 msgm = msg.id_
 local num = 100
@@ -1948,8 +1948,8 @@ Text = '⌁︙العضو ↫ '..GetName..' \n⌁︙قام بالتكرار ال�
 SendText(msg.chat_id_,Text,0,'md')
 return false  
 end  
-if Type == "mute" and not DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_, msg.sender_user_id_) then
-DevAbs:sadd(ALOMDA..'Abs:Muted:'..msg.chat_id_,msg.sender_user_id_)
+if Type == "mute" and not Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_, msg.sender_user_id_) then
+Deviven:sadd(ALOMDA..'iven:Muted:'..msg.chat_id_,msg.sender_user_id_)
 my_ide = msg.sender_user_id_
 msgm = msg.id_
 local num = 100
@@ -1970,25 +1970,25 @@ end
 --  end functions ALOMDA --
 --     Source ALOMDA     --
 --       Spam Check       --
-if not VipMem(msg) and msg.content_.ID ~= "MessageChatAddMembers" and DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Spam:User") then 
+if not VipMem(msg) and msg.content_.ID ~= "MessageChatAddMembers" and Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Spam:User") then 
 if msg.sender_user_id_ ~= ALOMDA then
-floods = DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Spam:User") or "nil"
-Num_Msg_Max = DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Num:Spam") or 5
-Time_Spam = DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Num:Spam:Time") or 5
-local post_count = tonumber(DevAbs:get(ALOMDA.."Abs:Spam:Cont"..msg.sender_user_id_..":"..msg.chat_id_) or 0)
-if post_count > tonumber(DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Num:Spam") or 5) then 
+floods = Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Spam:User") or "nil"
+Num_Msg_Max = Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Num:Spam") or 5
+Time_Spam = Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Num:Spam:Time") or 5
+local post_count = tonumber(Deviven:get(ALOMDA.."iven:Spam:Cont"..msg.sender_user_id_..":"..msg.chat_id_) or 0)
+if post_count > tonumber(Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Num:Spam") or 5) then 
 local ch = msg.chat_id_
-local type = DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Spam:User") 
+local type = Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Spam:User") 
 NotSpam(msg,type)  
 end
-DevAbs:setex(ALOMDA.."Abs:Spam:Cont"..msg.sender_user_id_..":"..msg.chat_id_, tonumber(DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Num:Spam:Time") or 3), post_count+1) 
+Deviven:setex(ALOMDA.."iven:Spam:Cont"..msg.sender_user_id_..":"..msg.chat_id_, tonumber(Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Num:Spam:Time") or 3), post_count+1) 
 local edit_id = data.text_ or "nil"  
 Num_Msg_Max = 5
-if DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Num:Spam") then
-Num_Msg_Max = DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Num:Spam") 
+if Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Num:Spam") then
+Num_Msg_Max = Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Num:Spam") 
 end
-if DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Num:Spam:Time") then
-Time_Spam = DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Num:Spam:Time") 
+if Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Num:Spam:Time") then
+Time_Spam = Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Num:Spam:Time") 
 end 
 end
 end 
@@ -2014,20 +2014,20 @@ return false
 end
 if msg.content_.ID == "MessagePinMessage" then
 if Constructor(msg) or tonumber(msg.sender_user_id_) == tonumber(ALOMDA) then
-DevAbs:set(ALOMDA..'Abs:PinnedMsg'..msg.chat_id_,msg.content_.message_id_)
+Deviven:set(ALOMDA..'iven:PinnedMsg'..msg.chat_id_,msg.content_.message_id_)
 else
-local pin_id = DevAbs:get(ALOMDA..'Abs:PinnedMsg'..msg.chat_id_)
-if pin_id and DevAbs:get(ALOMDA..'Abs:Lock:Pin'..msg.chat_id_) then
+local pin_id = Deviven:get(ALOMDA..'iven:PinnedMsg'..msg.chat_id_)
+if pin_id and Deviven:get(ALOMDA..'iven:Lock:Pin'..msg.chat_id_) then
 pinmsg(msg.chat_id_,pin_id,0)
 end
 end
 end
-if DevAbs:get(ALOMDA..'Abs:viewget'..msg.sender_user_id_) then
+if Deviven:get(ALOMDA..'iven:viewget'..msg.sender_user_id_) then
 if not msg.forward_info_ then
-DevAbs:del(ALOMDA..'Abs:viewget'..msg.sender_user_id_)
+Deviven:del(ALOMDA..'iven:viewget'..msg.sender_user_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عدد مشاهدات المنشور هي ↫ ('..msg.views_..')', 1, 'md')
-DevAbs:del(ALOMDA..'Abs:viewget'..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عدد مشاهدات المنشور هي ↫ ('..msg.views_..')', 1, 'md')
+Deviven:del(ALOMDA..'iven:viewget'..msg.sender_user_id_)
 end
 end
 --     Source ALOMDA     --
@@ -2035,44 +2035,44 @@ end
 if msg.content_.ID == "MessagePhoto" then
 if not VipMem(msg) then
 if msg.forward_info_ then
-if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then
 if msg.forward_info_.ID == "MessageForwardedFromUser" or msg.forward_info_.ID == "MessageForwardedPost" then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Photo'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Photo'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 if msg.content_.caption_ then
 Filters(msg, msg.content_.caption_)
-if DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then
 if msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then
 if msg.content_.caption_:match("@") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("#") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[Hh][Tt][Tt][Pp][Ss]://") or msg.content_.caption_:match("[Hh][Tt][Tt][Pp]://") or msg.content_.caption_:match(".[Ii][Rr]") or msg.content_.caption_:match(".[Cc][Oo][Mm]") or msg.content_.caption_:match(".[Oo][Rr][Gg]") or msg.content_.caption_:match(".[Ii][Nn][Ff][Oo]") or msg.content_.caption_:match("[Ww][Ww][Ww].") or msg.content_.caption_:match(".[Xx][Yy][Zz]") or msg.content_.caption_:match(".[Tt][Kk]") or msg.content_.ID == "MessageEntityTextUrl" or msg.content_.ID == "MessageEntityUrl" then
-if DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[\216-\219][\128-\191]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[A-Z]") or msg.content_.caption_:match("[a-z]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
@@ -2081,7 +2081,7 @@ end
 --     Source ALOMDA     --
 --        Markdown        --
 elseif not msg.reply_markup_ and msg.via_bot_user_id_ ~= 0 then
-if DevAbs:get(ALOMDA..'Abs:Lock:Markdown'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Markdown'..msg.chat_id_) then
 if not VipMem(msg) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
@@ -2091,44 +2091,44 @@ end
 elseif msg.content_.ID == "MessageDocument" then
 if not VipMem(msg) then
 if msg.forward_info_ then
-if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then
 if msg.forward_info_.ID == "MessageForwardedFromUser" or msg.forward_info_.ID == "MessageForwardedPost" then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Document'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Document'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 if msg.content_.caption_ then
 Filters(msg, msg.content_.caption_)
-if DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then
 if msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then
 if msg.content_.caption_:match("@") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("#") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[Hh][Tt][Tt][Pp][Ss]://") or msg.content_.caption_:match("[Hh][Tt][Tt][Pp]://") or msg.content_.caption_:match(".[Ii][Rr]") or msg.content_.caption_:match(".[Cc][Oo][Mm]") or msg.content_.caption_:match(".[Oo][Rr][Gg]") or msg.content_.caption_:match(".[Ii][Nn][Ff][Oo]") or msg.content_.caption_:match("[Ww][Ww][Ww].") or msg.content_.caption_:match(".[Xx][Yy][Zz]") or msg.content_.caption_:match(".[Tt][Kk]") or msg.content_.ID == "MessageEntityTextUrl" or msg.content_.ID == "MessageEntityUrl" then
-if DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[\216-\219][\128-\191]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[A-Z]") or msg.content_.caption_:match("[a-z]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
@@ -2138,7 +2138,7 @@ end
 --         Inline         --
 elseif msg.reply_markup_ and msg.reply_markup_.ID == "ReplyMarkupInlineKeyboard" and msg.via_bot_user_id_ ~= 0 then
 if not VipMem(msg) then
-if DevAbs:get(ALOMDA..'Abs:Lock:Inline'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Inline'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
@@ -2146,54 +2146,54 @@ end
 --        Sticker         --
 elseif msg.content_.ID == "MessageSticker" then
 if not VipMem(msg) then
-if DevAbs:get(ALOMDA..'Abs:Lock:Stickers'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Stickers'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 elseif msg.content_.ID == "MessageChatJoinByLink" then
-if DevAbs:get(ALOMDA..'Abs:Lock:TagServr'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:TagServr'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 return
 end
 function get_welcome(extra,result,success)
-if DevAbs:get(ALOMDA..'Abs:Groups:Welcomes'..msg.chat_id_) then
-text = DevAbs:get(ALOMDA..'Abs:Groups:Welcomes'..msg.chat_id_)
+if Deviven:get(ALOMDA..'iven:Groups:Welcomes'..msg.chat_id_) then
+text = Deviven:get(ALOMDA..'iven:Groups:Welcomes'..msg.chat_id_)
 else
 text = '• نورت حبي \n• [firstname lastname] \n• [@username]'
 end
 local text = text:gsub('firstname',(result.first_name_ or ''))
 local text = text:gsub('lastname',(result.last_name_ or ''))
 local text = text:gsub('username',(result.username_ or 'src_web'))
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, 'md')
 end 
-if DevAbs:get(ALOMDA.."Abs:Lock:Welcome"..msg.chat_id_) then
+if Deviven:get(ALOMDA.."iven:Lock:Welcome"..msg.chat_id_) then
 getUser(msg.sender_user_id_,get_welcome)
 end
 --     Source ALOMDA     --
 --      New User Add      --
 elseif msg.content_.ID == "MessageChatAddMembers" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:BotWelcome') then 
+if not Deviven:get(ALOMDA..'iven:Lock:BotWelcome') then 
 tdcli_function ({ID = "GetUserProfilePhotos",user_id_ = ALOMDA,offset_ = 0,limit_ = 1},function(extra,abbas,success) 
 for i=0,#msg.content_.members_ do    
 BotWelcome = msg.content_.members_[i].id_    
 if BotWelcome and BotWelcome == tonumber(ALOMDA) then 
-if DevAbs:sismember(ALOMDA..'Abs:Groups',msg.chat_id_) then
+if Deviven:sismember(ALOMDA..'iven:Groups',msg.chat_id_) then
 BotText = "مفعله في السابق\n⌁︙ارسل ↫ الاوامر واستمتع بالمميزيات"
 else 
 BotText = "معطله يجب رفعي مشرف\n⌁︙بعد ذلك يرجى ارسال امر ↫ تفعيل\n⌁︙سيتم رفع الادمنيه والمنشئ تلقائيا"
 end 
-local AbsText = (DevAbs:get(ALOMDA.."Abs:Text:BotWelcome") or "⌁︙مرحبا انا بوت اسمي "..NameBot.."\n⌁︙حالة المجموعه ↫ "..BotText.."\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉")
-local AbsPhoto = (DevAbs:get(ALOMDA.."Abs:Photo:BotWelcome") or abbas.photos_[0].sizes_[1].photo_.persistent_id_)
-if DevAbs:get(ALOMDA.."Abs:Photo:BotWelcome") or abbas.photos_[0] then
-sendPhoto(msg.chat_id_,msg.id_,0,1,nil,AbsPhoto,AbsText)
+local ivenText = (Deviven:get(ALOMDA.."iven:Text:BotWelcome") or "⌁︙مرحبا انا بوت اسمي "..NameBot.."\n⌁︙حالة المجموعه ↫ "..BotText.."\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉")
+local ivenPhoto = (Deviven:get(ALOMDA.."iven:Photo:BotWelcome") or abbas.photos_[0].sizes_[1].photo_.persistent_id_)
+if Deviven:get(ALOMDA.."iven:Photo:BotWelcome") or abbas.photos_[0] then
+sendPhoto(msg.chat_id_,msg.id_,0,1,nil,ivenPhoto,ivenText)
 else 
-send(msg.chat_id_,msg.id_,AbsText)
+send(msg.chat_id_,msg.id_,ivenText)
 end 
 end   
 end
 end,nil)
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:TagServr'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:TagServr'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 return
 end
@@ -2207,29 +2207,29 @@ ChatKick(msg.chat_id_, msg.content_.members_[0].id_)
 DeleteMessage(msg.chat_id_, {[0] = msg.id_}) 
 return false
 end
-if DevAbs:get(ALOMDA.."Abs:Lock:Welcome"..msg.chat_id_) then
-if DevAbs:get(ALOMDA..'Abs:Groups:Welcomes'..msg.chat_id_) then
-text = DevAbs:get(ALOMDA..'Abs:Groups:Welcomes'..msg.chat_id_)
+if Deviven:get(ALOMDA.."iven:Lock:Welcome"..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Groups:Welcomes'..msg.chat_id_) then
+text = Deviven:get(ALOMDA..'iven:Groups:Welcomes'..msg.chat_id_)
 else
 text = '• نورت حبي \n• [firstname lastname] \n• [@username]'
 end
 local text = text:gsub('firstname',(msg.content_.members_[0].first_name_ or ''))
 local text = text:gsub('lastname',(msg.content_.members_[0].last_name_ or ''))
 local text = text:gsub('username',(msg.content_.members_[0].username_ or 'src_web'))
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, 'md')
 end
 --     Source ALOMDA     --
 --        Contact         --
 elseif msg.content_.ID == "MessageContact" then
 if not VipMem(msg) then
 if msg.forward_info_ then
-if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then
 if msg.forward_info_.ID == "MessageForwardedFromUser" or msg.forward_info_.ID == "MessageForwardedPost" then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Contact'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Contact'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
@@ -2238,44 +2238,44 @@ end
 elseif msg.content_.ID == "MessageAudio" then
 if not VipMem(msg) then
 if msg.forward_info_ then
-if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then
 if msg.forward_info_.ID == "MessageForwardedFromUser" or msg.forward_info_.ID == "MessageForwardedPost" then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Music'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Music'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 if msg.content_.caption_ then
 Filters(msg, msg.content_.caption_)
-if DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then
 if msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then
 if msg.content_.caption_:match("@") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("#") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[Hh][Tt][Tt][Pp][Ss]://") or msg.content_.caption_:match("[Hh][Tt][Tt][Pp]://") or msg.content_.caption_:match(".[Ii][Rr]") or msg.content_.caption_:match(".[Cc][Oo][Mm]") or msg.content_.caption_:match(".[Oo][Rr][Gg]") or msg.content_.caption_:match(".[Ii][Nn][Ff][Oo]") or msg.content_.caption_:match("[Ww][Ww][Ww].") or msg.content_.caption_:match(".[Xx][Yy][Zz]") or msg.content_.caption_:match(".[Tt][Kk]") or msg.content_.ID == "MessageEntityTextUrl" or msg.content_.ID == "MessageEntityUrl" then
-if DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[\216-\219][\128-\191]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[A-Z]") or msg.content_.caption_:match("[a-z]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
@@ -2286,44 +2286,44 @@ end
 elseif msg.content_.ID == "MessageVoice" then
 if not VipMem(msg) then
 if msg.forward_info_ then
-if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then
 if msg.forward_info_.ID == "MessageForwardedFromUser" or msg.forward_info_.ID == "MessageForwardedPost" then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Voice'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Voice'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 if msg.content_.caption_ then
 Filters(msg, msg.content_.caption_)
-if DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then
 if msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then
 if msg.content_.caption_:match("@") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("#") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[Hh][Tt][Tt][Pp][Ss]://") or msg.content_.caption_:match("[Hh][Tt][Tt][Pp]://") or msg.content_.caption_:match(".[Ii][Rr]") or msg.content_.caption_:match(".[Cc][Oo][Mm]") or msg.content_.caption_:match(".[Oo][Rr][Gg]") or msg.content_.caption_:match(".[Ii][Nn][Ff][Oo]") or msg.content_.caption_:match("[Ww][Ww][Ww].") or msg.content_.caption_:match(".[Xx][Yy][Zz]") or msg.content_.caption_:match(".[Tt][Kk]") or msg.content_.ID == "MessageEntityTextUrl" or msg.content_.ID == "MessageEntityUrl" then
-if DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[\216-\219][\128-\191]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[A-Z]") or msg.content_.caption_:match("[a-z]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
@@ -2334,45 +2334,45 @@ end
 elseif msg.content_.ID == "MessageLocation" then
 if not VipMem(msg) then
 if msg.forward_info_ then
-if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then
 if msg.forward_info_.ID == "MessageForwardedFromUser" or msg.forward_info_.ID == "MessageForwardedPost" then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Location'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Location'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 return
 end
 if msg.content_.caption_ then
 Filters(msg, msg.content_.caption_)
-if DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then
 if msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then
 if msg.content_.caption_:match("@") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("#") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[Hh][Tt][Tt][Pp][Ss]://") or msg.content_.caption_:match("[Hh][Tt][Tt][Pp]://") or msg.content_.caption_:match(".[Ii][Rr]") or msg.content_.caption_:match(".[Cc][Oo][Mm]") or msg.content_.caption_:match(".[Oo][Rr][Gg]") or msg.content_.caption_:match(".[Ii][Nn][Ff][Oo]") or msg.content_.caption_:match("[Ww][Ww][Ww].") or msg.content_.caption_:match(".[Xx][Yy][Zz]") or msg.content_.caption_:match(".[Tt][Kk]") or msg.content_.ID == "MessageEntityTextUrl" or msg.content_.ID == "MessageEntityUrl" then
-if DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[\216-\219][\128-\191]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[A-Z]") or msg.content_.caption_:match("[a-z]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
@@ -2383,44 +2383,44 @@ end
 elseif msg.content_.ID == "MessageVideo" then
 if not VipMem(msg) then
 if msg.forward_info_ then
-if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then
 if msg.forward_info_.ID == "MessageForwardedFromUser" or msg.forward_info_.ID == "MessageForwardedPost" then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Videos'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Videos'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 if msg.content_.caption_ then
 Filters(msg, msg.content_.caption_)
-if DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then
 if msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or msg.content_.caption_:match("[Tt].[Mm][Ee]") or msg.content_.caption_:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then
 if msg.content_.caption_:match("@") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("#") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[Hh][Tt][Tt][Pp][Ss]://") or msg.content_.caption_:match("[Hh][Tt][Tt][Pp]://") or msg.content_.caption_:match(".[Ii][Rr]") or msg.content_.caption_:match(".[Cc][Oo][Mm]") or msg.content_.caption_:match(".[Oo][Rr][Gg]") or msg.content_.caption_:match(".[Ii][Nn][Ff][Oo]") or msg.content_.caption_:match("[Ww][Ww][Ww].") or msg.content_.caption_:match(".[Xx][Yy][Zz]") or msg.content_.caption_:match(".[Tt][Kk]") or msg.content_.ID == "MessageEntityTextUrl" or msg.content_.ID == "MessageEntityUrl" then
-if DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[\216-\219][\128-\191]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[A-Z]") or msg.content_.caption_:match("[a-z]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
@@ -2431,44 +2431,44 @@ end
 elseif msg.content_.ID == "MessageAnimation" then
 if not VipMem(msg) then
 if msg.forward_info_ then
-if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then
 if msg.forward_info_.ID == "MessageForwardedFromUser" or msg.forward_info_.ID == "MessageForwardedPost" then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Gifs'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Gifs'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 if msg.content_.caption_ then
 Filters(msg, msg.content_.caption_)
-if DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then
 if msg.content_.caption_:match("[Hh][Tt][Tt][Pp][Ss]://") or msg.content_.caption_:match("[Hh][Tt][Tt][Pp]://") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then
 if msg.content_.caption_:match("@") then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("#") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[Hh][Tt][Tt][Pp][Ss]://") or msg.content_.caption_:match("[Hh][Tt][Tt][Pp]://") or msg.content_.caption_:match(".[Ii][Rr]") or msg.content_.caption_:match(".[Cc][Oo][Mm]") or msg.content_.caption_:match(".[Oo][Rr][Gg]") or msg.content_.caption_:match(".[Ii][Nn][Ff][Oo]") or msg.content_.caption_:match("[Ww][Ww][Ww].") or msg.content_.caption_:match(".[Xx][Yy][Zz]") or msg.content_.caption_:match(".[Tt][Kk]") or msg.content_.ID == "MessageEntityTextUrl" or msg.content_.ID == "MessageEntityUrl" then
-if DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[\216-\219][\128-\191]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.caption_:match("[A-Z]") or msg.content_.caption_:match("[a-z]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
@@ -2480,70 +2480,70 @@ elseif msg.content_.ID == "MessageText" then
 if not VipMem(msg) then
 Filters(msg,text)
 if msg.forward_info_ then
-if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then
 if msg.forward_info_.ID == "MessageForwardedFromUser" or msg.forward_info_.ID == "MessageForwardedPost" then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 end
 if text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text:match("[Tt].[Mm][Ee]") or text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Text'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Text'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 if msg.content_.text_:match("@") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.text_:match("#") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if text:match("[Hh][Tt][Tt][Pp][Ss]://") or text:match("[Hh][Tt][Tt][Pp]://") or text:match(".[Ii][Rr]") or text:match(".[Cc][Oo][Mm]") or text:match(".[Oo][Rr][Gg]") or text:match(".[Ii][Nn][Ff][Oo]") or text:match("[Ww][Ww][Ww].") or text:match(".[Tt][Kk]") or text:match(".[Xx][Yy][Zz]") or msg.content_.ID == "MessageEntityTextUrl" or msg.content_.ID == "MessageEntityUrl" then
-if DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.text_:match("[\216-\219][\128-\191]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.text_ then
 local _nl, ctrl_chars = string.gsub(text, '%c', '')
 local _nl, real_digits = string.gsub(text, '%d', '')
-if not DevAbs:get(ALOMDA..'Abs:Spam:Text'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Spam:Text'..msg.chat_id_) then
 sens = 400
 else
-sens = tonumber(DevAbs:get(ALOMDA..'Abs:Spam:Text'..msg.chat_id_))
+sens = tonumber(Deviven:get(ALOMDA..'iven:Spam:Text'..msg.chat_id_))
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Spam'..msg.chat_id_) and string.len(msg.content_.text_) > (sens) or ctrl_chars > (sens) or real_digits > (sens) then
+if Deviven:get(ALOMDA..'iven:Lock:Spam'..msg.chat_id_) and string.len(msg.content_.text_) > (sens) or ctrl_chars > (sens) or real_digits > (sens) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 if msg.content_.text_:match("[A-Z]") or msg.content_.text_:match("[a-z]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 end
 end
 --     Source ALOMDA     --
-if DevAbs:get(ALOMDA.."Abs:Set:Groups:Links"..msg.chat_id_..""..msg.sender_user_id_) then
+if Deviven:get(ALOMDA.."iven:Set:Groups:Links"..msg.chat_id_..""..msg.sender_user_id_) then
 if text == "الغاء" then
 send(msg.chat_id_,msg.id_,"⌁︙تم الغاء حفظ الرابط")       
-DevAbs:del(ALOMDA.."Abs:Set:Groups:Links"..msg.chat_id_..""..msg.sender_user_id_) 
+Deviven:del(ALOMDA.."iven:Set:Groups:Links"..msg.chat_id_..""..msg.sender_user_id_) 
 return false
 end
 if msg.content_.text_:match("(https://telegram.me/joinchat/%S+)") or msg.content_.text_:match("(https://t.me/joinchat/%S+)") then
 local Link = msg.content_.text_:match("(https://telegram.me/joinchat/%S+)") or msg.content_.text_:match("(https://t.me/joinchat/%S+)")
-DevAbs:set(ALOMDA.."Abs:Groups:Links"..msg.chat_id_,Link)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ الرابط بنجاح', 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Set:Groups:Links"..msg.chat_id_..""..msg.sender_user_id_) 
+Deviven:set(ALOMDA.."iven:Groups:Links"..msg.chat_id_,Link)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ الرابط بنجاح', 1, 'md')
+Deviven:del(ALOMDA.."iven:Set:Groups:Links"..msg.chat_id_..""..msg.sender_user_id_) 
 return false 
 end
 end
@@ -2551,76 +2551,76 @@ end
 local msg = data.message_
 text = msg.content_.text_
 if text and Constructor(msg) then 
-if DevAbs:get('ALOMDATEAM:'..ALOMDA.."numadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_) then 
+if Deviven:get('ALOMDATEAM:'..ALOMDA.."numadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_) then 
 if text and text:match("^الغاء$") then 
-DevAbs:del('ALOMDATEAM:'..ALOMDA..'id:user'..msg.chat_id_)  
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء الامر', 1, 'md')
-DevAbs:del('ALOMDATEAM:'..ALOMDA.."numadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
+Deviven:del('ALOMDATEAM:'..ALOMDA..'id:user'..msg.chat_id_)  
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء الامر', 1, 'md')
+Deviven:del('ALOMDATEAM:'..ALOMDA.."numadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
 return false  end 
-DevAbs:del('ALOMDATEAM:'..ALOMDA.."numadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
+Deviven:del('ALOMDATEAM:'..ALOMDA.."numadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
 local numadded = string.match(text, "(%d+)") 
-local iduserr = DevAbs:get('ALOMDATEAM:'..ALOMDA..'id:user'..msg.chat_id_)  
-DevAbs:incrby(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..iduserr,numadded)
-Dev_Abs(msg.chat_id_, msg.id_,  1, "⌁︙تم اضافة "..numadded..' رساله', 1, 'md')
-DevAbs:del('ALOMDATEAM:'..ALOMDA..'id:user'..msg.chat_id_) 
+local iduserr = Deviven:get('ALOMDATEAM:'..ALOMDA..'id:user'..msg.chat_id_)  
+Deviven:incrby(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..iduserr,numadded)
+Dev_iven(msg.chat_id_, msg.id_,  1, "⌁︙تم اضافة "..numadded..' رساله', 1, 'md')
+Deviven:del('ALOMDATEAM:'..ALOMDA..'id:user'..msg.chat_id_) 
 end
 end
 if text and Constructor(msg) then 
-if DevAbs:get('ALOMDATEAM:'..ALOMDA.."nmadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_) then 
+if Deviven:get('ALOMDATEAM:'..ALOMDA.."nmadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_) then 
 if text and text:match("^الغاء$") then 
-DevAbs:del('ALOMDATEAM:'..ALOMDA..'ids:user'..msg.chat_id_)  
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء الامر', 1, 'md')
-DevAbs:del('ALOMDATEAM:'..ALOMDA.."nmadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
+Deviven:del('ALOMDATEAM:'..ALOMDA..'ids:user'..msg.chat_id_)  
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء الامر', 1, 'md')
+Deviven:del('ALOMDATEAM:'..ALOMDA.."nmadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
 return false  end 
-DevAbs:del('ALOMDATEAM:'..ALOMDA.."nmadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
+Deviven:del('ALOMDATEAM:'..ALOMDA.."nmadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
 local numadded = string.match(text, "(%d+)") 
-local iduserr = DevAbs:get('ALOMDATEAM:'..ALOMDA..'ids:user'..msg.chat_id_)  
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..iduserr,numadded)  
-Dev_Abs(msg.chat_id_, msg.id_,  1, "⌁︙تم اضافة "..numadded..' نقطه', 1, 'md')
-DevAbs:del('ALOMDATEAM:'..ALOMDA..'ids:user'..msg.chat_id_)  
+local iduserr = Deviven:get('ALOMDATEAM:'..ALOMDA..'ids:user'..msg.chat_id_)  
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..iduserr,numadded)  
+Dev_iven(msg.chat_id_, msg.id_,  1, "⌁︙تم اضافة "..numadded..' نقطه', 1, 'md')
+Deviven:del('ALOMDATEAM:'..ALOMDA..'ids:user'..msg.chat_id_)  
 end
 end
 --     Source ALOMDA     --
 if text and (text:match("طيز") or text:match("ديس") or text:match("انيج") or text:match("نيج") or text:match("ديوس") or text:match("عير") or text:match("كسختك") or text:match("كسمك") or text:match("كسربك") or text:match("بلاع") or text:match("ابو العيوره") or text:match("منيوج") or text:match("كحبه") or text:match("كحاب") or text:match("الكحبه") or text:match("كسك") or text:match("طيزك") or text:match("كس امك") or text:match("صرم") or text:match("كس اختك")) then
-if not DevAbs:get(ALOMDA.."Abs:Lock:Fshar"..msg.chat_id_) and not VipMem(msg) then
+if not Deviven:get(ALOMDA.."iven:Lock:Fshar"..msg.chat_id_) and not VipMem(msg) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 ReplyStatus(msg,msg.sender_user_id_,"WrongWay","⌁︙ممنوع الفشار في المجموعه")  
 end end
 if text and (text:match("ڬ") or text:match("ٺ") or text:match("چ") or text:match("ڇ") or text:match("ڿ") or text:match("ڀ") or text:match("ڎ") or text:match("ݫ") or text:match("ژ") or text:match("ڟ") or text:match("ݜ") or text:match("ڸ") or text:match("پ") or text:match("۴") or text:match("مک") or text:match("زدن") or text:match("دخترا") or text:match("دیوث") or text:match("کلیپشن") or text:match("خوششون") or text:match("میدا") or text:match("که") or text:match("بدانیم") or text:match("باید") or text:match("زناشویی") or text:match("آموزش") or text:match("راحتی") or text:match("خسته") or text:match("بیام") or text:match("بپوشم") or text:match("كرمه")) then
-if DevAbs:get(ALOMDA.."Abs:Lock:Farsi"..msg.chat_id_) and not VipMem(msg) then
+if Deviven:get(ALOMDA.."iven:Lock:Farsi"..msg.chat_id_) and not VipMem(msg) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 ReplyStatus(msg,msg.sender_user_id_,"WrongWay","⌁︙ممنوع التكلم بالغه الفارسيه هنا")  
 end end
 if text and (text:match("ڬ") or text:match("ٺ") or text:match("چ") or text:match("ڇ") or text:match("ڿ") or text:match("ڀ") or text:match("ڎ") or text:match("ݫ") or text:match("ژ") or text:match("ڟ") or text:match("ݜ") or text:match("ڸ") or text:match("پ") or text:match("۴") or text:match("مک") or text:match("زدن") or text:match("دخترا") or text:match("دیوث") or text:match("کلیپشن") or text:match("خوششون") or text:match("میدا") or text:match("که") or text:match("بدانیم") or text:match("باید") or text:match("زناشویی") or text:match("آموزش") or text:match("راحتی") or text:match("خسته") or text:match("بیام") or text:match("بپوشم") or text:match("كرمه")) then
-if DevAbs:get(ALOMDA.."Abs:Lock:FarsiBan"..msg.chat_id_) and not VipMem(msg) then
+if Deviven:get(ALOMDA.."iven:Lock:FarsiBan"..msg.chat_id_) and not VipMem(msg) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 ChatKick(msg.chat_id_, msg.sender_user_id_)
 end end 
 if text and (text:match("خره بالله") or text:match("خبربك") or text:match("كسدينربك") or text:match("خرب بالله") or text:match("خرب الله") or text:match("خره بربك") or text:match("الله الكواد") or text:match("خره بمحمد") or text:match("كسم الله") or text:match("كسم ربك") or text:match("كسربك") or text:match("كسختالله") or text:match("كسخت الله") or text:match("خره بدينك") or text:match("خرهبدينك") or text:match("كسالله") or text:match("خربالله")) then
-if not DevAbs:get(ALOMDA.."Abs:Lock:Kfr"..msg.chat_id_) and not VipMem(msg) then
+if not Deviven:get(ALOMDA.."iven:Lock:Kfr"..msg.chat_id_) and not VipMem(msg) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 ReplyStatus(msg,msg.sender_user_id_,"WrongWay","⌁︙ممنوع الكفر في المجموعه") 
 end end
 if text and (text:match("سني نكس") or text:match("شيعه") or text:match("الشيعه") or text:match("السنه") or text:match("طائفتكم") or text:match("شيعي") or text:match("انا سني") or text:match("مسيحي") or text:match("يهودي") or text:match("صابئي") or text:match("ملحد") or text:match("بالسنه") or text:match("شيعة")) then
-if not DevAbs:get(ALOMDA.."Abs:Lock:Taf"..msg.chat_id_) and not VipMem(msg) then
+if not Deviven:get(ALOMDA.."iven:Lock:Taf"..msg.chat_id_) and not VipMem(msg) then
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 ReplyStatus(msg,msg.sender_user_id_,"WrongWay","⌁︙ممنوع التكلم بالطائفيه هنا") 
 end end
 --     Source ALOMDA     --
 if SecondSudo(msg) then
 if text == 'جلب نسخه الكروبات' and ChCheck(msg) or text == 'جلب نسخه احتياطيه' and ChCheck(msg) then
-local List = DevAbs:smembers(ALOMDA..'Abs:Groups') 
-local BotName = (DevAbs:get(ALOMDA.."Abs:NameBot") or 'العمده')
+local List = Deviven:smembers(ALOMDA..'iven:Groups') 
+local BotName = (Deviven:get(ALOMDA.."iven:NameBot") or 'العمده')
 local GetJson = '{"BotId": '..ALOMDA..',"BotName": "'..BotName..'","GroupsList":{'  
 for k,v in pairs(List) do 
-LinkGroups = DevAbs:get(ALOMDA.."Abs:Groups:Links"..v)
-Welcomes = DevAbs:get(ALOMDA..'Abs:Groups:Welcomes'..v) or ''
-AbsConstructors = DevAbs:smembers(ALOMDA..'Abs:AbsConstructor:'..v)
-Constructors = DevAbs:smembers(ALOMDA..'Abs:BasicConstructor:'..v)
-BasicConstructors = DevAbs:smembers(ALOMDA..'Abs:Constructor:'..v)
-Managers = DevAbs:smembers(ALOMDA..'Abs:Managers:'..v)
-Admis = DevAbs:smembers(ALOMDA..'Abs:Admins:'..v)
-Vips = DevAbs:smembers(ALOMDA..'Abs:VipMem:'..v)
+LinkGroups = Deviven:get(ALOMDA.."iven:Groups:Links"..v)
+Welcomes = Deviven:get(ALOMDA..'iven:Groups:Welcomes'..v) or ''
+ivenConstructors = Deviven:smembers(ALOMDA..'iven:ivenConstructor:'..v)
+Constructors = Deviven:smembers(ALOMDA..'iven:BasicConstructor:'..v)
+BasicConstructors = Deviven:smembers(ALOMDA..'iven:Constructor:'..v)
+Managers = Deviven:smembers(ALOMDA..'iven:Managers:'..v)
+Admis = Deviven:smembers(ALOMDA..'iven:Admins:'..v)
+Vips = Deviven:smembers(ALOMDA..'iven:VipMem:'..v)
 if k == 1 then
 GetJson = GetJson..'"'..v..'":{'
 else
@@ -2681,9 +2681,9 @@ end
 end   
 GetJson = GetJson..'],'
 end
-if #AbsConstructors ~= 0 then
-GetJson = GetJson..'"AbsConstructors":['
-for k,v in pairs(AbsConstructors) do
+if #ivenConstructors ~= 0 then
+GetJson = GetJson..'"ivenConstructors":['
+for k,v in pairs(ivenConstructors) do
 if k == 1 then
 GetJson =  GetJson..'"'..v..'"'
 else
@@ -2716,29 +2716,29 @@ tdcli_function ({ ID = "GetMessage", chat_id_ = msg.chat_id_, message_id_ = tonu
 end
 end
 --     Source ALOMDA     --
-if DevAbs:get(ALOMDA.."SET:GAME"..msg.chat_id_) then  
+if Deviven:get(ALOMDA.."SET:GAME"..msg.chat_id_) then  
 if text and text:match("^(%d+)$") then
 local NUM = text:match("^(%d+)$")
 if tonumber(NUM) > 6 then
-Dev_Abs( msg.chat_id_, msg.id_, 1,"⌁︙يوجد فقط ( 6 ) اختيارات\n⌁︙ارسل اختيارك مره اخرى", 1, "md")    
+Dev_iven( msg.chat_id_, msg.id_, 1,"⌁︙يوجد فقط ( 6 ) اختيارات\n⌁︙ارسل اختيارك مره اخرى", 1, "md")    
 return false  end 
-local GETNUM = DevAbs:get(ALOMDA.."GAMES"..msg.chat_id_)
+local GETNUM = Deviven:get(ALOMDA.."GAMES"..msg.chat_id_)
 if tonumber(NUM) == tonumber(GETNUM) then
-DevAbs:del(ALOMDA.."SET:GAME"..msg.chat_id_)   
-Dev_Abs( msg.chat_id_, msg.id_, 1,'⌁︙*المحيبس باليد رقم* ↫ '..NUM..'\n⌁︙*مبروك لقد ربحت وحصلت على 5 نقاط يمكنك استبدالها بالرسائل*', 1, "md") 
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_,5)  
+Deviven:del(ALOMDA.."SET:GAME"..msg.chat_id_)   
+Dev_iven( msg.chat_id_, msg.id_, 1,'⌁︙*المحيبس باليد رقم* ↫ '..NUM..'\n⌁︙*مبروك لقد ربحت وحصلت على 5 نقاط يمكنك استبدالها بالرسائل*', 1, "md") 
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_,5)  
 elseif tonumber(NUM) ~= tonumber(GETNUM) then
-DevAbs:del(ALOMDA.."SET:GAME"..msg.chat_id_)   
-Dev_Abs( msg.chat_id_, msg.id_, 1,'⌁︙*المحيبس باليد رقم* ↫ '..GETNUM..'\n⌁︙*للاسف لقد خسرت حاول مره اخرى للعثور على المحيبس*', 1, "md")
+Deviven:del(ALOMDA.."SET:GAME"..msg.chat_id_)   
+Dev_iven( msg.chat_id_, msg.id_, 1,'⌁︙*المحيبس باليد رقم* ↫ '..GETNUM..'\n⌁︙*للاسف لقد خسرت حاول مره اخرى للعثور على المحيبس*', 1, "md")
 end
 end
 end
-if DevAbs:get(ALOMDA..'DevAbs4'..msg.sender_user_id_) then
+if Deviven:get(ALOMDA..'Deviven4'..msg.sender_user_id_) then
 if text and text:match("^الغاء$") then 
 send(msg.chat_id_, msg.id_, "⌁︙تم الغاء الامر")
-DevAbs:del(ALOMDA..'DevAbs4'..msg.sender_user_id_)
+Deviven:del(ALOMDA..'Deviven4'..msg.sender_user_id_)
 return false  end 
-DevAbs:del(ALOMDA..'DevAbs4'..msg.sender_user_id_)
+Deviven:del(ALOMDA..'Deviven4'..msg.sender_user_id_)
 local username = string.match(text, "@[%a%d_]+") 
 tdcli_function({ID = "SearchPublicChat",username_ = username},function(arg,data) 
 if data and data.message_ and data.message_ == "USERNAME_NOT_OCCUPIED" then 
@@ -2753,8 +2753,8 @@ return false  end
 if data and data.type_ and data.type_.channel_ and data.type_.channel_.is_supergroup_ == false then
 if data and data.type_ and data.type_.channel_ and data.type_.channel_.ID and data.type_.channel_.status_.ID == 'ChatMemberStatusEditor' then
 send(msg.chat_id_, msg.id_,'⌁︙البوت ادمن في القناة \n⌁︙تم تفعيل الاشتراك الاجباري \n⌁︙ايدي القناة ↫ '..data.id_..'\n⌁︙معرف القناة ↫ [@'..data.type_.channel_.username_..']')
-DevAbs:set(ALOMDA..'DevAbs2',data.id_)
-DevAbs:set(ALOMDA..'DevAbs3','@'..data.type_.channel_.username_)
+Deviven:set(ALOMDA..'Deviven2',data.id_)
+Deviven:set(ALOMDA..'Deviven3','@'..data.type_.channel_.username_)
 else
 send(msg.chat_id_, msg.id_,'⌁︙عذرا البوت ليس ادمن في القناة')
 end
@@ -2763,79 +2763,79 @@ end
 end,nil)
 end
 --     Source ALOMDA     --
-if DevAbs:get(ALOMDA.."Abs:DevText" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then
+if Deviven:get(ALOMDA.."iven:DevText" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then
 if text and text:match("^الغاء$") then 
-DevAbs:del(ALOMDA.."Abs:DevText" .. msg.chat_id_ .. ":" .. msg.sender_user_id_)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء الامر', 1, 'md')
+Deviven:del(ALOMDA.."iven:DevText" .. msg.chat_id_ .. ":" .. msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء الامر', 1, 'md')
 return false 
 end 
-DevAbs:del(ALOMDA.."Abs:DevText" .. msg.chat_id_ .. ":" .. msg.sender_user_id_)
+Deviven:del(ALOMDA.."iven:DevText" .. msg.chat_id_ .. ":" .. msg.sender_user_id_)
 local DevText = msg.content_.text_:match("(.*)")
-DevAbs:set(ALOMDA.."DevText", DevText)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ كليشة المطور", 1, "md")
+Deviven:set(ALOMDA.."DevText", DevText)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ كليشة المطور", 1, "md")
 end
-if DevAbs:get(ALOMDA..'Abs:NameBot'..msg.sender_user_id_) == 'msg' then
+if Deviven:get(ALOMDA..'iven:NameBot'..msg.sender_user_id_) == 'msg' then
 if text and text:match("^الغاء$") then 
-DevAbs:del(ALOMDA..'Abs:NameBot'..msg.sender_user_id_)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء الامر', 1, 'md')
+Deviven:del(ALOMDA..'iven:NameBot'..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء الامر', 1, 'md')
 return false 
 end 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ اسم البوت ', 1, 'html')
-DevAbs:del(ALOMDA..'Abs:NameBot'..msg.sender_user_id_)
-DevAbs:set(ALOMDA..'Abs:NameBot', text)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ اسم البوت ', 1, 'html')
+Deviven:del(ALOMDA..'iven:NameBot'..msg.sender_user_id_)
+Deviven:set(ALOMDA..'iven:NameBot', text)
 return false 
 end
 --     Source ALOMDA     --
 if text == "الرابط" then
-if not DevAbs:get(ALOMDA.."Abs:Lock:GpLinks"..msg.chat_id_) then 
-if DevAbs:get(ALOMDA.."Abs:Groups:Links"..msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙𝒈𝒓𝒐𝒖𝒑 𝒍𝒊𝒏𝒌 ↬ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"..DevAbs:get(ALOMDA.."Abs:Groups:Links"..msg.chat_id_), 1, "html")
+if not Deviven:get(ALOMDA.."iven:Lock:GpLinks"..msg.chat_id_) then 
+if Deviven:get(ALOMDA.."iven:Groups:Links"..msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙𝒈𝒓𝒐𝒖𝒑 𝒍𝒊𝒏𝒌 ↬ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"..Deviven:get(ALOMDA.."iven:Groups:Links"..msg.chat_id_), 1, "html")
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لايوجد رابط ارسل ↫ ضع رابط او ارسل ↫ انشاء رابط للانشاء', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لايوجد رابط ارسل ↫ ضع رابط او ارسل ↫ انشاء رابط للانشاء', 1, 'md')
 end
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙جلب رابط المجموعه معطل', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙جلب رابط المجموعه معطل', 1, 'md')
 end
 end
 --     Source ALOMDA     --
 if ChatType == 'sp' or ChatType == 'gp'  then
 if text == 'بوت' or text == 'بوتت' then 
-NameBot = (DevAbs:get(ALOMDA..'Abs:NameBot') or 'العمده')
+NameBot = (Deviven:get(ALOMDA..'iven:NameBot') or 'العمده')
 local ALOMDATEAM = {"لتكول بوت اسمي "..NameBot.." 😒🔪","اسمي القميل "..NameBot.." 😚♥️","عندي اسم تره 😒💔","صيحولي "..NameBot.." كافي بوت 😒🔪","انت البوت لك 😒💔"} 
-DevAbs2 = math.random(#ALOMDATEAM) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM[DevAbs2] , 1, 'html') 
+Deviven2 = math.random(#ALOMDATEAM) 
+Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM[Deviven2] , 1, 'html') 
 return false
 end
 if text == 'اسم البوت' or text == 'البوت شنو اسمه' or text == 'شسمه البوت' or text == 'البوت شسمه' then
-NameBot = (DevAbs:get(ALOMDA..'Abs:NameBot') or 'العمده') 
+NameBot = (Deviven:get(ALOMDA..'iven:NameBot') or 'العمده') 
 local ALOMDATEAM = {"اسمي القميل "..NameBot.." 😚♥️","هلاا يروحيي وياكك "..NameBot.." 😻♥️"} 
-DevAbs2 = math.random(#ALOMDATEAM) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM[DevAbs2] , 1, 'html') 
+Deviven2 = math.random(#ALOMDATEAM) 
+Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM[Deviven2] , 1, 'html') 
 return false
 end
-if text and text == (DevAbs:get(ALOMDA..'Abs:NameBot') or 'العمده') then 
-NameBot = (DevAbs:get(ALOMDA..'Abs:NameBot') or 'العمده')
+if text and text == (Deviven:get(ALOMDA..'iven:NameBot') or 'العمده') then 
+NameBot = (Deviven:get(ALOMDA..'iven:NameBot') or 'العمده')
 local namebot = {'😸♥️ هلا كلبي وياك '..NameBot..' تفضل','ترةه مصختهاا احجيي شرايد 😕😒💔','اطلقق واحدد يصيح '..NameBot..' 😻♥️','خبصتت امنةة شتريدد عااد 🤧😒💔'} 
 name = math.random(#namebot) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, namebot[name] , 1, 'html') 
+Dev_iven(msg.chat_id_, msg.id_, 1, namebot[name] , 1, 'html') 
 return false 
 end
 if text =='نقاطي' and ChCheck(msg) then 
-if tonumber((DevAbs:get(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_) or 0)) == 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙لم تربح اي نقطه\n⌁︙ارسل ↫ الالعاب للعب', 1, 'md')
+if tonumber((Deviven:get(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_) or 0)) == 0 then
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙لم تربح اي نقطه\n⌁︙ارسل ↫ الالعاب للعب', 1, 'md')
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙عدد النقاط التي ربحتها ↫ '..(DevAbs:get(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_)), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙عدد النقاط التي ربحتها ↫ '..(Deviven:get(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_)), 1, 'md')
 end
 end
-if text ==  'حذف رسائلي' and ChCheck(msg) or text ==  'مسح رسائلي' and ChCheck(msg) then DevAbs:del(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_) Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف جميع رسائلك', 1, 'md') end
-if text ==  'حذف نقاطي' and ChCheck(msg) or text ==  'مسح نقاطي' and ChCheck(msg) then DevAbs:del(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_) Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف جميع نقاطك', 1, 'md') end
+if text ==  'حذف رسائلي' and ChCheck(msg) or text ==  'مسح رسائلي' and ChCheck(msg) then Deviven:del(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_) Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف جميع رسائلك', 1, 'md') end
+if text ==  'حذف نقاطي' and ChCheck(msg) or text ==  'مسح نقاطي' and ChCheck(msg) then Deviven:del(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_) Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف جميع نقاطك', 1, 'md') end
 --     Source ALOMDA     --
 if text == 'سمايلات' and ChCheck(msg) or text == 'السمايلات' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-DevAbs2 = {'🍏','🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🍈','🍒','🍑','🍍','🥥','🥝','🍅','🍆','🥑','🥦','🥒','🌶','🌽','🥕','🥔','🍠','🥐','🍞','🥖','🥨','🧀','🥚','🍳','🥞','🥓','🥩','🍗','🍖','🌭','🍔','🍟','🍕','🥪','🥙','🍼','☕️','🍵','🥤','🍶','🍺','🍻','🏀','⚽️','🏈','⚾️','🎾','🏐','🏉','🎱','🏓','🏸','🥅','🎰','🎮','🎳','🎯','🏆','🎻','🎸','🎺','🥁','🎹','🎼','🎧','🎤','🎬','🎨','🎭','🎪','🛎','📤','🎗','🏵','🎖','🏆','🥌','🛷','🚕','🚗','🚙','🚌','🚎','🏎','🚓','🚑','🚚','🚛','🚜','🇮🇶','⚔️','🛡','🔮','🌡','💣','⏱','🛢','📓','📗','📂','📅','📪','📫','📬','📭','⏰','📺','🎚','☎️','📡'}
-name = DevAbs2[math.random(#DevAbs2)]
-DevAbs:set(ALOMDA..'Abs:GameNum'..msg.chat_id_,name)
-DevAbs:del(ALOMDA..'Abs:Games:Ids'..msg.chat_id_)
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Deviven2 = {'🍏','🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🍈','🍒','🍑','🍍','🥥','🥝','🍅','🍆','🥑','🥦','🥒','🌶','🌽','🥕','🥔','🍠','🥐','🍞','🥖','🥨','🧀','🥚','🍳','🥞','🥓','🥩','🍗','🍖','🌭','🍔','🍟','🍕','🥪','🥙','🍼','☕️','🍵','🥤','🍶','🍺','🍻','🏀','⚽️','🏈','⚾️','🎾','🏐','🏉','🎱','🏓','🏸','🥅','🎰','🎮','🎳','🎯','🏆','🎻','🎸','🎺','🥁','🎹','🎼','🎧','🎤','🎬','🎨','🎭','🎪','🛎','📤','🎗','🏵','🎖','🏆','🥌','🛷','🚕','🚗','🚙','🚌','🚎','🏎','🚓','🚑','🚚','🚛','🚜','🇮🇶','⚔️','🛡','🔮','🌡','💣','⏱','🛢','📓','📗','📂','📅','📪','📫','📬','📭','⏰','📺','🎚','☎️','📡'}
+name = Deviven2[math.random(#Deviven2)]
+Deviven:set(ALOMDA..'iven:GameNum'..msg.chat_id_,name)
+Deviven:del(ALOMDA..'iven:Games:Ids'..msg.chat_id_)
 name = string.gsub(name,'🍞','🍞')
 name = string.gsub(name,'🥖','🥖')
 name = string.gsub(name,'🥨','🥨')
@@ -2953,23 +2953,23 @@ name = string.gsub(name,'📺','📺')
 name = string.gsub(name,'🎚','🎚')
 name = string.gsub(name,'☎️','☎️')
 ALOMDATEAM = '⌁︙اول واحد يدز هذا السمايل يربح ↫ '..name
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 return false
 end end
-if text == DevAbs:get(ALOMDA..'Abs:GameNum'..msg.chat_id_) and not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then
-if not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then 
+if text == Deviven:get(ALOMDA..'iven:GameNum'..msg.chat_id_) and not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then 
 ALOMDATEAM = '⌁︙مبروك لقد ربحت في اللعبه \n⌁︙ارسل ↫ سمايلات للعب مره اخرى'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
 end
-DevAbs:set(ALOMDA..'Abs:Games:Ids'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Games:Ids'..msg.chat_id_,true)
 end
 if text == 'ترتيب' and ChCheck(msg) or text == 'الترتيب' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-DevAbs2 = {'سحور','سياره','استقبال','قنفه','ايفون','بزونه','مطبخ','كرستيانو','دجاجه','مدرسه','الوان','غرفه','ثلاجه','كهوه','سفينه','العراق','محطه','طياره','رادار','منزل','مستشفى','كهرباء','تفاحه','اخطبوط','سلمون','فرنسا','برتقاله','تفاح','مطرقه','بتيته','لهانه','شباك','باص','سمكه','ذباب','تلفاز','حاسوب','انترنيت','ساحه','جسر'};
-name = DevAbs2[math.random(#DevAbs2)]
-DevAbs:set(ALOMDA..'Abs:GameNum'..msg.chat_id_,name)
-DevAbs:del(ALOMDA..'Abs:Games:Ids'..msg.chat_id_)
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Deviven2 = {'سحور','سياره','استقبال','قنفه','ايفون','بزونه','مطبخ','كرستيانو','دجاجه','مدرسه','الوان','غرفه','ثلاجه','كهوه','سفينه','العراق','محطه','طياره','رادار','منزل','مستشفى','كهرباء','تفاحه','اخطبوط','سلمون','فرنسا','برتقاله','تفاح','مطرقه','بتيته','لهانه','شباك','باص','سمكه','ذباب','تلفاز','حاسوب','انترنيت','ساحه','جسر'};
+name = Deviven2[math.random(#Deviven2)]
+Deviven:set(ALOMDA..'iven:GameNum'..msg.chat_id_,name)
+Deviven:del(ALOMDA..'iven:Games:Ids'..msg.chat_id_)
 name = string.gsub(name,'سحور','س ر و ح')
 name = string.gsub(name,'سياره','ه ر س ي ا')
 name = string.gsub(name,'استقبال','ل ب ا ت ق س ا')
@@ -3011,21 +3011,21 @@ name = string.gsub(name,'انترنيت','ا ت ن ر ن ي ت')
 name = string.gsub(name,'ساحه','ح ا ه س')
 name = string.gsub(name,'جسر','ر ج س')
 ALOMDATEAM = '⌁︙اول واحد يرتبها يربح ↫ '..name
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 return false
 end end
-if text == DevAbs:get(ALOMDA..'Abs:GameNum'..msg.chat_id_) and not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then
-if not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then 
+if text == Deviven:get(ALOMDA..'iven:GameNum'..msg.chat_id_) and not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then 
 ALOMDATEAM = '⌁︙مبروك لقد ربحت في اللعبه \n⌁︙ارسل ↫ ترتيب للعب مره اخرى'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
 end
-DevAbs:set(ALOMDA..'Abs:Games:Ids'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Games:Ids'..msg.chat_id_,true)
 end
 if text == 'محيبس' and ChCheck(msg) or text == 'بات' and ChCheck(msg) or text == 'المحيبس' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
 Num = math.random(1,6)
-DevAbs:set(ALOMDA.."GAMES"..msg.chat_id_,Num) 
+Deviven:set(ALOMDA.."GAMES"..msg.chat_id_,Num) 
 TEST = [[
 ➀     ➁     ➂     ➃     ➄     ➅
 ↓     ↓     ↓     ↓     ↓     ↓
@@ -3034,16 +3034,16 @@ TEST = [[
 ⌁︙اختر رقم لاستخراج المحيبس
 ⌁︙الفائز يحصل على (5) نقاط
 ]]
-Dev_Abs(msg.chat_id_, msg.id_, 1, TEST, 1, "md") 
-DevAbs:setex(ALOMDA.."SET:GAME"..msg.chat_id_, 100, true)  
+Dev_iven(msg.chat_id_, msg.id_, 1, TEST, 1, "md") 
+Deviven:setex(ALOMDA.."SET:GAME"..msg.chat_id_, 100, true)  
 return false  
 end end
 if text == 'حزوره' and ChCheck(msg) or text == 'الحزوره' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-DevAbs2 = {'الجرس','عقرب الساعه','السمك','المطر','5','الكتاب','البسمار','7','الكعبه','بيت الشعر','لهانه','انا','امي','الابره','الساعه','22','غلط','كم الساعه','البيتنجان','البيض','المرايه','الضوء','الهواء','الضل','العمر','القلم','المشط','الحفره','البحر','الثلج','الاسفنج','الصوت','بلم'};
-name = DevAbs2[math.random(#DevAbs2)]
-DevAbs:set(ALOMDA..'Abs:GameNum'..msg.chat_id_,name)
-DevAbs:del(ALOMDA..'Abs:Games:Ids'..msg.chat_id_)
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Deviven2 = {'الجرس','عقرب الساعه','السمك','المطر','5','الكتاب','البسمار','7','الكعبه','بيت الشعر','لهانه','انا','امي','الابره','الساعه','22','غلط','كم الساعه','البيتنجان','البيض','المرايه','الضوء','الهواء','الضل','العمر','القلم','المشط','الحفره','البحر','الثلج','الاسفنج','الصوت','بلم'};
+name = Deviven2[math.random(#Deviven2)]
+Deviven:set(ALOMDA..'iven:GameNum'..msg.chat_id_,name)
+Deviven:del(ALOMDA..'iven:Games:Ids'..msg.chat_id_)
 name = string.gsub(name,'الجرس','شيئ اذا لمسته صرخ ما هوه ؟')
 name = string.gsub(name,'عقرب الساعه','اخوان لا يستطيعان تمضيه اكثر من دقيقه معا فما هما ؟')
 name = string.gsub(name,'السمك','ما هو الحيوان الذي لم يصعد الى سفينة نوح عليه السلام ؟')
@@ -3078,23 +3078,23 @@ name = string.gsub(name,'الاسفنج','كلي ثقوب ومع ذالك احف
 name = string.gsub(name,'الصوت','اسير بلا رجلين ولا ادخل الا بالاذنين فمن انا ؟')
 name = string.gsub(name,'بلم','حامل ومحمول نصف ناشف ونصف مبلول فمن اكون ؟ ')
 ALOMDATEAM = '⌁︙اول واحد يحلها يربح ↫ '..name
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 return false
 end end
-if text == DevAbs:get(ALOMDA..'Abs:GameNum'..msg.chat_id_) and not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then
-if not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then 
+if text == Deviven:get(ALOMDA..'iven:GameNum'..msg.chat_id_) and not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then 
 ALOMDATEAM = '⌁︙مبروك لقد ربحت في اللعبه \n⌁︙ارسل ↫ حزوره للعب مره اخرى'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
 end
-DevAbs:set(ALOMDA..'Abs:Games:Ids'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Games:Ids'..msg.chat_id_,true)
 end 
 if text == 'المعاني' and ChCheck(msg) or text == 'معاني' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-DevAbs2 = {'قرد','دجاجه','بطريق','ضفدع','بومه','نحله','ديك','جمل','بقره','دولفين','تمساح','قرش','نمر','اخطبوط','سمكه','خفاش','اسد','فأر','ذئب','فراشه','عقرب','زرافه','قنفذ','تفاحه','باذنجان'}
-name = DevAbs2[math.random(#DevAbs2)]
-DevAbs:set(ALOMDA..'Abs:GameNum2'..msg.chat_id_,name)
-DevAbs:del(ALOMDA..'Abs:Games:Ids'..msg.chat_id_)
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Deviven2 = {'قرد','دجاجه','بطريق','ضفدع','بومه','نحله','ديك','جمل','بقره','دولفين','تمساح','قرش','نمر','اخطبوط','سمكه','خفاش','اسد','فأر','ذئب','فراشه','عقرب','زرافه','قنفذ','تفاحه','باذنجان'}
+name = Deviven2[math.random(#Deviven2)]
+Deviven:set(ALOMDA..'iven:GameNum2'..msg.chat_id_,name)
+Deviven:del(ALOMDA..'iven:Games:Ids'..msg.chat_id_)
 name = string.gsub(name,'قرد','🐒')
 name = string.gsub(name,'دجاجه','🐔')
 name = string.gsub(name,'بطريق','🐧')
@@ -3121,23 +3121,23 @@ name = string.gsub(name,'قنفذ','🦔')
 name = string.gsub(name,'تفاحه','🍎')
 name = string.gsub(name,'باذنجان','🍆')
 ALOMDATEAM = '⌁︙ما معنى هذا السمايل :؟ ↫ '..name
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 return false
 end end
-if text == DevAbs:get(ALOMDA..'Abs:GameNum2'..msg.chat_id_) and not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then
-if not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then 
+if text == Deviven:get(ALOMDA..'iven:GameNum2'..msg.chat_id_) and not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then 
 ALOMDATEAM = '⌁︙مبروك لقد ربحت في اللعبه \n⌁︙ارسل ↫ المعاني للعب مره اخرى'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
 end
-DevAbs:set(ALOMDA..'Abs:Games:Ids'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Games:Ids'..msg.chat_id_,true)
 end 
 if text == 'العكس' and ChCheck(msg) or text == 'عكس' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-DevAbs2 = {'باي','فهمت','موزين','اسمعك','احبك','موحلو','نضيف','حاره','ناصي','جوه','سريع','ونسه','طويل','سمين','ضعيف','شريف','شجاع','رحت','عدل','نشيط','شبعان','موعطشان','خوش ولد','اني','هادئ'}
-name = DevAbs2[math.random(#DevAbs2)]
-DevAbs:set(ALOMDA..'Abs:GameNum3'..msg.chat_id_,name)
-DevAbs:del(ALOMDA..'Abs:Games:Ids'..msg.chat_id_)
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Deviven2 = {'باي','فهمت','موزين','اسمعك','احبك','موحلو','نضيف','حاره','ناصي','جوه','سريع','ونسه','طويل','سمين','ضعيف','شريف','شجاع','رحت','عدل','نشيط','شبعان','موعطشان','خوش ولد','اني','هادئ'}
+name = Deviven2[math.random(#Deviven2)]
+Deviven:set(ALOMDA..'iven:GameNum3'..msg.chat_id_,name)
+Deviven:del(ALOMDA..'iven:Games:Ids'..msg.chat_id_)
 name = string.gsub(name,'باي','هلو')
 name = string.gsub(name,'فهمت','مافهمت')
 name = string.gsub(name,'موزين','زين')
@@ -3164,23 +3164,23 @@ name = string.gsub(name,'خوش ولد','موخوش ولد')
 name = string.gsub(name,'اني','مطي')
 name = string.gsub(name,'هادئ','عصبي')
 ALOMDATEAM = '⌁︙ما هو عكس كلمة ↫ '..name
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 return false
 end end
-if text == DevAbs:get(ALOMDA..'Abs:GameNum3'..msg.chat_id_) and not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then
-if not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then 
+if text == Deviven:get(ALOMDA..'iven:GameNum3'..msg.chat_id_) and not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then 
 ALOMDATEAM = '⌁︙مبروك لقد ربحت في اللعبه \n⌁︙ارسل ↫ العكس للعب مره اخرى'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
 end
-DevAbs:set(ALOMDA..'Abs:Games:Ids'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Games:Ids'..msg.chat_id_,true)
 end 
 if text == 'المختلف' and ChCheck(msg) or text == 'مختلف' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-DevAbs2 = {'😸','☠','🐼','🐇','🌑','🌚','⭐️','📥','⛈','🌥','⛄️','👨‍🔬','👨‍💻','👨‍🔧','👩‍🍳','🧚‍♀','🧚‍♂️','🧝‍♂','🙍‍♂','🧖‍♂','👬','👨‍👨‍👧','🕓','🕤','⌛️','📅','👩‍⚖️','👨‍🎨'};
-name = DevAbs2[math.random(#DevAbs2)]
-DevAbs:set(ALOMDA..'Abs:GameNum4'..msg.chat_id_,name)
-DevAbs:del(ALOMDA..'Abs:Games:Ids'..msg.chat_id_)
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Deviven2 = {'😸','☠','🐼','🐇','🌑','🌚','⭐️','📥','⛈','🌥','⛄️','👨‍🔬','👨‍💻','👨‍🔧','👩‍🍳','🧚‍♀','🧚‍♂️','🧝‍♂','🙍‍♂','🧖‍♂','👬','👨‍👨‍👧','🕓','🕤','⌛️','📅','👩‍⚖️','👨‍🎨'};
+name = Deviven2[math.random(#Deviven2)]
+Deviven:set(ALOMDA..'iven:GameNum4'..msg.chat_id_,name)
+Deviven:del(ALOMDA..'iven:Games:Ids'..msg.chat_id_)
 name = string.gsub(name,'😸','😹😹😹😸😹😹😹😹')
 name = string.gsub(name,'☠️','💀💀💀☠️💀💀💀💀')
 name = string.gsub(name,'🐼','👻👻👻👻👻👻👻🐼')
@@ -3210,25 +3210,25 @@ name = string.gsub(name,'📅','📆📆📆📆📆📅📆📆')
 name = string.gsub(name,'👩‍⚖️','👨‍⚖️👨‍⚖️👨‍⚖️👨‍⚖️👨‍⚖️👩‍⚖️👨‍⚖️👨‍⚖️')
 name = string.gsub(name,'👨‍🎨','👩‍🎨👩‍🎨👨‍🎨👩‍🎨👩‍🎨👩‍🎨👩‍🎨👩‍🎨')
 ALOMDATEAM = '⌁︙اول واحد يطلع المختلف يربح\n{'..name..'} '
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 return false
 end end
-if text == DevAbs:get(ALOMDA..'Abs:GameNum4'..msg.chat_id_) and not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then
-if not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then 
+if text == Deviven:get(ALOMDA..'iven:GameNum4'..msg.chat_id_) and not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then 
 ALOMDATEAM = '⌁︙مبروك لقد ربحت في اللعبه \n⌁︙ارسل ↫ المختلف للعب مره اخرى'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
 end
-DevAbs:set(ALOMDA..'Abs:Games:Ids'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Games:Ids'..msg.chat_id_,true)
 end  
 if text == 'امثله' and ChCheck(msg) or text == 'الامثله' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-DevAbs2 = {
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Deviven2 = {
 'جوز','ضراطه','الحبل','الحافي','شقره','بيدك','سلايه','النخله','الخيل','حداد','المبلل','يركص','قرد','العنب','العمه','الخبز','بالحصاد','شهر','شكه','يكحله',
 };
-name = DevAbs2[math.random(#DevAbs2)]
-DevAbs:set(ALOMDA..'Abs:GameNum5'..msg.chat_id_,name)
-DevAbs:del(ALOMDA..'Abs:Games:Ids'..msg.chat_id_)
+name = Deviven2[math.random(#Deviven2)]
+Deviven:set(ALOMDA..'iven:GameNum5'..msg.chat_id_,name)
+Deviven:del(ALOMDA..'iven:Games:Ids'..msg.chat_id_)
 name = string.gsub(name,'جوز','ينطي ___ للماعنده سنون')
 name = string.gsub(name,'ضراطه','الي يسوق المطي يتحمل ___ ')
 name = string.gsub(name,'بيدك','اكل ___ محد يفيدك')
@@ -3250,24 +3250,24 @@ name = string.gsub(name,'شكه','يامن تعب يامن ___ يا من على 
 name = string.gsub(name,'القرد',' ___ بعين امه غزال')
 name = string.gsub(name,'يكحله','اجه ___ عماها')
 ALOMDATEAM = '⌁︙اكمل المثال التالي ↫ ['..name..']'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 return false
 end end
-if text == DevAbs:get(ALOMDA..'Abs:GameNum5'..msg.chat_id_) then
-if not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then 
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
-DevAbs:del(ALOMDA..'Abs:GameNum5'..msg.chat_id_)
+if text == Deviven:get(ALOMDA..'iven:GameNum5'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then 
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
+Deviven:del(ALOMDA..'iven:GameNum5'..msg.chat_id_)
 ALOMDATEAM = '⌁︙مبروك لقد ربحت في اللعبه \n⌁︙ارسل ↫ امثله للعب مره اخرى'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 end
-DevAbs:set(ALOMDA..'Abs:Games:Ids'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Games:Ids'..msg.chat_id_,true)
 end  
 if text == 'رياضيات' and ChCheck(msg) or text == 'الرياضيات' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-DevAbs2 = {'9','46','2','9','5','4','25','10','17','15','39','5','16',};
-name = DevAbs2[math.random(#DevAbs2)]
-DevAbs:set(ALOMDA..'Abs:GameNum6'..msg.chat_id_,name)
-DevAbs:del(ALOMDA..'Abs:Games:Ids'..msg.chat_id_)
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Deviven2 = {'9','46','2','9','5','4','25','10','17','15','39','5','16',};
+name = Deviven2[math.random(#Deviven2)]
+Deviven:set(ALOMDA..'iven:GameNum6'..msg.chat_id_,name)
+Deviven:del(ALOMDA..'iven:Games:Ids'..msg.chat_id_)
 name = string.gsub(name,'9','7 + 2 = ?')
 name = string.gsub(name,'46','41 + 5 = ?')
 name = string.gsub(name,'2','5 - 3 = ?')
@@ -3282,24 +3282,24 @@ name = string.gsub(name,'39','44 - 5 = ?')
 name = string.gsub(name,'5','12 + 1 - 8 = ?')
 name = string.gsub(name,'16','16 + 16 - 16 = ?')
 ALOMDATEAM = '⌁︙اكمل المعادله التاليه ↫ ⤈\n{'..name..'} '
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 return false
 end end
-if text == DevAbs:get(ALOMDA..'Abs:GameNum6'..msg.chat_id_) then
-if not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then 
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
-DevAbs:del(ALOMDA..'Abs:GameNum6'..msg.chat_id_)
+if text == Deviven:get(ALOMDA..'iven:GameNum6'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then 
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
+Deviven:del(ALOMDA..'iven:GameNum6'..msg.chat_id_)
 ALOMDATEAM = '⌁︙مبروك لقد ربحت في اللعبه \n⌁︙ارسل ↫ رياضيات للعب مره اخرى'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 end
-DevAbs:set(ALOMDA..'Abs:Games:Ids'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Games:Ids'..msg.chat_id_,true)
 end  
 if text == 'الانكليزي' and ChCheck(msg) or text == 'الانجليزيه' and ChCheck(msg) or text == 'انكليزيه' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-DevAbs2 = {'معلومات','قنوات','مجموعات','كتاب','تفاحه','سدني','نقود','اعلم','ذئب','تمساح','ذكي','شاطئ','غبي',};
-name = DevAbs2[math.random(#DevAbs2)]
-DevAbs:set(ALOMDA..'Abs:GameNum7'..msg.chat_id_,name)
-DevAbs:del(ALOMDA..'Abs:Games:Ids'..msg.chat_id_)
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Deviven2 = {'معلومات','قنوات','مجموعات','كتاب','تفاحه','سدني','نقود','اعلم','ذئب','تمساح','ذكي','شاطئ','غبي',};
+name = Deviven2[math.random(#Deviven2)]
+Deviven:set(ALOMDA..'iven:GameNum7'..msg.chat_id_,name)
+Deviven:del(ALOMDA..'iven:Games:Ids'..msg.chat_id_)
 name = string.gsub(name,'ذئب','Wolf')
 name = string.gsub(name,'معلومات','Information')
 name = string.gsub(name,'قنوات','Channels')
@@ -3313,25 +3313,25 @@ name = string.gsub(name,'شاطئ','Beach')
 name = string.gsub(name,'غبي','Stupid')
 name = string.gsub(name,'صداقه','Friendchip')
 ALOMDATEAM = '⌁︙ما معنى كلمة ↫ '..name
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 return false
 end end
-if text == DevAbs:get(ALOMDA..'Abs:GameNum7'..msg.chat_id_) then
-if not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then 
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
-DevAbs:del(ALOMDA..'Abs:GameNum7'..msg.chat_id_)
+if text == Deviven:get(ALOMDA..'iven:GameNum7'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then 
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
+Deviven:del(ALOMDA..'iven:GameNum7'..msg.chat_id_)
 ALOMDATEAM = '⌁︙مبروك لقد ربحت في اللعبه \n⌁︙ارسل ↫ انكليزيه للعب مره اخرى'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 end
-DevAbs:set(ALOMDA..'Abs:Games:Ids'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Games:Ids'..msg.chat_id_,true)
 end  
 --     Source ALOMDA     --
 if text == 'اسئله' and ChCheck(msg) or text == 'اختيارات' and ChCheck(msg) or text == 'الاسئله' and ChCheck(msg) or text == 'اساله' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-DevAbs2 = {'النيل','14','الفم','11','30','بوتين','ستيف جوبر','باريس','10','النمل','حرف الواو','الشعر','سحاب','الاسم','ذهب','حرف الام','العزائم','انسات','المنجنيق','اسيا','6','الاسد','مهر','الدولفين','اوروبا','الزئبق','لندن','الانسان','طوكيو','خديجه',}
-name = DevAbs2[math.random(#DevAbs2)]
-DevAbs:set(ALOMDA..'Abs:GameNum8'..msg.chat_id_,name)
-DevAbs:del(ALOMDA..'Abs:Games:Ids'..msg.chat_id_)
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Deviven2 = {'النيل','14','الفم','11','30','بوتين','ستيف جوبر','باريس','10','النمل','حرف الواو','الشعر','سحاب','الاسم','ذهب','حرف الام','العزائم','انسات','المنجنيق','اسيا','6','الاسد','مهر','الدولفين','اوروبا','الزئبق','لندن','الانسان','طوكيو','خديجه',}
+name = Deviven2[math.random(#Deviven2)]
+Deviven:set(ALOMDA..'iven:GameNum8'..msg.chat_id_,name)
+Deviven:del(ALOMDA..'iven:Games:Ids'..msg.chat_id_)
 name = string.gsub(name,'النيل','⌁︙ماهو اطول نهر في العالم ؟\n1- النيل\n2- الفرات\n3- نهر الكونغو')
 name = string.gsub(name,'14','⌁︙ماعدد عظام الوجه ؟\n1- 15\n2- 13\n3- 14')
 name = string.gsub(name,'الفم','⌁︙كراسي بيضاء وجدران ورديه اذا اغلقته اصبح ظلام  فمن اكون ؟\n1- الفم\n2- الاذن\n3- الثلاجه')
@@ -3363,95 +3363,95 @@ name = string.gsub(name,'الانسان','⌁︙ماهو الشئ الذي بر�
 name = string.gsub(name,'طوكيو','⌁︙ماهي عاصمه اليابان ؟\n1- بانكول\n2- نيو دلهي\n3- طوكيو')
 name = string.gsub(name,'خديجه','⌁︙من هي زوجه الرسول الاكبر منه سنآ ؟\n1- حفضه\n2- زينب\n3- خديجه')
 ALOMDATEAM = name..'\n⌁︙ارسل الجواب الصحيح فقط'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 return false
 end end
-if text == DevAbs:get(ALOMDA..'Abs:GameNum8'..msg.chat_id_) then
-if not DevAbs:get(ALOMDA..'Abs:Games:Ids'..msg.chat_id_) then 
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
-DevAbs:del(ALOMDA..'Abs:GameNum8'..msg.chat_id_)
+if text == Deviven:get(ALOMDA..'iven:GameNum8'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Games:Ids'..msg.chat_id_) then 
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_, 1)  
+Deviven:del(ALOMDA..'iven:GameNum8'..msg.chat_id_)
 ALOMDATEAM = '⌁︙مبروك لقد ربحت في اللعبه \n⌁︙ارسل ↫ الاسئله للعب مره اخرى'
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md')
 end
-DevAbs:set(ALOMDA..'Abs:Games:Ids'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Games:Ids'..msg.chat_id_,true)
 end  
 --     Source ALOMDA     --
-if DevAbs:get(ALOMDA.."GAME:TKMEN" .. msg.chat_id_ .. "" .. msg.sender_user_id_) then  
+if Deviven:get(ALOMDA.."GAME:TKMEN" .. msg.chat_id_ .. "" .. msg.sender_user_id_) then  
 if text and text:match("^(%d+)$") then
 local NUM = text:match("^(%d+)$")
 if tonumber(NUM) > 20 then
-Dev_Abs(msg.chat_id_, msg.id_, 1,"⌁︙عذرا لا يمكنك تخمين عدد اكبر من الـ20 خمن رقم ما بين الـ1 والـ20", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,"⌁︙عذرا لا يمكنك تخمين عدد اكبر من الـ20 خمن رقم ما بين الـ1 والـ20", 1, 'md')
 return false  end 
-local GETNUM = DevAbs:get(ALOMDA.."GAMES:NUM"..msg.chat_id_)
+local GETNUM = Deviven:get(ALOMDA.."GAMES:NUM"..msg.chat_id_)
 if tonumber(NUM) == tonumber(GETNUM) then
-DevAbs:del(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_)
-DevAbs:del(ALOMDA.."GAME:TKMEN" .. msg.chat_id_ .. "" .. msg.sender_user_id_)   
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_,5)  
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙*التخمين الصحيح هو* ↫ '..NUM..'\n⌁︙*مبروك لقد ربحت وحصلت على 5 نقاط يمكنك استبدالها بالرسائل*', 1, 'md')
+Deviven:del(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_)
+Deviven:del(ALOMDA.."GAME:TKMEN" .. msg.chat_id_ .. "" .. msg.sender_user_id_)   
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_,5)  
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙*التخمين الصحيح هو* ↫ '..NUM..'\n⌁︙*مبروك لقد ربحت وحصلت على 5 نقاط يمكنك استبدالها بالرسائل*', 1, 'md')
 elseif tonumber(NUM) ~= tonumber(GETNUM) then
-DevAbs:incrby(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_,1)
-if tonumber(DevAbs:get(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_)) >= 3 then
-DevAbs:del(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_)
-DevAbs:del(ALOMDA.."GAME:TKMEN" .. msg.chat_id_ .. "" .. msg.sender_user_id_)   
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙*التخمين الصحيح هو* ↫ '..GETNUM..'\n⌁︙*للاسف لقد خسرت حاول مره اخرى لتخمين الرقم الصحيح*', 1, 'md')
+Deviven:incrby(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_,1)
+if tonumber(Deviven:get(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_)) >= 3 then
+Deviven:del(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_)
+Deviven:del(ALOMDA.."GAME:TKMEN" .. msg.chat_id_ .. "" .. msg.sender_user_id_)   
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙*التخمين الصحيح هو* ↫ '..GETNUM..'\n⌁︙*للاسف لقد خسرت حاول مره اخرى لتخمين الرقم الصحيح*', 1, 'md')
 else
-if tonumber(DevAbs:get(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_)) == 1 then
+if tonumber(Deviven:get(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_)) == 1 then
 SetNum = 'محاولتان فقط'
-elseif tonumber(DevAbs:get(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_)) == 2 then
+elseif tonumber(Deviven:get(ALOMDA..'Set:Num'..msg.chat_id_..msg.sender_user_id_)) == 2 then
 SetNum = 'محاوله واحده فقط'
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙لقد خمنت الرقم الخطا وتبقى لديك '..SetNum..' ارسل رقم تخمنه مره اخرى للفوز', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙لقد خمنت الرقم الخطا وتبقى لديك '..SetNum..' ارسل رقم تخمنه مره اخرى للفوز', 1, 'md')
 end
 end
 end
 end
 if text == 'خمن' and ChCheck(msg) or text == 'تخمين' and ChCheck(msg) then   
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
 Num = math.random(1,20)
-DevAbs:set(ALOMDA.."GAMES:NUM"..msg.chat_id_,Num) 
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙اهلا بك عزيزي في لعبة التخمين ↫ ⤈\n ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙سيتم تخمين عدد ما بين الـ1 والـ20 اذا تعتقد انك تستطيع الفوز جرب واللعب الان .\n⌁︙ملاحظه لديك ثلاث محاولات فقط فكر قبل ارسال تخمينك !', 1, 'md')
-DevAbs:setex(ALOMDA.."GAME:TKMEN" .. msg.chat_id_ .. "" .. msg.sender_user_id_, 100, true)  
+Deviven:set(ALOMDA.."GAMES:NUM"..msg.chat_id_,Num) 
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙اهلا بك عزيزي في لعبة التخمين ↫ ⤈\n ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙سيتم تخمين عدد ما بين الـ1 والـ20 اذا تعتقد انك تستطيع الفوز جرب واللعب الان .\n⌁︙ملاحظه لديك ثلاث محاولات فقط فكر قبل ارسال تخمينك !', 1, 'md')
+Deviven:setex(ALOMDA.."GAME:TKMEN" .. msg.chat_id_ .. "" .. msg.sender_user_id_, 100, true)  
 return false  
 end
 end
 --     Source ALOMDA     --
 if text == 'روليت' then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-DevAbs:del(ALOMDA.."Abs:NumRolet"..msg.chat_id_..msg.sender_user_id_) 
-DevAbs:del(ALOMDA..'Abs:ListRolet'..msg.chat_id_)  
-DevAbs:setex(ALOMDA.."Abs:StartRolet"..msg.chat_id_..msg.sender_user_id_,3600,true)  
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙حسنا لنلعب , ارسل عدد اللاعبين للروليت .', 1, 'md')
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Deviven:del(ALOMDA.."iven:NumRolet"..msg.chat_id_..msg.sender_user_id_) 
+Deviven:del(ALOMDA..'iven:ListRolet'..msg.chat_id_)  
+Deviven:setex(ALOMDA.."iven:StartRolet"..msg.chat_id_..msg.sender_user_id_,3600,true)  
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙حسنا لنلعب , ارسل عدد اللاعبين للروليت .', 1, 'md')
 return false  
 end
 end
-if text and text:match("^(%d+)$") and DevAbs:get(ALOMDA.."Abs:StartRolet"..msg.chat_id_..msg.sender_user_id_) then
+if text and text:match("^(%d+)$") and Deviven:get(ALOMDA.."iven:StartRolet"..msg.chat_id_..msg.sender_user_id_) then
 if text == "1" then
 Text = "⌁︙لا استطيع بدء اللعبه بلاعب واحد فقط"
 else
-DevAbs:set(ALOMDA.."Abs:NumRolet"..msg.chat_id_..msg.sender_user_id_,text)  
+Deviven:set(ALOMDA.."iven:NumRolet"..msg.chat_id_..msg.sender_user_id_,text)  
 Text = '⌁︙تم بدء تسجيل اللسته يرجى ارسال المعرفات \n⌁︙الفائز يحصل على 5 نقاط عدد المطلوبين ↫ '..text..' لاعب'
 end
-DevAbs:del(ALOMDA.."Abs:StartRolet"..msg.chat_id_..msg.sender_user_id_)
+Deviven:del(ALOMDA.."iven:StartRolet"..msg.chat_id_..msg.sender_user_id_)
 send(msg.chat_id_,msg.id_,Text)
 return false
 end
-if text and text:match('^(@[%a%d_]+)$') and DevAbs:get(ALOMDA.."Abs:NumRolet"..msg.chat_id_..msg.sender_user_id_) then 
-if DevAbs:sismember(ALOMDA..'Abs:ListRolet'..msg.chat_id_,text) then
+if text and text:match('^(@[%a%d_]+)$') and Deviven:get(ALOMDA.."iven:NumRolet"..msg.chat_id_..msg.sender_user_id_) then 
+if Deviven:sismember(ALOMDA..'iven:ListRolet'..msg.chat_id_,text) then
 send(msg.chat_id_,msg.id_,'⌁︙المعرف ↫ ['..text..'] موجود اساسا')
 return false
 end
 tdcli_function ({ID = "SearchPublicChat",username_ = text},function(extra, res, success) 
 if res and res.message_ and res.message_ == "USERNAME_NOT_OCCUPIED" then 
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙المعرف غير صحيح يرجى ارسال معرف صحيح', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙المعرف غير صحيح يرجى ارسال معرف صحيح', 1, 'md')
 return false 
 end
-DevAbs:sadd(ALOMDA..'Abs:ListRolet'..msg.chat_id_,text)
-local CountAdd = DevAbs:get(ALOMDA.."Abs:NumRolet"..msg.chat_id_..msg.sender_user_id_)
-local CountAll = DevAbs:scard(ALOMDA..'Abs:ListRolet'..msg.chat_id_)
+Deviven:sadd(ALOMDA..'iven:ListRolet'..msg.chat_id_,text)
+local CountAdd = Deviven:get(ALOMDA.."iven:NumRolet"..msg.chat_id_..msg.sender_user_id_)
+local CountAll = Deviven:scard(ALOMDA..'iven:ListRolet'..msg.chat_id_)
 local CountUser = CountAdd - CountAll
 if tonumber(CountAll) == tonumber(CountAdd) then 
-DevAbs:del(ALOMDA.."Abs:NumRolet"..msg.chat_id_..msg.sender_user_id_) 
-DevAbs:setex(ALOMDA.."Abs:WittingStartRolet"..msg.chat_id_..msg.sender_user_id_,1400,true) 
+Deviven:del(ALOMDA.."iven:NumRolet"..msg.chat_id_..msg.sender_user_id_) 
+Deviven:setex(ALOMDA.."iven:WittingStartRolet"..msg.chat_id_..msg.sender_user_id_,1400,true) 
 local Text = "⌁︙تم ادخال المعرف ↫ ["..text.."]\n⌁︙وتم اكتمال العدد الكلي هل انت مستعد ؟"
 keyboard = {} 
 keyboard.inline_keyboard = {{{text="نعم",callback_data="/YesRolet"},{text="لا",callback_data="/NoRolet"}},{{text="اللاعبين",callback_data="/ListRolet"}}} 
@@ -3467,16 +3467,16 @@ end,nil)
 end
 --     Source ALOMDA     --
 if text == 'كت تويت' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
 local ALOMDATEAM = {  "آخر مرة زرت مدينة الملاهي؟",  "آخر مرة أكلت أكلتك المفضّلة؟",  "الوضع الحالي؟\n‏1. سهران\n‏2. ضايج\n‏3. أتأمل",  "آخر شيء ضاع منك؟","كلمة أخيرة لشاغل البال؟","طريقتك المعتادة في التخلّص من الطاقة السلبية؟","شهر من أشهر العام له ذكرى جميلة معك؟","كلمة غريبة من لهجتك ومعناها؟🤓","‏- شيء سمعته عالق في ذهنك هاليومين؟","متى تكره الشخص الذي أمامك حتى لو كنت مِن أشد معجبينه؟","‏- أبرز صفة حسنة في صديقك المقرب؟","هل تشعر أن هنالك مَن يُحبك؟","اذا اكتشفت أن أعز أصدقائك يضمر لك السوء، موقفك الصريح؟","أجمل شيء حصل معك خلال هاليوم؟","صِف شعورك وأنت تُحب شخص يُحب غيرك؟👀💔","كلمة لشخص غالي اشتقت إليه؟💕","آخر خبر سعيد، متى وصلك؟","أنا آسف على ....؟","أوصف نفسك بكلمة؟","صريح، مشتاق؟","‏- صريح، هل سبق وخذلت أحدهم ولو عن غير قصد؟","‏- ماذا ستختار من الكلمات لتعبر لنا عن حياتك التي عشتها الى الآن؟💭","‏- فنان/ة تود لو يدعوكَ على مائدة عشاء؟😁❤","‏- تخيّل شيء قد يحدث في المستقبل؟","‏- للشباب | آخر مرة وصلك غزل من فتاة؟🌚","شخص أو صاحب عوضك ونساك مُر الحياة ما اسمه ؟","| اذا شفت حد واعجبك وعندك الجرأه انك تروح وتتعرف عليه ، مقدمة الحديث شو راح تكون ؟.", }  
-Dev_Abs(msg.chat_id_, msg.id_, 1, ''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'' , 1, 'md')  
+Dev_iven(msg.chat_id_, msg.id_, 1, ''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'' , 1, 'md')  
 return false
 end
 end
 --     Source ALOMDA     --
 if text == 'الالعاب' and ChCheck(msg) or text == 'العاب' and ChCheck(msg) or text == 'اللعبه' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1,[[
+if not Deviven:get(ALOMDA..'iven:Lock:Games'..msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1,[[
 ⌁︙قائمة العاب المجموعه ↫ ⤈
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 ⌁︙لعبة التخمين ↫ خمن
@@ -3499,60 +3499,60 @@ Dev_Abs(msg.chat_id_, msg.id_, 1,[[
 ⌁︙[Source Channel](https://t.me/src_web)
 ]], 1, 'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عذرا الالعاب معطله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عذرا الالعاب معطله في المجموعه', 1, 'md')
 end
 end
 --     Source ALOMDA     --
 if text == 'بيع نقاطي' and ChCheck(msg) then
-if tonumber((DevAbs:get(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_) or 0)) == 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙لم تربح اي نقطه\n⌁︙ارسل ↫ الالعاب للعب', 1, 'md')
+if tonumber((Deviven:get(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_) or 0)) == 0 then
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙لم تربح اي نقطه\n⌁︙ارسل ↫ الالعاب للعب', 1, 'md')
 else
-DevAbs0 = (DevAbs:get(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_) * 50)
-DevAbs:incrby(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_,DevAbs0)
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙تم بيع '..(DevAbs:get(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_))..' من نقاطك\n⌁︙كل نقطه تساوي 50 رساله', 'md')
-DevAbs:del(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_)
+Deviven0 = (Deviven:get(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_) * 50)
+Deviven:incrby(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_,Deviven0)
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙تم بيع '..(Deviven:get(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_))..' من نقاطك\n⌁︙كل نقطه تساوي 50 رساله', 'md')
+Deviven:del(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_)
 end
 end
 --     Source ALOMDA     --
 if text == 'رفع المشرفين' and ChCheck(msg) or text == 'رفع الادمنيه' and ChCheck(msg) then  
 tdcli_function ({ID = "GetChannelMembers",channel_id_ = msg.chat_id_:gsub("-100",""),filter_ = {ID = "ChannelMembersAdministrators"},offset_ = 0,limit_ = 200},function(arg,abbas) 
-DevAbs:del(ALOMDA..'Abs:AbsConstructor:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:ivenConstructor:'..msg.chat_id_)
 local num = 0
 local admins = abbas.members_  
 for i=0 , #admins do   
 if abbas.members_[i].bot_info_ == false and abbas.members_[i].status_.ID == "ChatMemberStatusEditor" then
-DevAbs:sadd(ALOMDA..'Abs:Admins:'..msg.chat_id_, admins[i].user_id_)   
+Deviven:sadd(ALOMDA..'iven:Admins:'..msg.chat_id_, admins[i].user_id_)   
 num = num + 1
 tdcli_function ({ID = "GetUser",user_id_ = admins[i].user_id_},function(arg,dp) 
 if dp.first_name_ == false then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, admins[i].user_id_)   
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, admins[i].user_id_)   
 end
 end,nil)   
 else
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, admins[i].user_id_)   
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, admins[i].user_id_)   
 end 
 if abbas.members_[i].status_.ID == "ChatMemberStatusCreator" then  
 Manager_id = admins[i].user_id_  
-DevAbs:sadd(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,Manager_id)  
-DevAbs:sadd(ALOMDA..'Abs:AbsConstructor:'..msg.chat_id_,Manager_id)   
+Deviven:sadd(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,Manager_id)  
+Deviven:sadd(ALOMDA..'iven:ivenConstructor:'..msg.chat_id_,Manager_id)   
 end  
 end  
 if num == 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لا يوجد ادمنيه ليتم رفعهم\n⌁︙تم رفع منشئ المجموعه", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لا يوجد ادمنيه ليتم رفعهم\n⌁︙تم رفع منشئ المجموعه", 1, 'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم رفع '..num..' من الادمنيه \n⌁︙تم رفع منشئ المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم رفع '..num..' من الادمنيه \n⌁︙تم رفع منشئ المجموعه', 1, 'md')
 end
 end,nil) 
 end
 --     Source ALOMDA     --
 if text == 'غادر' and SudoBot(msg) then
-if DevAbs:get(ALOMDA.."Abs:Left:Bot"..ALOMDA) and not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_,msg.id_, 1, "⌁︙المغادره معطله من قبل المطور الاساسي", 1, 'md')
+if Deviven:get(ALOMDA.."iven:Left:Bot"..ALOMDA) and not SecondSudo(msg) then
+Dev_iven(msg.chat_id_,msg.id_, 1, "⌁︙المغادره معطله من قبل المطور الاساسي", 1, 'md')
 return false  
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم مغادرة المجموعه \n⌁︙تم حذف جميع بياناتها ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم مغادرة المجموعه \n⌁︙تم حذف جميع بياناتها ', 1, 'md')
 ChatLeave(msg.chat_id_, ALOMDA)
-DevAbs:srem(ALOMDA.."Abs:Groups",msg.chat_id_)
+Deviven:srem(ALOMDA.."iven:Groups",msg.chat_id_)
 end
 --     Source ALOMDA     --
 if text ==('موقعي') and ChCheck(msg) then
@@ -3564,19 +3564,19 @@ rtpa = 'الادمن'
 elseif da.status_.ID == "ChatMemberStatusMember" then
 rtpa = 'عضو'
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙موقعك ↫ '..rtpa, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙موقعك ↫ '..rtpa, 1, 'md')
 end,nil)
 end
 --     Source ALOMDA     --
 if text == "معلوماتي" and ChCheck(msg) then
 function get_me(extra,result,success)
-local msguser = tonumber(DevAbs:get(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_))
-local user_msgs = DevAbs:get(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
-local cont = (tonumber(DevAbs:get(ALOMDA..'Abs:ContactNumber'..msg.chat_id_..':'..msg.sender_user_id_)) or 0)
-local user_nkt = tonumber(DevAbs:get(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_) or 0)
+local msguser = tonumber(Deviven:get(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_))
+local user_msgs = Deviven:get(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
+local cont = (tonumber(Deviven:get(ALOMDA..'iven:ContactNumber'..msg.chat_id_..':'..msg.sender_user_id_)) or 0)
+local user_nkt = tonumber(Deviven:get(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_) or 0)
 if result.username_ then username = '@'..result.username_ else username = 'لا يوجد' end
 if result.last_name_ then lastname = result.last_name_ else lastname = '' end
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙اسمك ↫ ❨ ['..result.first_name_..'] ❩\n⌁︙معرفك ↫ ❨ ['..username..'] ❩\n⌁︙ايديك ↫ ❨ `'..result.id_..'` ❩\n⌁︙نقاطك ↫ ❨ '..user_nkt..' ❩\n⌁︙رسائلك ↫ ❨ '..user_msgs..' ❩\n⌁︙جهاتك ↫ ❨ '..cont..' ❩\n⌁︙تفاعلك ↫ '..formsgs(msguser)..'\n⌁︙رتبتك ↫ '..IdRank(msg.sender_user_id_, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙اسمك ↫ ❨ ['..result.first_name_..'] ❩\n⌁︙معرفك ↫ ❨ ['..username..'] ❩\n⌁︙ايديك ↫ ❨ `'..result.id_..'` ❩\n⌁︙نقاطك ↫ ❨ '..user_nkt..' ❩\n⌁︙رسائلك ↫ ❨ '..user_msgs..' ❩\n⌁︙جهاتك ↫ ❨ '..cont..' ❩\n⌁︙تفاعلك ↫ '..formsgs(msguser)..'\n⌁︙رتبتك ↫ '..IdRank(msg.sender_user_id_, msg.chat_id_), 1, 'md')
 end
 getUser(msg.sender_user_id_,get_me)
 end
@@ -3584,22 +3584,22 @@ end
 --     Source ALOMDA     --
 if text == "تعيين قناة الاشتراك" or text == "تغيير قناة الاشتراك" or text == "تعيين الاشتراك الاجباري" or text == "وضع قناة الاشتراك" then
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
-DevAbs:setex(ALOMDA..'DevAbs4'..msg.sender_user_id_,360,true)
+Deviven:setex(ALOMDA..'Deviven4'..msg.sender_user_id_,360,true)
 send(msg.chat_id_, msg.id_, '⌁︙ارسل لي معرف قناة الاشتراك الان')
 end
 return false  
 end
 if text == "تفعيل الاشتراك الاجباري" then  
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
-if DevAbs:get(ALOMDA..'DevAbs2') then
-local DevCh = DevAbs:get(ALOMDA..'DevAbs3')
+if Deviven:get(ALOMDA..'Deviven2') then
+local DevCh = Deviven:get(ALOMDA..'Deviven3')
 send(msg.chat_id_, msg.id_,"⌁︙الاشتراك الاجباري مفعل \n⌁︙على القناة ↫ ["..DevCh.."]")
 else
-DevAbs:setex(ALOMDA..'DevAbs4'..msg.sender_user_id_,360,true)
+Deviven:setex(ALOMDA..'Deviven4'..msg.sender_user_id_,360,true)
 send(msg.chat_id_, msg.id_,"⌁︙لاتوجد قناة لتفعيل الاشتراك\n⌁︙ارسل لي معرف قناة الاشتراك الان")
 end
 end
@@ -3607,26 +3607,26 @@ return false
 end
 if text == "تعطيل الاشتراك الاجباري" then  
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
-DevAbs:del(ALOMDA..'DevAbs2') DevAbs:del(ALOMDA..'DevAbs3')
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل الاشتراك الاجباري'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'Deviven2') Deviven:del(ALOMDA..'Deviven3')
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل الاشتراك الاجباري'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end
 return false  
 end
 if text == "حذف قناة الاشتراك" or text == "حذف قناه الاشتراك" then
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
-DevAbs:del(ALOMDA..'DevAbs2') DevAbs:del(ALOMDA..'DevAbs3')
-Dev_Abs(msg.chat_id_, msg.id_, 1,"⌁︙تم حذف قناة الاشتراك الاجباري", 1, 'md') 
+Deviven:del(ALOMDA..'Deviven2') Deviven:del(ALOMDA..'Deviven3')
+Dev_iven(msg.chat_id_, msg.id_, 1,"⌁︙تم حذف قناة الاشتراك الاجباري", 1, 'md') 
 end
 end
 if SecondSudo(msg) then
 if text == 'جلب قناة الاشتراك' or text == 'قناة الاشتراك' or text == 'الاشتراك الاجباري' or text == 'قناة الاشتراك الاجباري' then
-if DevAbs:get(ALOMDA..'DevAbs3') then
-local DevCh = DevAbs:get(ALOMDA..'DevAbs3')
+if Deviven:get(ALOMDA..'Deviven3') then
+local DevCh = Deviven:get(ALOMDA..'Deviven3')
 send(msg.chat_id_, msg.id_, "⌁︙قناة الاشتراك ↫ ["..DevCh.."]")
 else
 send(msg.chat_id_, msg.id_, "⌁︙لاتوجد قناة في الاشتراك الاجباري")
@@ -3637,27 +3637,27 @@ end end
 if SudoBot(msg) then
 if text == 'اذاعه للكل بالتوجيه' and tonumber(msg.reply_to_message_id_) > 0 then
 function ALOMDATEAM(extra,result,success)
-if DevAbs:get(ALOMDA.."Abs:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
+if Deviven:get(ALOMDA.."iven:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
 send(msg.chat_id_, msg.id_,"⌁︙الاذاعه معطله من قبل المطور الاساسي")
 return false
 end
-local GpList = DevAbs:smembers(ALOMDA.."Abs:Groups")
+local GpList = Deviven:smembers(ALOMDA.."iven:Groups")
 for k,v in pairs(GpList) do
 tdcli_function({ID="ForwardMessages", chat_id_ = v, from_chat_id_ = msg.chat_id_, message_ids_ = {[0] = result.id_}, disable_notification_ = 0, from_background_ = 1},function(a,t) end,nil) 
 end
-local PvList = DevAbs:smembers(ALOMDA.."Abs:Users")
+local PvList = Deviven:smembers(ALOMDA.."iven:Users")
 for k,v in pairs(PvList) do
 tdcli_function({ID="ForwardMessages", chat_id_ = v, from_chat_id_ = msg.chat_id_, message_ids_ = {[0] = result.id_}, disable_notification_ = 0, from_background_ = 1},function(a,t) end,nil) 
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم اذاعة رسالتك بالتوجيه \n⌁︙‏في ↫ ❨ '..#GpList..' ❩ مجموعه \n⌁︙والى ↫ ❨ '..#PvList..' ❩ مشترك \n ✓', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم اذاعة رسالتك بالتوجيه \n⌁︙‏في ↫ ❨ '..#GpList..' ❩ مجموعه \n⌁︙والى ↫ ❨ '..#PvList..' ❩ مشترك \n ✓', 1, 'md')
 end
 getMessage(msg.chat_id_, tonumber(msg.reply_to_message_id_),ALOMDATEAM)
 end
 end
 --     Source ALOMDA     --
 if text == "مشاهده المنشور" and ChCheck(msg) or text == "مشاهدات المنشور" and ChCheck(msg) or text == "عدد المشاهدات" and ChCheck(msg) then
-DevAbs:set(ALOMDA..'Abs:viewget'..msg.sender_user_id_,true)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙حسنا قم باعادة توجيه للمنشور الذي تريدني حساب مشاهداته', 1, 'md')
+Deviven:set(ALOMDA..'iven:viewget'..msg.sender_user_id_,true)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙حسنا قم باعادة توجيه للمنشور الذي تريدني حساب مشاهداته', 1, 'md')
 end
 --     Source ALOMDA     --
 if text == "السورس" or text == "سورس" then 
@@ -3673,17 +3673,17 @@ Welcome To Source
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 ⌁︙[Tws ALOMDA](https://t.me/TwSLAlomdABot)
 ]]
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, 'md')
 end
 --     Source ALOMDA     --
 if ChatType == 'sp' or ChatType == 'gp'  then
 if text == "اطردني" and ChCheck(msg) or text == "ادفرني" and ChCheck(msg) then
-if DevAbs:get(ALOMDA.."Abs:Kick:Me"..msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عذرا هذه الخاصيه معطله ', 1, 'md')
+if Deviven:get(ALOMDA.."iven:Kick:Me"..msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عذرا هذه الخاصيه معطله ', 1, 'md')
 return false
 end
-DevAbs:set(ALOMDA..'yes'..msg.sender_user_id_..'', 'delyes')
-DevAbs:set(ALOMDA..'no'..msg.sender_user_id_..'', 'delno')
+Deviven:set(ALOMDA..'yes'..msg.sender_user_id_..'', 'delyes')
+Deviven:set(ALOMDA..'no'..msg.sender_user_id_..'', 'delno')
 local Text = '⌁︙هل انت متأكد من المغادره'
 keyboard = {} 
 keyboard.inline_keyboard = {{{text="نعم",callback_data="/delyes"},{text="لا",callback_data="/delno"}}} 
@@ -3692,23 +3692,23 @@ return https.request("https://api.telegram.org/bot"..TokenBot..'/sendMessage?cha
 end
 --     Source ALOMDA     --
 if text == 'تعطيل اطردني' and Manager(msg) and ChCheck(msg) then
-DevAbs:set(ALOMDA.."Abs:Kick:Me"..msg.chat_id_, true)
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل امر اطردني'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA.."iven:Kick:Me"..msg.chat_id_, true)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل امر اطردني'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end
 if text == 'تفعيل اطردني' and Manager(msg) and ChCheck(msg) then
-DevAbs:del(ALOMDA.."Abs:Kick:Me"..msg.chat_id_)
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل امر اطردني'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA.."iven:Kick:Me"..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل امر اطردني'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end
 --     Source ALOMDA     --
 if text == "نزلني" and ChCheck(msg) then
-if DevAbs:get(ALOMDA.."Abs:Del:Me"..msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عذرا هذه الخاصيه معطله ', 1, 'md')
+if Deviven:get(ALOMDA.."iven:Del:Me"..msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عذرا هذه الخاصيه معطله ', 1, 'md')
 return false
 end
-DevAbs:set(ALOMDA..'yesdel'..msg.sender_user_id_..'', 'delyes')
-DevAbs:set(ALOMDA..'nodel'..msg.sender_user_id_..'', 'delno')
+Deviven:set(ALOMDA..'yesdel'..msg.sender_user_id_..'', 'delyes')
+Deviven:set(ALOMDA..'nodel'..msg.sender_user_id_..'', 'delno')
 local Text = '⌁︙هل انت متأكد من تنزيلك'
 keyboard = {} 
 keyboard.inline_keyboard = {{{text="نعم",callback_data="/yesdel"},{text="لا",callback_data="/nodel"}}} 
@@ -3717,14 +3717,14 @@ return https.request("https://api.telegram.org/bot"..TokenBot..'/sendMessage?cha
 end
 --     Source ALOMDA     --
 if text == 'تعطيل نزلني' and BasicConstructor(msg) and ChCheck(msg) then
-DevAbs:set(ALOMDA.."Abs:Del:Me"..msg.chat_id_, true)
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل امر نزلني'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA.."iven:Del:Me"..msg.chat_id_, true)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل امر نزلني'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end
 if text == 'تفعيل نزلني' and BasicConstructor(msg) and ChCheck(msg) then
-DevAbs:del(ALOMDA.."Abs:Del:Me"..msg.chat_id_)
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل امر نزلني'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA.."iven:Del:Me"..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل امر نزلني'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end
 --     Source ALOMDA     --
 if Admin(msg) then
@@ -3734,13 +3734,13 @@ local text = "⌁︙وينكم يالربع \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ �
 i = 0
 for k, v in pairs(dp2.members_) do
 i = i + 1
-if DevAbs:get(ALOMDA..'Save:UserName'..v.user_id_) then
-text = text..""..i.."~ : [@"..DevAbs:get(ALOMDA..'Save:UserName'..v.user_id_).."]\n"
+if Deviven:get(ALOMDA..'Save:UserName'..v.user_id_) then
+text = text..""..i.."~ : [@"..Deviven:get(ALOMDA..'Save:UserName'..v.user_id_).."]\n"
 else
 text = text..""..i.."~ : "..v.user_id_.."\n"
 end
 end 
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, 'md')
 end
 tdcli_function({ID = "GetChannelMembers",channel_id_ = getChatId(msg.chat_id_).ID, offset_ = 0,limit_ = 200000},TagAll,nil)
 end
@@ -3752,34 +3752,34 @@ local text = "⌁︙"..txt[2].." \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 i = 0
 for k, v in pairs(dp2.members_) do
 i = i + 1
-if DevAbs:get(ALOMDA..'Save:UserName'..v.user_id_) then
-text = text..""..i.."~ : [@"..DevAbs:get(ALOMDA..'Save:UserName'..v.user_id_).."]\n"
+if Deviven:get(ALOMDA..'Save:UserName'..v.user_id_) then
+text = text..""..i.."~ : [@"..Deviven:get(ALOMDA..'Save:UserName'..v.user_id_).."]\n"
 else
 text = text..""..i.."~ : "..v.user_id_.."\n"
 end
 end 
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, 'md')
 end
 tdcli_function({ID = "GetChannelMembers",channel_id_ = getChatId(msg.chat_id_).ID, offset_ = 0,limit_ = 200000},TagAll,nil)
 end
 end
 --     Source ALOMDA     --
 if text == "رسائلي" and msg.reply_to_message_id_ == 0 and ChCheck(msg) then
-local user_msgs = DevAbs:get(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙عدد رسائلك هنا ↫ *❨ "..user_msgs.." ❩*", 1, 'md')
+local user_msgs = Deviven:get(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙عدد رسائلك هنا ↫ *❨ "..user_msgs.." ❩*", 1, 'md')
 end
 if text == "التفاعل" and ChCheck(msg) then
-local EntryNumber = (DevAbs:get(ALOMDA..'Abs:EntryNumber'..msg.chat_id_..':'..os.date('%d')) or 0)
-local ExitNumber = (DevAbs:get(ALOMDA..'Abs:ExitNumber'..msg.chat_id_..':'..os.date('%d')) or 0)
-local MsgNumberDay = (DevAbs:get(ALOMDA..'Abs:MsgNumberDay'..msg.chat_id_..':'..os.date('%d')) or 0)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙انضمام الاعضاء اليوم ↫ *"..EntryNumber.."*\n⌁︙مغادرة الاعضاء اليوم ↫ *"..ExitNumber.."*\n⌁︙عدد الرسائل اليوم ↫ *"..MsgNumberDay.."*\n⌁︙نسبة التفاعل اليوم ↫ *"..math.random(40,100).."%*", 1, 'md')
+local EntryNumber = (Deviven:get(ALOMDA..'iven:EntryNumber'..msg.chat_id_..':'..os.date('%d')) or 0)
+local ExitNumber = (Deviven:get(ALOMDA..'iven:ExitNumber'..msg.chat_id_..':'..os.date('%d')) or 0)
+local MsgNumberDay = (Deviven:get(ALOMDA..'iven:MsgNumberDay'..msg.chat_id_..':'..os.date('%d')) or 0)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙انضمام الاعضاء اليوم ↫ *"..EntryNumber.."*\n⌁︙مغادرة الاعضاء اليوم ↫ *"..ExitNumber.."*\n⌁︙عدد الرسائل اليوم ↫ *"..MsgNumberDay.."*\n⌁︙نسبة التفاعل اليوم ↫ *"..math.random(40,100).."%*", 1, 'md')
 end
 --     Source ALOMDA     --
 if text == "معرفي" and ChCheck(msg) then
 function get_username(extra,result,success)
 text = '⌁︙معرفك ↫ ❨ User ❩'
 local text = text:gsub('User',('@'..result.username_ or ''))
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, 'html')
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, 'html')
 end
 getUser(msg.sender_user_id_,get_username)
 end
@@ -3788,59 +3788,59 @@ function get_firstname(extra,result,success)
 text = '⌁︙اسمك ↫ firstname lastname'
 local text = text:gsub('firstname',(result.first_name_ or ''))
 local text = text:gsub('lastname',(result.last_name_ or ''))
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, 'html')
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, 'html')
 end
 getUser(msg.sender_user_id_,get_firstname)
 end   
 --     Source ALOMDA     --
-if text == "اهمس" or text == "همسه" or text == "اريد بوت الهمسه" or text == "دزلي بوت الهمسه" or  text == "دزولي بوت الهمسه" then  Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙@HMSEBOT', 1, 'md') end
+if text == "اهمس" or text == "همسه" or text == "اريد بوت الهمسه" or text == "دزلي بوت الهمسه" or  text == "دزولي بوت الهمسه" then  Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙@HMSEBOT', 1, 'md') end
 if text == "رابط حذف" or text == "رابط الحذف" or text == "اريد رابط الحذف" or  text == "شمرلي رابط الحذف" or text == "اريد رابط حذف" then local inline = {{{text="اضغط هنا",url="https://t.me/DYFBOT"}}} SendInline(msg.chat_id_,'⌁︙اضغط للحصول على الرابط',nil,inline) return false end
 if text == "بوت الحذف" or text == "اريد بوت الحذف" or text == "اريد بوت حذف" or text == "بوت حذف" or text == "بوت حذف حسابات" or text == "راح احذف" then local inline = {{{text="اضغط هنا",url="https://t.me/DYFBOT"}}} SendInline(msg.chat_id_,'⌁︙اضغط للحصول على البوت',nil,inline) return false end
-if text == "جهاتي" and ChCheck(msg) or text == "اضافاتي" and ChCheck(msg) then add = (tonumber(DevAbs:get(ALOMDA..'Abs:ContactNumber'..msg.chat_id_..':'..msg.sender_user_id_)) or 0) Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙عدد جهاتك المضافه ↫ *❨ "..add.." ❩* ", 1, 'md') end
-if text == "تعديلاتي" or text == "سحكاتي" and ChCheck(msg) then local edit_msg = DevAbs:get(ALOMDA..'Abs:EditMsg'..msg.chat_id_..msg.sender_user_id_) or 0  Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙عدد تعديلاتك ↫ *❨ "..edit_msg.." ❩* ", 1, 'md') end
-if text == "ايديي" and ChCheck(msg) then Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙ايديك ↫ ❨ `'..msg.sender_user_id_..'` ❩', 1, 'md') end
-if text == "رتبتي" and ChCheck(msg) then Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙رتبتك ↫ '..IdRank(msg.sender_user_id_, msg.chat_id_), 1, 'html') end
-if text == "ايدي المجموعه" and ChCheck(msg) then Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ايدي المجموعه ↫ `"..msg.chat_id_.."`", 1, 'md') end
-if text == 'مسح سحكاتي' or text == 'مسح تعديلاتي' or text == 'حذف سحكاتي' or text == 'حذف تعديلاتي' then DevAbs:del(ALOMDA..'Abs:EditMsg'..msg.chat_id_..msg.sender_user_id_) Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف جميع تعديلاتك بنجاح' , 1, 'md') end
-if text == 'مسح جهاتي' or text == 'مسح اضافاتي' or text == 'حذف جهاتي' or text == 'حذف اضافاتي' then DevAbs:del(ALOMDA..'Abs:ContactNumber'..msg.chat_id_..':'..msg.sender_user_id_) Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف جميع جهاتك المضافه' , 1, 'md') end
+if text == "جهاتي" and ChCheck(msg) or text == "اضافاتي" and ChCheck(msg) then add = (tonumber(Deviven:get(ALOMDA..'iven:ContactNumber'..msg.chat_id_..':'..msg.sender_user_id_)) or 0) Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙عدد جهاتك المضافه ↫ *❨ "..add.." ❩* ", 1, 'md') end
+if text == "تعديلاتي" or text == "سحكاتي" and ChCheck(msg) then local edit_msg = Deviven:get(ALOMDA..'iven:EditMsg'..msg.chat_id_..msg.sender_user_id_) or 0  Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙عدد تعديلاتك ↫ *❨ "..edit_msg.." ❩* ", 1, 'md') end
+if text == "ايديي" and ChCheck(msg) then Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙ايديك ↫ ❨ `'..msg.sender_user_id_..'` ❩', 1, 'md') end
+if text == "رتبتي" and ChCheck(msg) then Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙رتبتك ↫ '..IdRank(msg.sender_user_id_, msg.chat_id_), 1, 'html') end
+if text == "ايدي المجموعه" and ChCheck(msg) then Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ايدي المجموعه ↫ `"..msg.chat_id_.."`", 1, 'md') end
+if text == 'مسح سحكاتي' or text == 'مسح تعديلاتي' or text == 'حذف سحكاتي' or text == 'حذف تعديلاتي' then Deviven:del(ALOMDA..'iven:EditMsg'..msg.chat_id_..msg.sender_user_id_) Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف جميع تعديلاتك بنجاح' , 1, 'md') end
+if text == 'مسح جهاتي' or text == 'مسح اضافاتي' or text == 'حذف جهاتي' or text == 'حذف اضافاتي' then Deviven:del(ALOMDA..'iven:ContactNumber'..msg.chat_id_..':'..msg.sender_user_id_) Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف جميع جهاتك المضافه' , 1, 'md') end
 --     Source ALOMDA     --
 if text == "المطور" then 
-local DevCh1 = DevAbs:get(ALOMDA.."DevAbs3")
-local DevText = DevAbs:get(ALOMDA.."DevText")
+local DevCh1 = Deviven:get(ALOMDA.."Deviven3")
+local DevText = Deviven:get(ALOMDA.."DevText")
 if DevCh1 then DevCh = '\n⌁︙*Dev Ch* ↬ ['..DevCh1..']' else DevCh = '' end
 tdcli_function({ID="GetUser",user_id_=DevId},function(arg,dp) 
 if dp.username_ ~= false then DevUser = '@'..dp.username_ else DevUser = dp.first_name_ end
 if DevText then
-Dev_Abs(msg.chat_id_, msg.id_, 1, DevText, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, DevText, 1, "md")
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*Dev User* ↬ ['..DevUser..']\n⌁︙*Dev Id* ↬ '..DevId..''..DevCh, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*Dev User* ↬ ['..DevUser..']\n⌁︙*Dev Id* ↬ '..DevId..''..DevCh, 1, "md")
 end
 end,nil)
 end 
 --     Source ALOMDA     --
 if text and text:match('^هينه @(.*)') and ChCheck(msg) or text and text:match('^هينها @(.*)') then 
-if not DevAbs:get(ALOMDA..'Abs:Lock:Stupid'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Stupid'..msg.chat_id_) then
 local username = text:match('^هينه @(.*)') or text:match('^هينها @(.*)') 
 function ALOMDATEAM(extra,result,success)
 if result.id_ then  
 if tonumber(result.id_) == tonumber(ALOMDA) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, 'شو تمضرط اكو واحد يهين نفسه؟🤔👌🏿', 1, 'md')  
+Dev_iven(msg.chat_id_, msg.id_, 1, 'شو تمضرط اكو واحد يهين نفسه؟🤔👌🏿', 1, 'md')  
 return false 
 end  
 if tonumber(result.id_) == tonumber(DevId) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, 'دي لكك تريد اهينن تاج راسكك؟😏🖕🏿', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, 'دي لكك تريد اهينن تاج راسكك؟😏🖕🏿', 1, 'md') 
 return false  
 end  
-if DevAbs:sismember(ALOMDA.."Abs:AbsConstructor:"..msg.chat_id_,result.id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, 'دي لكك تريد اهينن تاج راسكك؟😏🖕🏿', 1, 'md')
+if Deviven:sismember(ALOMDA.."iven:ivenConstructor:"..msg.chat_id_,result.id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, 'دي لكك تريد اهينن تاج راسكك؟😏🖕🏿', 1, 'md')
 return false
 end 
 local ALOMDATEAM = "صارر ستاذيي 🏃🏻‍♂️♥️" 
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md') 
 local ALOMDATEAM = { "لكك جرجف @"..username.." احترم اسيادكك لا اكتلكك وازربب على كبركك،💩🖐🏿","هشش لكك فاشل @"..username.." لتضل تمسلت لا اخربط تضاريس وجهك جنه ابط عبده، 😖👌🏿","حبيبي @"..username.." راح احاول احترمكك هالمره بلكي تبطل حيونه، 🤔🔪","دمشي لك @"..username.." ينبوع الفشل مو زين ملفيك ونحجي وياك هي منبوذ 😏🖕🏿","ها الغليض التفس ابو راس المربع @"..username.." متعلملك جم حجايه وجاي تطكطكهن علينه دبطل😒🔪",}
-Dev_Abs(msg.chat_id_, result.id_, 1,''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'', 1, 'html') 
+Dev_iven(msg.chat_id_, result.id_, 1,''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'', 1, 'html') 
 else  
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو غير موجود في المجموعه', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو غير موجود في المجموعه', 1, 'md') 
 end 
 end 
 resolve_username(username,ALOMDATEAM)
@@ -3848,28 +3848,28 @@ end
 end
 --     Source ALOMDA     --
 if text == ("هينه") or text == ("بعد هينه") or text == ("هينه بعد") or text == ("لك هينه") or text == ("هينها") or text == ("هينهه") or text == ("رزله") or text == ("رزلهه") or text == ("رزلها") then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Stupid'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Stupid'..msg.chat_id_) then
 function hena(extra, result, success)
 if tonumber(result.sender_user_id_) == tonumber(ALOMDA) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, 'شو تمضرط اكو واحد يهين نفسه؟🤔👌🏿', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, 'شو تمضرط اكو واحد يهين نفسه؟🤔👌🏿', 1, 'md') 
 return false  
 end  
 if tonumber(result.sender_user_id_) == tonumber(DevId) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, 'دي لكك تريد اهينن تاج راسكك؟😏🖕🏿', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, 'دي لكك تريد اهينن تاج راسكك؟😏🖕🏿', 1, 'md')
 return false
 end 
 if tonumber(result.sender_user_id_) == tonumber(1632008076) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, 'دي لكك تريد اهينن تاج راسكك؟😏🖕🏿', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, 'دي لكك تريد اهينن تاج راسكك؟😏🖕🏿', 1, 'md')
 return false
 end 
-if DevAbs:sismember(ALOMDA.."Abs:AbsConstructor:"..msg.chat_id_,result.sender_user_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, 'دي لكك تريد اهينن تاج راسكك؟😏🖕🏿', 1, 'md')
+if Deviven:sismember(ALOMDA.."iven:ivenConstructor:"..msg.chat_id_,result.sender_user_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, 'دي لكك تريد اهينن تاج راسكك؟😏🖕🏿', 1, 'md')
 return false
 end 
 local ALOMDATEAM = "صارر ستاذيي 🏃🏻‍♂️♥️" 
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md') 
 local ALOMDATEAM = {"لكك جرجف احترم اسيادكك لا اكتلكك وازربب على كبركك،💩🖐🏿","هشش فاشل لتضل تمسلت لا اخربط تضاريس وجهك جنه ابط عبده، 😖👌🏿","دمشي لك ينبوع الفشل مو زين ملفيك ونحجي وياك هي منبوذ 😏🖕🏿","ها الغليض التفس ابو راس المربع متعلملك جم حجايه وجاي تطكطكهن علينه دبطل😒🔪","حبيبي راح احاول احترمكك هالمره بلكي تبطل حيونه، 🤔🔪"} 
-Dev_Abs(msg.chat_id_, result.id_, 1,''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'', 1, 'md') 
+Dev_iven(msg.chat_id_, result.id_, 1,''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'', 1, 'md') 
 end 
 if tonumber(msg.reply_to_message_id_) == 0 then
 else 
@@ -3878,20 +3878,20 @@ end
 end
 end
 if text == ("بوسه") or text == ("بعد بوسه") or text == ("ضل بوس") or text == ("بوسه بعد") or text == ("بوسها") or text == ("بعد بوسها") or text == ("ضل بوس") or text == ("بوسها بعد") or text == ("بوسهه") then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Stupid'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Stupid'..msg.chat_id_) then
 function bosh(extra, result, success)
 if tonumber(result.sender_user_id_) == tonumber(ALOMDA) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, 'فهمنيي شلوون راحح ابوس نفسيي؟😶💔', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, 'فهمنيي شلوون راحح ابوس نفسيي؟😶💔', 1, 'md') 
 return false  
 end  
 if tonumber(result.sender_user_id_) == tonumber(DevId) then  
-Dev_Abs(msg.chat_id_, result.id_, 1, 'مواححح احلاا بوسةة المطوريي😻🔥💗', 1, 'html')
+Dev_iven(msg.chat_id_, result.id_, 1, 'مواححح احلاا بوسةة المطوريي😻🔥💗', 1, 'html')
 return false
 end 
 local ALOMDATEAM = "صارر ستاذيي 🏃🏻‍♂️♥️" 
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md') 
 local ALOMDATEAM = {"مواححح افيش عافيههه😍🔥💗","امممووااهحح شهلعسل🥺🍯💘","مواححح،ءوفف اذوب🤤💗"} 
-Dev_Abs(msg.chat_id_, result.id_, 1,''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'', 1, 'md') 
+Dev_iven(msg.chat_id_, result.id_, 1,''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'', 1, 'md') 
 end 
 if tonumber(msg.reply_to_message_id_) == 0 then
 else 
@@ -3900,20 +3900,20 @@ end
 end
 end
 if text == ("صيحه") or text == ("صيحها") or text == ("صيحهه") or text == ("صيح") then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Stupid'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Stupid'..msg.chat_id_) then
 function seha(extra, result, success)
 if tonumber(result.sender_user_id_) == tonumber(ALOMDA) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, 'فهمنيي شلوون راحح اصيح نفسيي؟😶💔', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, 'فهمنيي شلوون راحح اصيح نفسيي؟😶💔', 1, 'md') 
 return false  
 end  
 if tonumber(result.sender_user_id_) == tonumber(DevId) then  
-Dev_Abs(msg.chat_id_, result.id_, 1, 'تعال مطوريي محتاجيكك🏃🏻‍♂️♥️', 1, 'html')
+Dev_iven(msg.chat_id_, result.id_, 1, 'تعال مطوريي محتاجيكك🏃🏻‍♂️♥️', 1, 'html')
 return false
 end 
 local ALOMDATEAM = "صارر ستاذيي 🏃🏻‍♂️♥️" 
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md') 
 local ALOMDATEAM = {"تتعال ححب محتاجيك🙂🍭","تعال يولل استاذكك ايريدككك😒🔪","يمعوود تعاال يريدوكك🤕♥️","تعال لكك ديصيحوك😐🖤"} 
-Dev_Abs(msg.chat_id_, result.id_, 1,''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'', 1, 'md') 
+Dev_iven(msg.chat_id_, result.id_, 1,''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'', 1, 'md') 
 end 
 if tonumber(msg.reply_to_message_id_) == 0 then
 else 
@@ -3923,24 +3923,24 @@ end
 end
 --     Source ALOMDA     --
 if text and text:match('^صيحه @(.*)') and ChCheck(msg) or text and text:match('^صيح @(.*)') and ChCheck(msg) then 
-if not DevAbs:get(ALOMDA..'Abs:Lock:Stupid'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Stupid'..msg.chat_id_) then
 local username = text:match('^صيحه @(.*)') or text:match('^صيح @(.*)') 
 function ALOMDATEAM(extra,result,success)
 if result.id_ then  
 if tonumber(result.id_) == tonumber(ALOMDA) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, 'فهمنيي شلوون راحح اصيح نفسيي؟😶💔', 1, 'md')  
+Dev_iven(msg.chat_id_, msg.id_, 1, 'فهمنيي شلوون راحح اصيح نفسيي؟😶💔', 1, 'md')  
 return false 
 end  
 if tonumber(result.id_) == tonumber(DevId) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, 'تعال مطوريي محتاجيكك🏃🏻‍♂️♥️ @'..username, 1, 'html') 
+Dev_iven(msg.chat_id_, msg.id_, 1, 'تعال مطوريي محتاجيكك🏃🏻‍♂️♥️ @'..username, 1, 'html') 
 return false  
 end  
 local ALOMDATEAM = "صارر ستاذيي 🏃🏻‍♂️♥️" 
-Dev_Abs(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1,ALOMDATEAM, 1, 'md') 
 local ALOMDATEAM = { "تتعال ححب @"..username.." محتاجيك🙂🍭","تعال يولل @"..username.." استاذكك ايريدككك😒🔪","يمعوود @"..username.." تعاال يريدوكك🤕♥️","تعال لكك @"..username.." ديصيحوك😐🖤",}
-Dev_Abs(msg.chat_id_, result.id_, 1,''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'', 1, 'html') 
+Dev_iven(msg.chat_id_, result.id_, 1,''..ALOMDATEAM[math.random(#ALOMDATEAM)]..'', 1, 'html') 
 else  
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العضو غير موجود في المجموعه', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العضو غير موجود في المجموعه', 1, 'md') 
 end 
 end 
 resolve_username(username,ALOMDATEAM)
@@ -3951,30 +3951,30 @@ end
 if text == ("تنزيل الكل") and msg.reply_to_message_id_ ~= 0 and Manager(msg) and ChCheck(msg) then 
 function promote_by_reply(extra, result, success)
 if SudoId(result.sender_user_id_) == true then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لاتستطيع تنزيل المطور الاساسي", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لاتستطيع تنزيل المطور الاساسي", 1, 'md')
 return false 
 end
-if DevAbs:sismember(ALOMDA..'Abs:SecondSudo:',result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:SecondSudo:',result.sender_user_id_) then
 secondsudo = 'المطورين الثانويين • ' else secondsudo = '' end
-if DevAbs:sismember(ALOMDA..'Abs:SudoBot:',result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:SudoBot:',result.sender_user_id_) then
 sudobot = 'المطورين • ' else sudobot = '' end
-if DevAbs:sismember(ALOMDA..'Abs:ManagerAll:',result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:ManagerAll:',result.sender_user_id_) then
 managerall = 'المدراء العامين • ' else managerall = '' end
-if DevAbs:sismember(ALOMDA..'Abs:AdminAll:',result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:AdminAll:',result.sender_user_id_) then
 adminall = 'الادمنيه العامين • ' else adminall = '' end
-if DevAbs:sismember(ALOMDA..'Abs:VipAll:',result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:VipAll:',result.sender_user_id_) then
 vpall = 'المميزين العامين • ' else vpall = '' end
-if DevAbs:sismember(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_, result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_, result.sender_user_id_) then
 basicconstructor = 'المنشئين الاساسيين • ' else basicconstructor = '' end
-if DevAbs:sismember(ALOMDA..'Abs:Constructor:'..msg.chat_id_, result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:Constructor:'..msg.chat_id_, result.sender_user_id_) then
 constructor = 'المنشئين • ' else constructor = '' end 
-if DevAbs:sismember(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:Managers:'..msg.chat_id_, result.sender_user_id_) then
 manager = 'المدراء • ' else manager = '' end
-if DevAbs:sismember(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:Admins:'..msg.chat_id_, result.sender_user_id_) then
 admins = 'الادمنيه • ' else admins = '' end
-if DevAbs:sismember(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.sender_user_id_) then
 vipmem = 'المميزين • ' else vipmem = '' end
-if DevAbs:sismember(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.sender_user_id_) then
 cleaner = 'المنظفين • ' else cleaner = ''
 end
 if RankChecking(result.sender_user_id_,msg.chat_id_) ~= false then
@@ -3982,60 +3982,60 @@ ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من ↫
 else 
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙لم تتم ترقيته مسبقا")  
 end
-if AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'sudoid' then
-DevAbs:srem(ALOMDA..'Abs:SecondSudo:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:SudoBot:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:ManagerAll:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:AdminAll:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:VipAll:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.sender_user_id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'secondsudo' then
-DevAbs:srem(ALOMDA..'Abs:SudoBot:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:ManagerAll:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:AdminAll:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:VipAll:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.sender_user_id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'sudobot' then
-DevAbs:srem(ALOMDA..'Abs:ManagerAll:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:AdminAll:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:VipAll:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.sender_user_id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'absconstructor' then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.sender_user_id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'basicconstructor' then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.sender_user_id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'constructor' then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.sender_user_id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'manager' then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.sender_user_id_)
+if ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'sudoid' then
+Deviven:srem(ALOMDA..'iven:SecondSudo:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:SudoBot:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:ManagerAll:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:AdminAll:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipAll:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.sender_user_id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'secondsudo' then
+Deviven:srem(ALOMDA..'iven:SudoBot:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:ManagerAll:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:AdminAll:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipAll:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.sender_user_id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'sudobot' then
+Deviven:srem(ALOMDA..'iven:ManagerAll:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:AdminAll:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipAll:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.sender_user_id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'ivenconstructor' then
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.sender_user_id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'basicconstructor' then
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.sender_user_id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'constructor' then
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.sender_user_id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'manager' then
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.sender_user_id_)
 end
 end
 getMessage(msg.chat_id_, msg.reply_to_message_id_,promote_by_reply)
@@ -4045,30 +4045,30 @@ local rem = {string.match(text, "^(تنزيل الكل) @(.*)$")}
 function remm(extra, result, success)
 if result.id_ then
 if SudoId(result.id_) == true then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لاتستطيع تنزيل المطور الاساسي", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لاتستطيع تنزيل المطور الاساسي", 1, 'md')
 return false 
 end
-if DevAbs:sismember(ALOMDA..'Abs:SecondSudo:',result.id_) then
+if Deviven:sismember(ALOMDA..'iven:SecondSudo:',result.id_) then
 secondsudo = 'المطورين الثانويين • ' else secondsudo = '' end
-if DevAbs:sismember(ALOMDA..'Abs:SudoBot:',result.id_) then
+if Deviven:sismember(ALOMDA..'iven:SudoBot:',result.id_) then
 sudobot = 'المطورين • ' else sudobot = '' end
-if DevAbs:sismember(ALOMDA..'Abs:ManagerAll:',result.id_) then
+if Deviven:sismember(ALOMDA..'iven:ManagerAll:',result.id_) then
 managerall = 'المدراء العامين • ' else managerall = '' end
-if DevAbs:sismember(ALOMDA..'Abs:AdminAll:',result.id_) then
+if Deviven:sismember(ALOMDA..'iven:AdminAll:',result.id_) then
 adminall = 'الادمنيه العامين • ' else adminall = '' end
-if DevAbs:sismember(ALOMDA..'Abs:VipAll:',result.id_) then
+if Deviven:sismember(ALOMDA..'iven:VipAll:',result.id_) then
 vpall = 'المميزين العامين • ' else vpall = '' end
-if DevAbs:sismember(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_, result.id_) then
+if Deviven:sismember(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_, result.id_) then
 basicconstructor = 'المنشئين الاساسيين • ' else basicconstructor = '' end
-if DevAbs:sismember(ALOMDA..'Abs:Constructor:'..msg.chat_id_, result.id_) then
+if Deviven:sismember(ALOMDA..'iven:Constructor:'..msg.chat_id_, result.id_) then
 constructor = 'المنشئين • ' else constructor = '' end 
-if DevAbs:sismember(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.id_) then
+if Deviven:sismember(ALOMDA..'iven:Managers:'..msg.chat_id_, result.id_) then
 manager = 'المدراء • ' else manager = '' end
-if DevAbs:sismember(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.id_) then
+if Deviven:sismember(ALOMDA..'iven:Admins:'..msg.chat_id_, result.id_) then
 admins = 'الادمنيه • ' else admins = '' end
-if DevAbs:sismember(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.id_) then
+if Deviven:sismember(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.id_) then
 vipmem = 'المميزين • ' else vipmem = '' end
-if DevAbs:sismember(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.id_) then
+if Deviven:sismember(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.id_) then
 cleaner = 'المنظفين • ' else cleaner = ''
 end
 if RankChecking(result.id_,msg.chat_id_) ~= false then
@@ -4076,62 +4076,62 @@ ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله من ↫ ⤈\n~ ( ".
 else 
 ReplyStatus(msg,result.id_,"Reply","⌁︙لم تتم ترقيته مسبقا")  
 end 
-if AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'sudoid' then
-DevAbs:srem(ALOMDA..'Abs:SecondSudo:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:SudoBot:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:ManagerAll:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:AdminAll:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:VipAll:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.id_)
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'secondsudo' then
-DevAbs:srem(ALOMDA..'Abs:SudoBot:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:ManagerAll:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:AdminAll:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:VipAll:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.id_)
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'sudobot' then
-DevAbs:srem(ALOMDA..'Abs:ManagerAll:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:AdminAll:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:VipAll:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.id_)
-DevAbs:srem(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'absconstructor' then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.id_)
-DevAbs:srem(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'basicconstructor' then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.id_)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_, result.id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'constructor' then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_, result.id_)
-elseif AbsDelAll(msg.sender_user_id_,msg.chat_id_) == 'manager' then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, result.id_)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_, result.id_)
+if ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'sudoid' then
+Deviven:srem(ALOMDA..'iven:SecondSudo:', result.id_)
+Deviven:srem(ALOMDA..'iven:SudoBot:', result.id_)
+Deviven:srem(ALOMDA..'iven:ManagerAll:', result.id_)
+Deviven:srem(ALOMDA..'iven:AdminAll:', result.id_)
+Deviven:srem(ALOMDA..'iven:VipAll:', result.id_)
+Deviven:srem(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'secondsudo' then
+Deviven:srem(ALOMDA..'iven:SudoBot:', result.id_)
+Deviven:srem(ALOMDA..'iven:ManagerAll:', result.id_)
+Deviven:srem(ALOMDA..'iven:AdminAll:', result.id_)
+Deviven:srem(ALOMDA..'iven:VipAll:', result.id_)
+Deviven:srem(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'sudobot' then
+Deviven:srem(ALOMDA..'iven:ManagerAll:', result.id_)
+Deviven:srem(ALOMDA..'iven:AdminAll:', result.id_)
+Deviven:srem(ALOMDA..'iven:VipAll:', result.id_)
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'ivenconstructor' then
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'basicconstructor' then
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_, result.id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'constructor' then
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_, result.id_)
+elseif ivenDelAll(msg.sender_user_id_,msg.chat_id_) == 'manager' then
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_, result.id_)
 end
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المعرف غير صحيح*', 1, 'md')
 end
 end
 resolve_username(rem[2],remm)
@@ -4141,7 +4141,7 @@ end
 if Sudo(msg) then
 if text ==('اضف مطور ثانوي') or text ==('رفع مطور ثانوي') and SourceCh(msg) then
 function sudo_reply(extra, result, success)
-DevAbs:sadd(ALOMDA..'Abs:SecondSudo:',result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:SecondSudo:',result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه في قائمة المطورين الثانويين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4152,23 +4152,23 @@ if text and (text:match('^اضف مطور ثانوي @(.*)') or text:match('^ر�
 local username = text:match('^اضف مطور ثانوي @(.*)') or text:match('^رفع مطور ثانوي @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:SecondSudo:',result.id_)
+Deviven:sadd(ALOMDA..'iven:SecondSudo:',result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفعه في قائمة المطورين الثانويين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and (text:match('^اضف مطور ثانوي (%d+)') or text:match('^رفع مطور ثانوي (%d+)')) and SourceCh(msg) then
 local user = text:match('اضف مطور ثانوي (%d+)') or text:match('رفع مطور ثانوي (%d+)')
-DevAbs:sadd(ALOMDA..'Abs:SecondSudo:',user)
+Deviven:sadd(ALOMDA..'iven:SecondSudo:',user)
 ReplyStatus(msg,user,"Reply","⌁︙تم رفعه في قائمة المطورين الثانويين")  
 end
 --     Source ALOMDA     --
 --     Rem SecondSudo     --
 if text ==('حذف مطور ثانوي') or text ==('تنزيل مطور ثانوي') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:SecondSudo:',result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:SecondSudo:',result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من قائمة المطورين الثانويين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4179,16 +4179,16 @@ if text and (text:match('^حذف مطور ثانوي @(.*)') or text:match('^ت�
 local username = text:match('^حذف مطور ثانوي @(.*)') or text:match('^تنزيل مطور ثانوي @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:SecondSudo:',result.id_)
+Deviven:srem(ALOMDA..'iven:SecondSudo:',result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله من قائمة المطورين الثانويين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and (text:match('^حذف مطور ثانوي (%d+)') or text:match('^تنزيل مطور ثانوي (%d+)')) and SourceCh(msg) then
 local user = text:match('حذف مطور ثانوي (%d+)') or text:match('تنزيل مطور ثانوي (%d+)')
-DevAbs:srem(ALOMDA..'Abs:SecondSudo:',user)
+Deviven:srem(ALOMDA..'iven:SecondSudo:',user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تنزيله من قائمة المطورين الثانويين")  
 end end
 --     Source ALOMDA     --
@@ -4196,7 +4196,7 @@ end end
 if SecondSudo(msg) then
 if text ==('اضف مطور') or text ==('رفع مطور') and SourceCh(msg) then
 function sudo_reply(extra, result, success)
-DevAbs:sadd(ALOMDA..'Abs:SudoBot:',result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:SudoBot:',result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه في قائمة المطورين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4207,23 +4207,23 @@ if text and (text:match('^اضف مطور @(.*)') or text:match('^رفع مطو�
 local username = text:match('^اضف مطور @(.*)') or text:match('^رفع مطور @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:SudoBot:',result.id_)
+Deviven:sadd(ALOMDA..'iven:SudoBot:',result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفعه في قائمة المطورين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and (text:match('^اضف مطور (%d+)') or text:match('^رفع مطور (%d+)')) and SourceCh(msg) then
 local user = text:match('اضف مطور (%d+)') or text:match('رفع مطور (%d+)')
-DevAbs:sadd(ALOMDA..'Abs:SudoBot:',user)
+Deviven:sadd(ALOMDA..'iven:SudoBot:',user)
 ReplyStatus(msg,user,"Reply","⌁︙تم رفعه في قائمة المطورين")  
 end
 --     Source ALOMDA     --
 --       Rem SudoBot      --
 if text ==('حذف مطور') or text ==('تنزيل مطور') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:SudoBot:',result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:SudoBot:',result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من قائمة المطورين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4234,16 +4234,16 @@ if text and (text:match('^حذف مطور @(.*)') or text:match('^تنزيل م�
 local username = text:match('^حذف مطور @(.*)') or text:match('^تنزيل مطور @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:SudoBot:',result.id_)
+Deviven:srem(ALOMDA..'iven:SudoBot:',result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله من قائمة المطورين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and (text:match('^حذف مطور (%d+)') or text:match('^تنزيل مطور (%d+)')) and SourceCh(msg) then
 local user = text:match('حذف مطور (%d+)') or text:match('تنزيل مطور (%d+)')
-DevAbs:srem(ALOMDA..'Abs:SudoBot:',user)
+Deviven:srem(ALOMDA..'iven:SudoBot:',user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تنزيله من قائمة المطورين")  
 end end
 --     Source ALOMDA     --
@@ -4251,7 +4251,7 @@ end end
 if SudoBot(msg) then
 if text ==('رفع مدير عام') and SourceCh(msg) then
 function raf_reply(extra, result, success)
-DevAbs:sadd(ALOMDA..'Abs:ManagerAll:',result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:ManagerAll:',result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه في قائمة المدراء العامين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4262,23 +4262,23 @@ if text and text:match('^رفع مدير عام @(.*)') and SourceCh(msg) then
 local username = text:match('^رفع مدير عام @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:ManagerAll:',result.id_)
+Deviven:sadd(ALOMDA..'iven:ManagerAll:',result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفعه في قائمة المدراء العامين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^رفع مدير عام (%d+)') and SourceCh(msg) then
 local user = text:match('رفع مدير عام (%d+)')
-DevAbs:sadd(ALOMDA..'Abs:ManagerAll:',user)
+Deviven:sadd(ALOMDA..'iven:ManagerAll:',user)
 ReplyStatus(msg,user,"Reply","⌁︙تم رفعه في قائمة المدراء العامين")  
 end
 --     Source ALOMDA     --
 --      Rem ManagerAll    --
 if text ==('تنزيل مدير عام') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:ManagerAll:',result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:ManagerAll:',result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من قائمة المدراء العامين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4289,16 +4289,16 @@ if text and text:match('^تنزيل مدير عام @(.*)') and SourceCh(msg) th
 local username = text:match('^تنزيل مدير عام @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:ManagerAll:',result.id_)
+Deviven:srem(ALOMDA..'iven:ManagerAll:',result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله من قائمة المدراء العامين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^تنزيل مدير عام (%d+)') and SourceCh(msg) then
 local user = text:match('تنزيل مدير عام (%d+)')
-DevAbs:srem(ALOMDA..'Abs:ManagerAll:',user)
+Deviven:srem(ALOMDA..'iven:ManagerAll:',user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تنزيله من قائمة المدراء العامين")  
 end end
 --     Source ALOMDA     --
@@ -4306,7 +4306,7 @@ end end
 if ManagerAll(msg) then
 if text ==('رفع ادمن عام') and SourceCh(msg) then
 function raf_reply(extra, result, success)
-DevAbs:sadd(ALOMDA..'Abs:AdminAll:',result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:AdminAll:',result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه في قائمة الادمنيه العامين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4317,23 +4317,23 @@ if text and text:match('^رفع ادمن عام @(.*)') and SourceCh(msg) then
 local username = text:match('^رفع ادمن عام @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:AdminAll:',result.id_)
+Deviven:sadd(ALOMDA..'iven:AdminAll:',result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفعه في قائمة الادمنيه العامين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^رفع ادمن عام (%d+)') and SourceCh(msg) then
 local user = text:match('رفع ادمن عام (%d+)')
-DevAbs:sadd(ALOMDA..'Abs:AdminAll:',user)
+Deviven:sadd(ALOMDA..'iven:AdminAll:',user)
 ReplyStatus(msg,user,"Reply","⌁︙تم رفعه في قائمة الادمنيه العامين")  
 end
 --     Source ALOMDA     --
 --      Rem adminall      --
 if text ==('تنزيل ادمن عام') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:AdminAll:',result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:AdminAll:',result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من قائمة الادمنيه العامين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4344,16 +4344,16 @@ if text and text:match('^تنزيل ادمن عام @(.*)') and SourceCh(msg) th
 local username = text:match('^تنزيل ادمن عام @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:AdminAll:',result.id_)
+Deviven:srem(ALOMDA..'iven:AdminAll:',result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله من قائمة الادمنيه العامين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^تنزيل ادمن عام (%d+)') and SourceCh(msg) then
 local user = text:match('تنزيل ادمن عام (%d+)')
-DevAbs:srem(ALOMDA..'Abs:AdminAll:',user)
+Deviven:srem(ALOMDA..'iven:AdminAll:',user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تنزيله من قائمة الادمنيه العامين")  
 end end
 --     Source ALOMDA     --
@@ -4361,7 +4361,7 @@ end end
 if AdminAll(msg) then
 if text ==('رفع مميز عام') and SourceCh(msg) then
 function raf_reply(extra, result, success)
-DevAbs:sadd(ALOMDA..'Abs:VipAll:',result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:VipAll:',result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه في قائمة المميزين العام")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4372,23 +4372,23 @@ if text and text:match('^رفع مميز عام @(.*)') and SourceCh(msg) then
 local username = text:match('^رفع مميز عام @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:VipAll:',result.id_)
+Deviven:sadd(ALOMDA..'iven:VipAll:',result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفعه في قائمة المميزين العام")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^رفع مميز عام (%d+)') and SourceCh(msg) then
 local user = text:match('رفع مميز عام (%d+)')
-DevAbs:sadd(ALOMDA..'Abs:VipAll:',user)
+Deviven:sadd(ALOMDA..'iven:VipAll:',user)
 ReplyStatus(msg,user,"Reply","⌁︙تم رفعه في قائمة المميزين العام")  
 end
 --     Source ALOMDA     --
 --       Rem Vipall       --
 if text ==('تنزيل مميز عام') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:VipAll:',result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipAll:',result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من قائمة المميزين العام")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4399,25 +4399,25 @@ if text and text:match('^تنزيل مميز عام @(.*)') and SourceCh(msg) th
 local username = text:match('^تنزيل مميز عام @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:VipAll:',result.id_)
+Deviven:srem(ALOMDA..'iven:VipAll:',result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله من قائمة المميزين العام")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^تنزيل مميز عام (%d+)') and SourceCh(msg) then
 local user = text:match('تنزيل مميز عام (%d+)')
-DevAbs:srem(ALOMDA..'Abs:VipAll:',user)
+Deviven:srem(ALOMDA..'iven:VipAll:',user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تنزيله من قائمة المميزين العام")  
 end end
 --     Source ALOMDA     --
 --  Set BasicConstructor  --
 if ChatType == 'sp' or ChatType == 'gp'  then
-if AbsConstructor(msg) then
+if ivenConstructor(msg) then
 if text ==('رفع منشئ اساسي') and SourceCh(msg) then
 function raf_reply(extra, result, success)
-DevAbs:sadd(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه منشئ اساسي")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4428,23 +4428,23 @@ if text and text:match('^رفع منشئ اساسي @(.*)') and SourceCh(msg) th
 local username = text:match('^رفع منشئ اساسي @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.id_)
+Deviven:sadd(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفعه منشئ اساسي")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^رفع منشئ اساسي (%d+)') and SourceCh(msg) then
 local user = text:match('رفع منشئ اساسي (%d+)')
-DevAbs:sadd(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,user)
+Deviven:sadd(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم رفعه منشئ اساسي")  
 end
 --     Source ALOMDA     --
 --  Rem BasicConstructor  --
 if text ==('تنزيل منشئ اساسي') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله منشئ اساسي")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4455,27 +4455,27 @@ if text and text:match('^تنزيل منشئ اساسي @(.*)') and SourceCh(msg
 local username = text:match('^تنزيل منشئ اساسي @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله منشئ اساسي")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^تنزيل منشئ اساسي (%d+)') and SourceCh(msg) then
 local user = text:match('تنزيل منشئ اساسي (%d+)')
-DevAbs:srem(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_,user)
+Deviven:srem(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تنزيله منشئ اساسي")  
 end end
-if text ==('رفع منشئ اساسي') and not AbsConstructor(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر لمنشئ المجموعه والمطورين فقط', 1, 'md')
+if text ==('رفع منشئ اساسي') and not ivenConstructor(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر لمنشئ المجموعه والمطورين فقط', 1, 'md')
 end
 --     Source ALOMDA     --
 --    Set  Constructor    --
 if BasicConstructor(msg) then
 if text ==('رفع منشئ') and SourceCh(msg) then
 function raf_reply(extra, result, success)
-DevAbs:sadd(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه في قائمة المنشئين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4486,23 +4486,23 @@ if text and text:match('^رفع منشئ @(.*)') and SourceCh(msg) then
 local username = text:match('^رفع منشئ @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.id_)
+Deviven:sadd(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفعه في قائمة المنشئين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^رفع منشئ (%d+)') and SourceCh(msg) then
 local user = text:match('رفع منشئ (%d+)')
-DevAbs:sadd(ALOMDA..'Abs:Constructor:'..msg.chat_id_,user)
+Deviven:sadd(ALOMDA..'iven:Constructor:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم رفعه في قائمة المنشئين")  
 end
 --     Source ALOMDA     --
 --    Rem  Constructor    --
 if text ==('تنزيل منشئ') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من قائمة المنشئين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4513,16 +4513,16 @@ if text and text:match('^تنزيل منشئ @(.*)') and SourceCh(msg) then
 local username = text:match('^تنزيل منشئ @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله من قائمة المنشئين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^تنزيل منشئ (%d+)') and SourceCh(msg) then
 local user = text:match('تنزيل منشئ (%d+)')
-DevAbs:srem(ALOMDA..'Abs:Constructor:'..msg.chat_id_,user)
+Deviven:srem(ALOMDA..'iven:Constructor:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تنزيله من قائمة المنشئين")  
 end 
 end
@@ -4531,7 +4531,7 @@ end
 if Constructor(msg) then
 if text ==('رفع مدير') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:sadd(ALOMDA..'Abs:Managers:'..msg.chat_id_,result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Managers:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه في قائمة المدراء")  
 end  
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4542,23 +4542,23 @@ if text and text:match('^رفع مدير @(.*)') and SourceCh(msg) then
 local username = text:match('^رفع مدير @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:Managers:'..msg.chat_id_,result.id_)
+Deviven:sadd(ALOMDA..'iven:Managers:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفعه في قائمة المدراء")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end 
 if text and text:match('^رفع مدير (%d+)') and SourceCh(msg) then
 local user = text:match('رفع مدير (%d+)')
-DevAbs:sadd(ALOMDA..'Abs:Managers:'..msg.chat_id_,user)
+Deviven:sadd(ALOMDA..'iven:Managers:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم رفعه في قائمة المدراء")  
 end
 --     Source ALOMDA     --
 --       Rem Manager      --
 if text ==('تنزيل مدير') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من قائمة المدراء")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4569,23 +4569,23 @@ if text and text:match('^تنزيل مدير @(.*)') and SourceCh(msg) then
 local username = text:match('^تنزيل مدير @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله من قائمة المدراء")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^تنزيل مدير (%d+)') and SourceCh(msg) then
 local user = text:match('تنزيل مدير (%d+)')
-DevAbs:srem(ALOMDA..'Abs:Managers:'..msg.chat_id_,user)
+Deviven:srem(ALOMDA..'iven:Managers:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تنزيله من قائمة المدراء")  
 end 
 --     Source ALOMDA     --
 --       Set Cleaner      --
 if text ==('رفع منظف') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:sadd(ALOMDA..'Abs:Cleaner:'..msg.chat_id_,result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Cleaner:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه في قائمة المنظفين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4596,23 +4596,23 @@ if text and text:match('^رفع منظف @(.*)') and SourceCh(msg) then
 local username = text:match('^رفع منظف @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:Cleaner:'..msg.chat_id_,result.id_)
+Deviven:sadd(ALOMDA..'iven:Cleaner:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفعه في قائمة المنظفين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^رفع منظف (%d+)') and SourceCh(msg) then
 local user = text:match('رفع منظف (%d+)')
-DevAbs:sadd(ALOMDA..'Abs:Cleaner:'..msg.chat_id_,user)
+Deviven:sadd(ALOMDA..'iven:Cleaner:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم رفعه في قائمة المنظفين")  
 end
 --     Source ALOMDA     --
 --       Rem Cleaner      --
 if text ==('تنزيل منظف') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من قائمة المنظفين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4623,16 +4623,16 @@ if text and text:match('^تنزيل منظف @(.*)') and SourceCh(msg) then
 local username = text:match('^تنزيل منظف @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله من قائمة المنظفين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^تنزيل منظف (%d+)') and SourceCh(msg) then
 local user = text:match('تنزيل منظف (%d+)')
-DevAbs:srem(ALOMDA..'Abs:Cleaner:'..msg.chat_id_,user)
+Deviven:srem(ALOMDA..'iven:Cleaner:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تنزيله من قائمة المنظفين")  
 end end
 --     Source ALOMDA     --
@@ -4640,11 +4640,11 @@ end end
 if Manager(msg) then
 if text ==('رفع ادمن') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-if not BasicConstructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:ProSet"..msg.chat_id_) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
+if not BasicConstructor(msg) and Deviven:get(ALOMDA.."iven:Lock:ProSet"..msg.chat_id_) then 
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
 return false
 end
-DevAbs:sadd(ALOMDA..'Abs:Admins:'..msg.chat_id_,result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Admins:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه في قائمة الادمنيه")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4654,32 +4654,32 @@ end end
 if text and text:match('^رفع ادمن @(.*)') and SourceCh(msg) then
 local username = text:match('^رفع ادمن @(.*)')
 function promreply(extra,result,success)
-if not BasicConstructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:ProSet"..msg.chat_id_) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
+if not BasicConstructor(msg) and Deviven:get(ALOMDA.."iven:Lock:ProSet"..msg.chat_id_) then 
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
 return false
 end
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:Admins:'..msg.chat_id_,result.id_)
+Deviven:sadd(ALOMDA..'iven:Admins:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفعه في قائمة الادمنيه")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^رفع ادمن (%d+)') and SourceCh(msg) then
 local user = text:match('رفع ادمن (%d+)')
-if not BasicConstructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:ProSet"..msg.chat_id_) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
+if not BasicConstructor(msg) and Deviven:get(ALOMDA.."iven:Lock:ProSet"..msg.chat_id_) then 
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
 return false
 end
-DevAbs:sadd(ALOMDA..'Abs:Admins:'..msg.chat_id_,user)
+Deviven:sadd(ALOMDA..'iven:Admins:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم رفعه في قائمة الادمنيه")  
 end
 --     Source ALOMDA     --
 --        Rem admin       --
 if text ==('تنزيل ادمن') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من قائمة الادمنيه")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4690,16 +4690,16 @@ if text and text:match('^تنزيل ادمن @(.*)') and SourceCh(msg) then
 local username = text:match('^تنزيل ادمن @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله من قائمة الادمنيه")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^تنزيل ادمن (%d+)') and SourceCh(msg) then
 local user = text:match('تنزيل ادمن (%d+)')
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_,user)
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تنزيله من قائمة الادمنيه")  
 end end
 --     Source ALOMDA     --
@@ -4707,11 +4707,11 @@ end end
 if Admin(msg) then
 if text ==('رفع مميز') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-if not BasicConstructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:ProSet"..msg.chat_id_) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
+if not BasicConstructor(msg) and Deviven:get(ALOMDA.."iven:Lock:ProSet"..msg.chat_id_) then 
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
 return false
 end
-DevAbs:sadd(ALOMDA..'Abs:VipMem:'..msg.chat_id_,result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:VipMem:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه في قائمة المميزين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4721,32 +4721,32 @@ end end
 if text and text:match('^رفع مميز @(.*)') and SourceCh(msg) then
 local username = text:match('^رفع مميز @(.*)')
 function promreply(extra,result,success)
-if not BasicConstructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:ProSet"..msg.chat_id_) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
+if not BasicConstructor(msg) and Deviven:get(ALOMDA.."iven:Lock:ProSet"..msg.chat_id_) then 
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
 return false
 end
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:VipMem:'..msg.chat_id_,result.id_)
+Deviven:sadd(ALOMDA..'iven:VipMem:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفعه في قائمة المميزين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^رفع مميز (%d+)') and SourceCh(msg) then
 local user = text:match('رفع مميز (%d+)')
-if not BasicConstructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:ProSet"..msg.chat_id_) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
+if not BasicConstructor(msg) and Deviven:get(ALOMDA.."iven:Lock:ProSet"..msg.chat_id_) then 
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙لاتستطيع رفع احد وذالك بسبب تعطيل الرفع من قبل المنشئيين', 1, 'md')
 return false
 end
-DevAbs:sadd(ALOMDA..'Abs:VipMem:'..msg.chat_id_,user)
+Deviven:sadd(ALOMDA..'iven:VipMem:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم رفعه في قائمة المميزين")  
 end
 --     Source ALOMDA     --
 --       Rem Vipmem       --
 if text ==('تنزيل مميز') and SourceCh(msg) then
 function prom_reply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_,result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_,result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من قائمة المميزين")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4757,16 +4757,16 @@ if text and text:match('^تنزيل مميز @(.*)') and SourceCh(msg) then
 local username = text:match('^تنزيل مميز @(.*)')
 function promreply(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_,result.id_)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_,result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تنزيله من قائمة المميزين")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,promreply)
 end
 if text and text:match('^تنزيل مميز (%d+)') and SourceCh(msg) then
 local user = text:match('تنزيل مميز (%d+)')
-DevAbs:srem(ALOMDA..'Abs:VipMem:'..msg.chat_id_,user)
+Deviven:srem(ALOMDA..'iven:VipMem:'..msg.chat_id_,user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تنزيله من قائمة المميزين")  
 end end 
 --     Source ALOMDA     --
@@ -4779,7 +4779,7 @@ if GetInfo.result.can_promote_members == true then
 HTTPS.request("https://api.telegram.org/bot" .. TokenBot .. "/promoteChatMember?chat_id=" .. msg.chat_id_ .. "&user_id=" ..result.sender_user_id_.."&can_change_info=True&can_delete_messages=True&can_invite_users=True&can_restrict_members=True&can_pin_messages=True&can_promote_members=false")
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه مشرف في المجموعه")  
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙ليست لدي صلاحية اضافة مشرفين جدد يرجى التحقق من الصلاحيات', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙ليست لدي صلاحية اضافة مشرفين جدد يرجى التحقق من الصلاحيات', 1, 'md')
 end
 end
 getMessage(msg.chat_id_, msg.reply_to_message_id_,promote_by_reply)
@@ -4792,7 +4792,7 @@ if GetInfo.result.can_promote_members == true then
 HTTPS.request("https://api.telegram.org/bot" .. TokenBot .. "/promoteChatMember?chat_id=" .. msg.chat_id_ .. "&user_id=" ..result.sender_user_id_.."&can_change_info=false&can_delete_messages=false&can_invite_users=false&can_restrict_members=false&can_pin_messages=false&can_promote_members=false")
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من مشرفين المجموعه")  
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙ليست لدي صلاحية اضافة مشرفين جدد يرجى التحقق من الصلاحيات', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙ليست لدي صلاحية اضافة مشرفين جدد يرجى التحقق من الصلاحيات', 1, 'md')
 end
 end
 getMessage(msg.chat_id_, msg.reply_to_message_id_,promote_by_reply)
@@ -4805,22 +4805,22 @@ if GetInfo.result.can_promote_members == true then
 HTTPS.request("https://api.telegram.org/bot" .. TokenBot .. "/promoteChatMember?chat_id=" .. msg.chat_id_ .. "&user_id=" ..result.sender_user_id_.."&can_change_info=True&can_delete_messages=True&can_invite_users=True&can_restrict_members=True&can_pin_messages=True&can_promote_members=True")
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه مشرف في جميع الصلاحيات")  
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙ليست لدي صلاحية اضافة مشرفين جدد يرجى التحقق من الصلاحيات', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙ليست لدي صلاحية اضافة مشرفين جدد يرجى التحقق من الصلاحيات', 1, 'md')
 end
 end
 getMessage(msg.chat_id_, msg.reply_to_message_id_,promote_by_reply)
 end
 if text and (text:match("^وضع لقب (.*)$") or text:match("^رفع مشرف (.*)$") or text:match("^ضع لقب (.*)$")) and SourceCh(msg) then
-local Abs = text:match("^وضع لقب (.*)$") or text:match("^رفع مشرف (.*)$") or text:match("^ضع لقب (.*)$")
+local iven = text:match("^وضع لقب (.*)$") or text:match("^رفع مشرف (.*)$") or text:match("^ضع لقب (.*)$")
 function ReplySet(extra, result, success)
 local Check = https.request('https://api.telegram.org/bot'..TokenBot..'/getChatMember?chat_id='..msg.chat_id_..'&user_id='..ALOMDA)
 local GetInfo = JSON.decode(Check)
 if GetInfo.result.can_promote_members == true then 
 https.request("https://api.telegram.org/bot"..TokenBot.."/promoteChatMember?chat_id=" .. msg.chat_id_ .. "&user_id=" ..result.sender_user_id_.."&can_change_info=false&can_delete_messages=false&can_invite_users=True&can_restrict_members=false&can_pin_messages=True&can_promote_members=false")
-ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم اضافة ↫ "..Abs.." كلقب له")  
-https.request("https://api.telegram.org/bot"..TokenBot.."/setChatAdministratorCustomTitle?chat_id=" .. msg.chat_id_ .. "&user_id=" ..result.sender_user_id_.."&custom_title="..Abs)
+ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم اضافة ↫ "..iven.." كلقب له")  
+https.request("https://api.telegram.org/bot"..TokenBot.."/setChatAdministratorCustomTitle?chat_id=" .. msg.chat_id_ .. "&user_id=" ..result.sender_user_id_.."&custom_title="..iven)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙ليست لدي صلاحية اضافة مشرفين جدد يرجى التحقق من الصلاحيات', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙ليست لدي صلاحية اضافة مشرفين جدد يرجى التحقق من الصلاحيات', 1, 'md')
 end
 end
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -4848,7 +4848,7 @@ function ValidityUser(extra,result,success)
 if result.id_ then
 Validity(msg,result.id_) 
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,ValidityUser)
 end
@@ -4862,39 +4862,39 @@ if msg.reply_to_message_id_ ~= 0 then
 if text and (text:match("^مسح$") or text:match("^حذف$")) and ChCheck(msg) then
 DeleteMessage(msg.chat_id_,{[0] = msg.reply_to_message_id_})
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف الرساله مع رسالة الامر', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف الرساله مع رسالة الامر', 1, 'md')
 end end end
 --     Source ALOMDA     --
 if Constructor(msg) then
 if text == "تفعيل الحظر" and ChCheck(msg) or text == "تفعيل الطرد" and ChCheck(msg) then
-DevAbs:del(ALOMDA.."Abs:Lock:KickBan"..msg.chat_id_)
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل الطرد والحظر'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA.."iven:Lock:KickBan"..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل الطرد والحظر'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end
 if text == "تعطيل الحظر" and ChCheck(msg) or text == "تعطيل الطرد" and ChCheck(msg) then
-DevAbs:set(ALOMDA.."Abs:Lock:KickBan"..msg.chat_id_,"true")
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل الطرد والحظر'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA.."iven:Lock:KickBan"..msg.chat_id_,"true")
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل الطرد والحظر'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end
 if text == "تفعيل الكتم" and ChCheck(msg) or text == "تفعيل التقييد" and ChCheck(msg) then
-DevAbs:del(ALOMDA.."Abs:Lock:MuteTked"..msg.chat_id_)
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل الكتم والتقيد'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA.."iven:Lock:MuteTked"..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل الكتم والتقيد'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end
 if text == "تعطيل الكتم" and ChCheck(msg) or text == "تعطيل التقييد" and ChCheck(msg) then
-DevAbs:set(ALOMDA.."Abs:Lock:MuteTked"..msg.chat_id_,"true")
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل الكتم والتقيد'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA.."iven:Lock:MuteTked"..msg.chat_id_,"true")
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل الكتم والتقيد'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end
 end
 if BasicConstructor(msg) then
 if text == "تفعيل الرفع" and ChCheck(msg) or text == "تفعيل الترقيه" and ChCheck(msg) then
-DevAbs:del(ALOMDA.."Abs:Lock:ProSet"..msg.chat_id_)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم تفعيل رفع ↫ الادمن • المميز', 1, 'md')
+Deviven:del(ALOMDA.."iven:Lock:ProSet"..msg.chat_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم تفعيل رفع ↫ الادمن • المميز', 1, 'md')
 end
 if text == "تعطيل الرفع" and ChCheck(msg) or text == "تعطيل الترقيه" and ChCheck(msg) then
-DevAbs:set(ALOMDA.."Abs:Lock:ProSet"..msg.chat_id_,"true")
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم تعطيل رفع ↫ الادمن • المميز', 1, 'md')
+Deviven:set(ALOMDA.."iven:Lock:ProSet"..msg.chat_id_,"true")
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم تعطيل رفع ↫ الادمن • المميز', 1, 'md')
 end
 end
 --     Source ALOMDA     --
@@ -4902,12 +4902,12 @@ end
 if Admin(msg) then
 if text ==('طرد') and ChCheck(msg) then
 function KickReply(extra, result, success)
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:KickBan"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:KickBan"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الطرد والحظر من قبل المنشئين')
 return false
 end
 if RankChecking(result.sender_user_id_, result.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع طرد ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع طرد ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md')
 else
 tdcli_function({ID="ChangeChatMemberStatus",chat_id_=msg.chat_id_,user_id_=result.sender_user_id_,status_={ID="ChatMemberStatusKicked"},},function(arg,dp) 
 if (dp and dp.code_ and dp.code_ == 400 and dp.message_ == "CHAT_ADMIN_REQUIRED") then 
@@ -4930,13 +4930,13 @@ end end
 if text and text:match('^طرد @(.*)') and ChCheck(msg) then
 local username = text:match('^طرد @(.*)')
 function KickUser(extra,result,success)
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:KickBan"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:KickBan"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الطرد والحظر من قبل المنشئين')
 return false
 end
 if result.id_ then
 if RankChecking(result.id_, msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع طرد ↫ '..IdRank(result.id_, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع طرد ↫ '..IdRank(result.id_, msg.chat_id_), 1, 'md')
 else
 tdcli_function({ID="ChangeChatMemberStatus",chat_id_=msg.chat_id_,user_id_=result.id_,status_={ID="ChatMemberStatusKicked"},},function(arg,dp) 
 if (dp and dp.code_ and dp.code_ == 400 and dp.message_ == "CHAT_ADMIN_REQUIRED") then 
@@ -4952,18 +4952,18 @@ ReplyStatus(msg,result.id_,"Reply","⌁︙تم طرده من المجموعه")
 end,nil)
 end
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,KickUser)
 end
 if text and text:match('^طرد (%d+)') and ChCheck(msg) then
 local user = text:match('طرد (%d+)')
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:KickBan"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:KickBan"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الطرد والحظر من قبل المنشئين')
 return false
 end
 if RankChecking(user, msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع طرد ↫ '..IdRank(user, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع طرد ↫ '..IdRank(user, msg.chat_id_), 1, 'md')
 else
 tdcli_function({ID="ChangeChatMemberStatus",chat_id_=msg.chat_id_,user_id_=user,status_={ID="ChatMemberStatusKicked"},},function(arg,dp) 
 if (dp and dp.code_ and dp.code_ == 400 and dp.message_ == "CHAT_ADMIN_REQUIRED") then 
@@ -4985,12 +4985,12 @@ end
 if Admin(msg) then
 if text ==('حضر') or text ==('حظر') and ChCheck(msg) then
 function BanReply(extra, result, success)
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:KickBan"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:KickBan"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الطرد والحظر من قبل المنشئين')
 return false
 end
 if RankChecking(result.sender_user_id_, result.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع حظر ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع حظر ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md')
 else
 tdcli_function({ID="ChangeChatMemberStatus",chat_id_=msg.chat_id_,user_id_=result.sender_user_id_,status_={ID="ChatMemberStatusKicked"},},function(arg,dp) 
 if (dp and dp.code_ and dp.code_ == 400 and dp.message_ == "CHAT_ADMIN_REQUIRED") then 
@@ -5002,7 +5002,7 @@ send(msg.chat_id_,msg.id_,"⌁︙لا استطيع حظر مشرفين المج�
 return false  
 end
 ChatKick(result.chat_id_, result.sender_user_id_)
-DevAbs:sadd(ALOMDA..'Abs:Ban:'..msg.chat_id_, result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Ban:'..msg.chat_id_, result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم حظره من المجموعه") 
 end,nil) 
 end 
@@ -5014,13 +5014,13 @@ end end
 if text and (text:match('^حضر @(.*)') or text:match('^حظر @(.*)')) and ChCheck(msg) then
 local username = text:match('^حضر @(.*)') or text:match('^حظر @(.*)')
 function BanUser(extra,result,success)
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:KickBan"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:KickBan"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الطرد والحظر من قبل المنشئين')
 return false
 end
 if result.id_ then
 if RankChecking(result.id_, msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع حظر ↫ '..IdRank(result.id_, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع حظر ↫ '..IdRank(result.id_, msg.chat_id_), 1, 'md')
 else
 tdcli_function({ID="ChangeChatMemberStatus",chat_id_=msg.chat_id_,user_id_=result.id_,status_={ID="ChatMemberStatusKicked"},},function(arg,dp) 
 if (dp and dp.code_ and dp.code_ == 400 and dp.message_ == "CHAT_ADMIN_REQUIRED") then 
@@ -5032,23 +5032,23 @@ send(msg.chat_id_,msg.id_,"⌁︙لا استطيع حظر مشرفين المج�
 return false  
 end
 ChatKick(msg.chat_id_, result.id_)
-DevAbs:sadd(ALOMDA..'Abs:Ban:'..msg.chat_id_, result.id_)
+Deviven:sadd(ALOMDA..'iven:Ban:'..msg.chat_id_, result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم حظره من المجموعه")  
 end,nil) 
 end
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,BanUser)
 end
 if text and (text:match('^حضر (%d+)') or text:match('^حظر (%d+)')) and ChCheck(msg) then
 local user = text:match('حضر (%d+)') or text:match('حظر (%d+)')
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:KickBan"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:KickBan"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الطرد والحظر من قبل المنشئين')
 return false
 end
 if RankChecking(user, msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع حظر ↫ '..IdRank(user, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع حظر ↫ '..IdRank(user, msg.chat_id_), 1, 'md')
 else
 tdcli_function({ID="ChangeChatMemberStatus",chat_id_=msg.chat_id_,user_id_=user,status_={ID="ChatMemberStatusKicked"},},function(arg,dp) 
 if (dp and dp.code_ and dp.code_ == 400 and dp.message_ == "CHAT_ADMIN_REQUIRED") then 
@@ -5060,7 +5060,7 @@ send(msg.chat_id_,msg.id_,"⌁︙لا استطيع حظر مشرفين المج�
 return false  
 end
 ChatKick(msg.chat_id_, user)
-DevAbs:sadd(ALOMDA..'Abs:Ban:'..msg.chat_id_, user)
+Deviven:sadd(ALOMDA..'iven:Ban:'..msg.chat_id_, user)
 ReplyStatus(msg,user,"Reply","⌁︙تم حظره من المجموعه")  
 end,nil) 
 end
@@ -5069,7 +5069,7 @@ end
 --         UnBan          --
 if text ==('الغاء الحظر') or text ==('الغاء حظر') and ChCheck(msg) then
 function UnBanReply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:Ban:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Ban:'..msg.chat_id_, result.sender_user_id_)
 tdcli_function ({ ID = "ChangeChatMemberStatus", chat_id_ = msg.chat_id_, user_id_ = result.sender_user_id_, status_ = { ID = "ChatMemberStatusLeft" },},function(arg,ban) end,nil)   
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم الغاء حظره من المجموعه")  
 end 
@@ -5081,17 +5081,17 @@ if text and (text:match('^الغاء الحظر @(.*)') or text:match('^الغا
 local username = text:match('^الغاء الحظر @(.*)') or text:match('^الغاء حظر @(.*)')
 function UnBanUser(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:Ban:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Ban:'..msg.chat_id_, result.id_)
 tdcli_function ({ ID = "ChangeChatMemberStatus", chat_id_ = msg.chat_id_, user_id_ = result.id_, status_ = { ID = "ChatMemberStatusLeft" },},function(arg,ban) end,nil)   
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم الغاء حظره من المجموعه")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,UnBanUser)
 end
 if text and (text:match('^الغاء الحظر (%d+)') or text:match('^الغاء حظر (%d+)')) and ChCheck(msg) then
 local user = text:match('الغاء الحظر (%d+)') or text:match('الغاء حظر (%d+)')
-DevAbs:srem(ALOMDA..'Abs:Ban:'..msg.chat_id_, user)
+Deviven:srem(ALOMDA..'iven:Ban:'..msg.chat_id_, user)
 tdcli_function ({ ID = "ChangeChatMemberStatus", chat_id_ = msg.chat_id_, user_id_ = user, status_ = { ID = "ChatMemberStatusLeft" },},function(arg,ban) end,nil)   
 ReplyStatus(msg,user,"Reply","⌁︙تم الغاء حظره من المجموعه")  
 end 
@@ -5101,17 +5101,17 @@ end
 if Admin(msg) then
 if text ==('كتم') and ChCheck(msg) then
 function MuteReply(extra, result, success)
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:MuteTked"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:MuteTked"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الكتم والتقيد من قبل المنشئين')
 return false
 end
 if RankChecking(result.sender_user_id_, result.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع كتم ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع كتم ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md')
 else
-if DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_, result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_, result.sender_user_id_) then
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙هو بالفعل مكتوم من المجموعه")  
 else
-DevAbs:sadd(ALOMDA..'Abs:Muted:'..msg.chat_id_, result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Muted:'..msg.chat_id_, result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم كتمه من المجموعه")  
 end 
 end
@@ -5123,39 +5123,39 @@ end end
 if text and text:match('^كتم @(.*)') and ChCheck(msg) then
 local username = text:match('^كتم @(.*)')
 function MuteUser(extra,result,success)
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:MuteTked"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:MuteTked"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الكتم والتقيد من قبل المنشئين')
 return false
 end
 if result.id_ then
 if RankChecking(result.id_, msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع كتم ↫ '..IdRank(result.id_, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع كتم ↫ '..IdRank(result.id_, msg.chat_id_), 1, 'md')
 else
-if DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_, result.id_) then
+if Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_, result.id_) then
 ReplyStatus(msg,result.id_,"Reply","⌁︙هو بالفعل مكتوم من المجموعه")  
 else
-DevAbs:sadd(ALOMDA..'Abs:Muted:'..msg.chat_id_, result.id_)
+Deviven:sadd(ALOMDA..'iven:Muted:'..msg.chat_id_, result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم كتمه من المجموعه")  
 end
 end
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,MuteUser)
 end
 if text and text:match('^كتم (%d+)') and ChCheck(msg) then
 local user = text:match('كتم (%d+)')
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:MuteTked"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:MuteTked"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الكتم والتقيد من قبل المنشئين')
 return false
 end
 if RankChecking(user, msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع كتم ↫ '..IdRank(user, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع كتم ↫ '..IdRank(user, msg.chat_id_), 1, 'md')
 else
-if DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_, user) then
+if Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_, user) then
 ReplyStatus(msg,user,"Reply","⌁︙هو بالفعل مكتوم من المجموعه")  
 else
-DevAbs:sadd(ALOMDA..'Abs:Muted:'..msg.chat_id_, user)
+Deviven:sadd(ALOMDA..'iven:Muted:'..msg.chat_id_, user)
 ReplyStatus(msg,user,"Reply","⌁︙تم كتمه من المجموعه")  
 end
 end
@@ -5164,10 +5164,10 @@ end
 --         UnMute         --
 if text ==('الغاء الكتم') or text ==('الغاء كتم') and ChCheck(msg) then
 function UnMuteReply(extra, result, success)
-if not DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_, result.sender_user_id_) then
+if not Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_, result.sender_user_id_) then
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙هو ليس مكتوم لالغاء كتمه")  
 else
-DevAbs:srem(ALOMDA..'Abs:Muted:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Muted:'..msg.chat_id_, result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم الغاء كتمه من المجموعه")  
 end
 end 
@@ -5179,23 +5179,23 @@ if text and (text:match('^الغاء الكتم @(.*)') or text:match('^الغا
 local username = text:match('^الغاء الكتم @(.*)') or text:match('^الغاء كتم @(.*)')
 function UnMuteUser(extra,result,success)
 if result.id_ then
-if not DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_, result.id_) then
+if not Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_, result.id_) then
 ReplyStatus(msg,result.id_,"Reply","⌁︙هو ليس مكتوم لالغاء كتمه")  
 else
-DevAbs:srem(ALOMDA..'Abs:Muted:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Muted:'..msg.chat_id_, result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم الغاء كتمه من المجموعه")  
 end
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,UnMuteUser)
 end
 if text and (text:match('^الغاء الكتم (%d+)') or text:match('^الغاء كتم (%d+)')) and ChCheck(msg) then
 local user = text:match('الغاء الكتم (%d+)') or text:match('الغاء كتم (%d+)')
-if not DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_, user) then
+if not Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_, user) then
 ReplyStatus(msg,user,"Reply","⌁︙هو ليس مكتوم لالغاء كتمه")  
 else
-DevAbs:srem(ALOMDA..'Abs:Muted:'..msg.chat_id_, user)
+Deviven:srem(ALOMDA..'iven:Muted:'..msg.chat_id_, user)
 ReplyStatus(msg,user,"Reply","⌁︙تم الغاء كتمه من المجموعه")  
 end
 end 
@@ -5205,15 +5205,15 @@ end
 if Admin(msg) then
 if text ==('تقييد') or text ==('تقيد') and ChCheck(msg) then
 function TkeedReply(extra, result, success)
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:MuteTked"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:MuteTked"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الكتم والتقيد من قبل المنشئين')
 return false
 end
 if RankChecking(result.sender_user_id_, result.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md')
 else
 HTTPS.request("https://api.telegram.org/bot"..TokenBot.."/restrictChatMember?chat_id="..msg.chat_id_.."&user_id="..result.sender_user_id_)
-DevAbs:sadd(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Tkeed:'..msg.chat_id_, result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تقيده من المجموعه")  
 end
 end 
@@ -5224,34 +5224,34 @@ end end
 if text and (text:match('^تقييد @(.*)') or text:match('^تقيد @(.*)')) and ChCheck(msg) then
 local username = text:match('^تقييد @(.*)') or text:match('^تقيد @(.*)')
 function TkeedUser(extra,result,success)
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:MuteTked"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:MuteTked"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الكتم والتقيد من قبل المنشئين')
 return false
 end
 if result.id_ then
 if RankChecking(result.id_, msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(result.id_, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(result.id_, msg.chat_id_), 1, 'md')
 else
 HTTPS.request("https://api.telegram.org/bot"..TokenBot.."/restrictChatMember?chat_id="..msg.chat_id_.."&user_id="..result.id_)
-DevAbs:sadd(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, result.id_)
+Deviven:sadd(ALOMDA..'iven:Tkeed:'..msg.chat_id_, result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم تقيده من المجموعه")  
 end
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,TkeedUser)
 end
 if text and (text:match('^تقييد (%d+)') or text:match('^تقيد (%d+)')) and ChCheck(msg) then
 local user = text:match('تقييد (%d+)') or text:match('تقيد (%d+)')
-if not Constructor(msg) and DevAbs:get(ALOMDA.."Abs:Lock:MuteTked"..msg.chat_id_) then 
+if not Constructor(msg) and Deviven:get(ALOMDA.."iven:Lock:MuteTked"..msg.chat_id_) then 
 send(msg.chat_id_, msg.id_,'⌁︙لقد تم تعطيل الكتم والتقيد من قبل المنشئين')
 return false
 end
 if RankChecking(user, msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(user, msg.chat_id_), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(user, msg.chat_id_), 1, 'md')
 else
 HTTPS.request("https://api.telegram.org/bot"..TokenBot.."/restrictChatMember?chat_id="..msg.chat_id_.."&user_id="..user)
-DevAbs:sadd(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, user)
+Deviven:sadd(ALOMDA..'iven:Tkeed:'..msg.chat_id_, user)
 ReplyStatus(msg,user,"Reply","⌁︙تم تقيده من المجموعه")  
 end
 end
@@ -5260,7 +5260,7 @@ end
 if text ==('الغاء تقييد') or text ==('الغاء تقيد') and ChCheck(msg) then
 function UnTkeedReply(extra, result, success)
 HTTPS.request("https://api.telegram.org/bot"..TokenBot.."/restrictChatMember?chat_id="..msg.chat_id_.."&user_id="..result.sender_user_id_.."&can_send_messages=True&can_send_media_messages=True&can_send_other_messages=True&can_add_web_page_previews=True")
-DevAbs:srem(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:Tkeed:'..msg.chat_id_, result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم الغاء تقيده من المجموعه")  
 end
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -5272,17 +5272,17 @@ local username = text:match('^الغاء تقييد @(.*)') or text:match('^ال
 function UnTkeedUser(extra,result,success)
 if result.id_ then
 HTTPS.request("https://api.telegram.org/bot"..TokenBot.."/restrictChatMember?chat_id="..msg.chat_id_.."&user_id="..result.id_.."&can_send_messages=True&can_send_media_messages=True&can_send_other_messages=True&can_add_web_page_previews=True")
-DevAbs:srem(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, result.id_)
+Deviven:srem(ALOMDA..'iven:Tkeed:'..msg.chat_id_, result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم الغاء تقيده من المجموعه")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,UnTkeedUser)
 end
 if text and (text:match('^الغاء تقييد (%d+)') or text:match('^الغاء تقيد (%d+)')) and ChCheck(msg) then
 local user = text:match('الغاء تقييد (%d+)') or text:match('الغاء تقيد (%d+)')
 HTTPS.request("https://api.telegram.org/bot"..TokenBot.."/restrictChatMember?chat_id="..msg.chat_id_.."&user_id="..user.."&can_send_messages=True&can_send_media_messages=True&can_send_other_messages=True&can_add_web_page_previews=True")
-DevAbs:srem(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, user)
+Deviven:srem(ALOMDA..'iven:Tkeed:'..msg.chat_id_, user)
 ReplyStatus(msg,user,"Reply","⌁︙تم الغاء تقيده من المجموعه")  
 end
 end 
@@ -5293,15 +5293,15 @@ if SecondSudo(msg) then
 if text ==('حضر عام') or text ==('حظر عام') then
 function BanAllReply(extra, result, success)
 if tonumber(result.sender_user_id_) == tonumber(ALOMDA) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر البوت عام*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر البوت عام*", 1, 'md')
 return false 
 end
 if SudoId(result.sender_user_id_) == true then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر المطور الاساسي*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر المطور الاساسي*", 1, 'md')
 return false 
 end
 ChatKick(result.chat_id_, result.sender_user_id_)
-DevAbs:sadd(ALOMDA..'Abs:BanAll:', result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:BanAll:', result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم حظره عام من المجموعات")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -5312,34 +5312,34 @@ if text and (text:match('^حضر عام @(.*)') or text:match('^حظر عام @(
 local username = text:match('^حضر عام @(.*)') or text:match('^حظر عام @(.*)')
 function BanAllUser(extra,result,success)
 if tonumber(result.id_) == tonumber(ALOMDA) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر البوت عام*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر البوت عام*", 1, 'md')
 return false 
 end
 if SudoId(result.id_) == true then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر المطور الاساسي*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر المطور الاساسي*", 1, 'md')
 return false 
 end
 if result.id_ then
 ChatKick(msg.chat_id_, result.id_)
-DevAbs:sadd(ALOMDA..'Abs:BanAll:', result.id_)
+Deviven:sadd(ALOMDA..'iven:BanAll:', result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم حظره عام من المجموعات")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,BanAllUser)
 end
 if text and (text:match('^حضر عام (%d+)') or text:match('^حظر عام (%d+)')) then
 local user = text:match('حضر عام (%d+)') or text:match('حظر عام (%d+)')
 if tonumber(user) == tonumber(ALOMDA) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر البوت عام*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر البوت عام*", 1, 'md')
 return false 
 end
 if SudoId(user) == true then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر المطور الاساسي*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع حظر المطور الاساسي*", 1, 'md')
 return false 
 end
 ChatKick(msg.chat_id_, user)
-DevAbs:sadd(ALOMDA..'Abs:BanAll:', user)
+Deviven:sadd(ALOMDA..'iven:BanAll:', user)
 ReplyStatus(msg,user,"Reply","⌁︙تم حظره عام من المجموعات")  
 end
 --     Source ALOMDA     --
@@ -5347,14 +5347,14 @@ end
 if text ==('كتم عام') then
 function MuteAllReply(extra, result, success)
 if tonumber(result.sender_user_id_) == tonumber(ALOMDA) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم البوت عام*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم البوت عام*", 1, 'md')
 return false 
 end
 if SudoId(result.sender_user_id_) == true then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم المطور الاساسي*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم المطور الاساسي*", 1, 'md')
 return false 
 end
-DevAbs:sadd(ALOMDA..'Abs:MuteAll:', result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:MuteAll:', result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم كتمه عام من المجموعات")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -5365,40 +5365,40 @@ if text and text:match('^كتم عام @(.*)') then
 local username = text:match('^كتم عام @(.*)')
 function MuteAllUser(extra,result,success)
 if tonumber(result.id_) == tonumber(ALOMDA) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم البوت عام*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم البوت عام*", 1, 'md')
 return false 
 end
 if SudoId(result.id_) == true then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم المطور الاساسي*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم المطور الاساسي*", 1, 'md')
 return false 
 end
 if result.id_ then
-DevAbs:sadd(ALOMDA..'Abs:MuteAll:', result.id_)
+Deviven:sadd(ALOMDA..'iven:MuteAll:', result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم كتمه عام من المجموعات")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,MuteAllUser)
 end
 if text and text:match('^كتم عام (%d+)') then
 local user = text:match('كتم عام (%d+)')
 if tonumber(user) == tonumber(ALOMDA) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم البوت عام*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم البوت عام*", 1, 'md')
 return false 
 end
 if SudoId(user) == true then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم المطور الاساسي*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتستطيع كتم المطور الاساسي*", 1, 'md')
 return false 
 end
-DevAbs:sadd(ALOMDA..'Abs:MuteAll:', user)
+Deviven:sadd(ALOMDA..'iven:MuteAll:', user)
 ReplyStatus(msg,user,"Reply","⌁︙تم كتمه عام من المجموعات")  
 end
 --     Source ALOMDA     --
 --         UnAll          --
 if text ==('الغاء عام') or text ==('الغاء العام') then
 function UnAllReply(extra, result, success)
-DevAbs:srem(ALOMDA..'Abs:BanAll:', result.sender_user_id_)
-DevAbs:srem(ALOMDA..'Abs:MuteAll:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:BanAll:', result.sender_user_id_)
+Deviven:srem(ALOMDA..'iven:MuteAll:', result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم الغاء (الحظر • الكتم) عام من المجموعات")  
 end 
 if tonumber(tonumber(msg.reply_to_message_id_)) == 0 then
@@ -5409,18 +5409,18 @@ if text and (text:match('^الغاء عام @(.*)') or text:match('^الغاء �
 local username = text:match('^الغاء عام @(.*)') or text:match('^الغاء العام @(.*)')
 function UnAllUser(extra,result,success)
 if result.id_ then
-DevAbs:srem(ALOMDA..'Abs:BanAll:', result.id_)
-DevAbs:srem(ALOMDA..'Abs:MuteAll:', result.id_)
+Deviven:srem(ALOMDA..'iven:BanAll:', result.id_)
+Deviven:srem(ALOMDA..'iven:MuteAll:', result.id_)
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم الغاء (الحظر • الكتم) عام من المجموعات")  
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')
 end end 
 resolve_username(username,UnAllUser)
 end
 if text and (text:match('^الغاء عام (%d+)') or text:match('^الغاء العام (%d+)')) then
 local user = text:match('الغاء عام (%d+)') or text:match('الغاء العام (%d+)')
-DevAbs:srem(ALOMDA..'Abs:BanAll:', user)
-DevAbs:srem(ALOMDA..'Abs:MuteAll:', user)
+Deviven:srem(ALOMDA..'iven:BanAll:', user)
+Deviven:srem(ALOMDA..'iven:MuteAll:', user)
 ReplyStatus(msg,user,"Reply","⌁︙تم الغاء (الحظر • الكتم) عام من المجموعات")  
 end
 end
@@ -5428,19 +5428,19 @@ end
 --     Source ALOMDA     --
 if (text == "تغير المطور الاساسي" or text == "نقل ملكيه البوت" or text == "تغيير المطور الاساسي" or text == "↫ تغير المطور الاساسي ⌁") and msg.reply_to_message_id_ == 0 and Sudo(msg) then 
 send(msg.chat_id_, msg.id_,'⌁︙يجب التاكد ان المطور الجديد ارسل start لخاص البوت بعد ذلك يمكنك ارسال ايدي المطور')
-DevAbs:setex(ALOMDA.."Abs:EditDev"..msg.sender_user_id_,300,true)
+Deviven:setex(ALOMDA.."iven:EditDev"..msg.sender_user_id_,300,true)
 end
-if DevAbs:get(ALOMDA.."Abs:EditDev"..msg.sender_user_id_) then
+if Deviven:get(ALOMDA.."iven:EditDev"..msg.sender_user_id_) then
 if text and text:match("^الغاء$") then 
 send(msg.chat_id_, msg.id_,'⌁︙تم الغاء امر تغير المطور الاساسي')
-DevAbs:del(ALOMDA.."Abs:EditDev"..msg.sender_user_id_)
+Deviven:del(ALOMDA.."iven:EditDev"..msg.sender_user_id_)
 return false
 end
 if text and text:match("^(%d+)$") then 
 tdcli_function ({ID = "GetUser",user_id_ = text},function(arg,dp) 
 if dp.first_name_ ~= false then
-DevAbs:del(ALOMDA.."Abs:EditDev"..msg.sender_user_id_)
-DevAbs:set(ALOMDA.."Abs:NewDev"..msg.sender_user_id_,dp.id_)
+Deviven:del(ALOMDA.."iven:EditDev"..msg.sender_user_id_)
+Deviven:set(ALOMDA.."iven:NewDev"..msg.sender_user_id_,dp.id_)
 if dp.username_ ~= false then DevUser = '\n⌁︙المعرف ↫ [@'..dp.username_..']' else DevUser = '' end
 local Text = '⌁︙الايدي ↫ '..dp.id_..DevUser..'\n⌁︙الاسم ↫ ['..CatchName(dp.first_name_,15)..'](tg://user?id='..dp.id_..')\n⌁︙تم حفظ المعلومات بنجاح\n⌁︙استخدم الازرار للتاكيد ↫ ⤈'
 keyboard = {} 
@@ -5449,7 +5449,7 @@ Msg_id = msg.id_/2097152/0.5
 return https.request("https://api.telegram.org/bot"..TokenBot..'/sendMessage?chat_id=' .. msg.chat_id_ .. '&text=' .. URL.escape(Text).."&reply_to_message_id="..Msg_id.."&parse_mode=markdown&disable_web_page_preview=true&reply_markup="..JSON.encode(keyboard))
 else
 send(msg.chat_id_, msg.id_,"⌁︙المعلومات خاطئه قم بالتاكد واعد المحاوله")
-DevAbs:del(ALOMDA.."Abs:EditDev"..msg.sender_user_id_)
+Deviven:del(ALOMDA.."iven:EditDev"..msg.sender_user_id_)
 end
 end,nil)
 return false
@@ -5457,24 +5457,24 @@ end
 end
 --     Source ALOMDA     --
 if msg.reply_to_message_id_ ~= 0 then
-if text and text:match("^رفع مطي$") and not DevAbs:get(ALOMDA..'Abs:Lock:Stupid'..msg.chat_id_) and ChCheck(msg) then
+if text and text:match("^رفع مطي$") and not Deviven:get(ALOMDA..'iven:Lock:Stupid'..msg.chat_id_) and ChCheck(msg) then
 function donky_by_reply(extra, result, success)
-if DevAbs:sismember(ALOMDA..'User:Donky:'..msg.chat_id_, result.sender_user_id_) then
+if Deviven:sismember(ALOMDA..'User:Donky:'..msg.chat_id_, result.sender_user_id_) then
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙هو مطي شرفع منه بعد😹💔") 
 else
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفعه في قائمة المطايه") 
-DevAbs:sadd(ALOMDA..'User:Donky:'..msg.chat_id_, result.sender_user_id_)
+Deviven:sadd(ALOMDA..'User:Donky:'..msg.chat_id_, result.sender_user_id_)
 end end
 getMessage(msg.chat_id_, msg.reply_to_message_id_,donky_by_reply)
 end end
 --     Source ALOMDA     --
 if msg.reply_to_message_id_ ~= 0  then
-if text and text:match("^تنزيل مطي$") and not DevAbs:get(ALOMDA..'Abs:Lock:Stupid'..msg.chat_id_) and ChCheck(msg) then
+if text and text:match("^تنزيل مطي$") and not Deviven:get(ALOMDA..'iven:Lock:Stupid'..msg.chat_id_) and ChCheck(msg) then
 function donky_by_reply(extra, result, success)
-if not DevAbs:sismember(ALOMDA..'User:Donky:'..msg.chat_id_, result.sender_user_id_) then
+if not Deviven:sismember(ALOMDA..'User:Donky:'..msg.chat_id_, result.sender_user_id_) then
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙هو ليس مطي ليتم تنزيله") 
 else
-DevAbs:srem(ALOMDA..'User:Donky:'..msg.chat_id_, result.sender_user_id_)
+Deviven:srem(ALOMDA..'User:Donky:'..msg.chat_id_, result.sender_user_id_)
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تنزيله من قائمة المطايه") 
 end end
 getMessage(msg.chat_id_, msg.reply_to_message_id_,donky_by_reply)
@@ -5487,11 +5487,11 @@ local mutept = text:match('^تقييد دقيقه (%d+)$') or text:match('^كت�
 local Minutes = string.gsub(mutept, 'm', '')
 local num1 = tonumber(Minutes) * 60 
 if RankChecking(result.sender_user_id_, msg.chat_id_) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md') 
 else 
 https.request("https://api.telegram.org/bot"..TokenBot.."/restrictChatMember?chat_id="..msg.chat_id_.."&user_id="..result.sender_user_id_..'&until_date='..tonumber(msg.date_+num1))
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تقيده لمدة ↫ "..mutept.." د") 
-DevAbs:sadd(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Tkeed:'..msg.chat_id_, result.sender_user_id_)
 end end 
 if tonumber(msg.reply_to_message_id_) == 0 then else
 tdcli_function ({ID = "GetMessage",chat_id_ = msg.chat_id_,message_id_ = tonumber(msg.reply_to_message_id_)}, mut_time,nil) end 
@@ -5502,11 +5502,11 @@ local mutept = text:match('^تقييد ساعه (%d+)$') or text:match('^كتم 
 local hour = string.gsub(mutept, 'h', '')
 local num1 = tonumber(hour) * 3600 
 if RankChecking(result.sender_user_id_, msg.chat_id_) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md') 
 else 
 https.request("https://api.telegram.org/bot"..TokenBot.."/restrictChatMember?chat_id="..msg.chat_id_.."&user_id="..result.sender_user_id_..'&until_date='..tonumber(msg.date_+num1))
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تقيده لمدة ↫ "..mutept.." س") 
-DevAbs:sadd(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Tkeed:'..msg.chat_id_, result.sender_user_id_)
 end end
 if tonumber(msg.reply_to_message_id_) == 0 then else
 tdcli_function ({ID = "GetMessage",chat_id_ = msg.chat_id_,message_id_ = tonumber(msg.reply_to_message_id_)}, mut_time,nil) end 
@@ -5517,11 +5517,11 @@ local mutept = text:match('^تقييد يوم (%d+)$') or text:match('^كتم ي
 local day = string.gsub(mutept, 'd', '')
 local num1 = tonumber(day) * 86400 
 if RankChecking(result.sender_user_id_, msg.chat_id_) then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا تستطيع تقيد ↫ '..IdRank(result.sender_user_id_, msg.chat_id_), 1, 'md') 
 else 
 https.request("https://api.telegram.org/bot"..TokenBot.."/restrictChatMember?chat_id="..msg.chat_id_.."&user_id="..result.sender_user_id_..'&until_date='..tonumber(msg.date_+num1))
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم تقيده لمدة ↫ "..mutept.." ي") 
-DevAbs:sadd(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, result.sender_user_id_)
+Deviven:sadd(ALOMDA..'iven:Tkeed:'..msg.chat_id_, result.sender_user_id_)
 end end
 if tonumber(msg.reply_to_message_id_) == 0 then else
 tdcli_function ({ID = "GetMessage",chat_id_ = msg.chat_id_,message_id_ = tonumber(msg.reply_to_message_id_)}, mut_time,nil) end 
@@ -5531,20 +5531,20 @@ end
 if text and text:match("^اضف رسائل (%d+)$") and msg.reply_to_message_id_ == 0 and ChCheck(msg) then  
 if Constructor(msg) then
 TXT = text:match("^اضف رسائل (%d+)$")
-DevAbs:set('ALOMDATEAM:'..ALOMDA..'id:user'..msg.chat_id_,TXT)  
-DevAbs:setex('ALOMDATEAM:'..ALOMDA.."numadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_, 300, true)  
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل عدد الرسائل الان \n⌁︙ارسل الغاء لالغاء الامر ", 1, "md")
-Dev_Abs(msg.chat_id_, msg.id_, 1,numd, 1, 'md') 
+Deviven:set('ALOMDATEAM:'..ALOMDA..'id:user'..msg.chat_id_,TXT)  
+Deviven:setex('ALOMDATEAM:'..ALOMDA.."numadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_, 300, true)  
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل عدد الرسائل الان \n⌁︙ارسل الغاء لالغاء الامر ", 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1,numd, 1, 'md') 
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر للمنشئين فقط', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر للمنشئين فقط', 1, 'md') 
 end 
 end 
 if text and text:match("^اضف رسائل (%d+)$") and msg.reply_to_message_id_ ~= 0 and Constructor(msg) then
 local Num = text:match("^اضف رسائل (%d+)$")
 function Reply(extra, result, success)
-DevAbs:del(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..result.sender_user_id_) 
-DevAbs:incrby(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..result.sender_user_id_,Num) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم اضافة "..Num..' رساله', 1, 'md') 
+Deviven:del(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..result.sender_user_id_) 
+Deviven:incrby(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..result.sender_user_id_,Num) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم اضافة "..Num..' رساله', 1, 'md') 
 end
 tdcli_function ({ID = "GetMessage",chat_id_=msg.chat_id_,message_id_=tonumber(msg.reply_to_message_id_)},Reply, nil)
 return false
@@ -5552,43 +5552,43 @@ end
 if text and text:match("^اضف نقاط (%d+)$") and msg.reply_to_message_id_ == 0 and ChCheck(msg) then  
 if Constructor(msg) then
 TXT = text:match("^اضف نقاط (%d+)$")
-DevAbs:set('ALOMDATEAM:'..ALOMDA..'ids:user'..msg.chat_id_,TXT)  
-DevAbs:setex('ALOMDATEAM:'..ALOMDA.."nmadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_, 300, true)  
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل عدد النقاط الان \n⌁︙ارسل الغاء لالغاء الامر ", 1, "md")
-Dev_Abs(msg.chat_id_, msg.id_, 1,numd, 1, 'md') 
+Deviven:set('ALOMDATEAM:'..ALOMDA..'ids:user'..msg.chat_id_,TXT)  
+Deviven:setex('ALOMDATEAM:'..ALOMDA.."nmadd:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_, 300, true)  
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل عدد النقاط الان \n⌁︙ارسل الغاء لالغاء الامر ", 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1,numd, 1, 'md') 
 else 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر للمنشئين فقط', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر للمنشئين فقط', 1, 'md') 
 end 
 end 
 if text and text:match("^اضف نقاط (%d+)$") and msg.reply_to_message_id_ ~= 0 and Constructor(msg) then
 local Num = text:match("^اضف نقاط (%d+)$")
 function Reply(extra, result, success)
-DevAbs:incrby(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..result.sender_user_id_,Num) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم اضافة "..Num..' نقطه', 1, 'md') 
+Deviven:incrby(ALOMDA..'iven:GamesNumber'..msg.chat_id_..result.sender_user_id_,Num) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم اضافة "..Num..' نقطه', 1, 'md') 
 end
 tdcli_function ({ID = "GetMessage",chat_id_=msg.chat_id_,message_id_=tonumber(msg.reply_to_message_id_)},Reply, nil)
 return false
 end
-if DevAbs:get(ALOMDA..'Abs:Lock:Clean'..msg.chat_id_) then if msg.content_.video_ or msg.content_.document_ or msg.content_.sticker_ or msg.content_.photo_ or msg.content_.animation_ then if msg.reply_to_message_id_ ~= 0 then DevAbs:sadd(ALOMDA.."Abs:cleaner"..msg.chat_id_, msg.id_) else DevAbs:sadd(ALOMDA.."Abs:cleaner"..msg.chat_id_, msg.id_) end end end
+if Deviven:get(ALOMDA..'iven:Lock:Clean'..msg.chat_id_) then if msg.content_.video_ or msg.content_.document_ or msg.content_.sticker_ or msg.content_.photo_ or msg.content_.animation_ then if msg.reply_to_message_id_ ~= 0 then Deviven:sadd(ALOMDA.."iven:cleaner"..msg.chat_id_, msg.id_) else Deviven:sadd(ALOMDA.."iven:cleaner"..msg.chat_id_, msg.id_) end end end
 if Manager(msg) and msg.reply_to_message_id_ ~= 0 then
 if text and text:match("^تثبيت$") and ChCheck(msg) then 
-if DevAbs:sismember(ALOMDA.."Abs:Lock:Pinpin",msg.chat_id_) and not BasicConstructor(msg) then
-Dev_Abs(msg.chat_id_,msg.id_, 1, "⌁︙التثبيت والغاء واعادة التثبيت تم قفله من قبل المنشئين الاساسيين", 1, 'md')
+if Deviven:sismember(ALOMDA.."iven:Lock:Pinpin",msg.chat_id_) and not BasicConstructor(msg) then
+Dev_iven(msg.chat_id_,msg.id_, 1, "⌁︙التثبيت والغاء واعادة التثبيت تم قفله من قبل المنشئين الاساسيين", 1, 'md')
 return false  
 end
 tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub("-100",""),message_id_ = msg.reply_to_message_id_,disable_notification_ = 1},function(arg,data) 
 if data.ID == "Ok" then
-DevAbs:set(ALOMDA..'Abs:PinnedMsg'..msg.chat_id_,msg.reply_to_message_id_)
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تثبيت الرساله بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:PinnedMsg'..msg.chat_id_,msg.reply_to_message_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تثبيت الرساله بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 return false  
 end
 if data.code_ == 6 then
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙البوت ليس ادمن هنا !', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙البوت ليس ادمن هنا !', 1, 'md')
 return false  
 end
 if data.message_ == "CHAT_ADMIN_REQUIRED" then
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙ليست لدي صلاحية التثبيت يرجى التحقق من الصلاحيات', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙ليست لدي صلاحية التثبيت يرجى التحقق من الصلاحيات', 1, 'md')
 return false  
 end
 end,nil)
@@ -5597,10 +5597,10 @@ end
 --     Source ALOMDA     --
 if Admin(msg) then
 if text == "المميزين" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:VipMem:'..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA..'iven:VipMem:'..msg.chat_id_)
 text = "⌁︙قائمة المميزين ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5609,16 +5609,16 @@ end end
 if #List == 0 then 
 text = "⌁︙*لا يوجد مميزين*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end end 
 --     Source ALOMDA     --
 if Manager(msg) then
 if text == "الادمنيه" and ChCheck(msg) or text == "الادمنية" and ChCheck(msg) then 
-local abs =  'Abs:Admins:'..msg.chat_id_
-local List = DevAbs:smembers(ALOMDA..abs)
+local iven =  'iven:Admins:'..msg.chat_id_
+local List = Deviven:smembers(ALOMDA..iven)
 text = "⌁︙قائمة الادمنيه ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5627,15 +5627,15 @@ end end
 if #List == 0 then
 text = "⌁︙*لا يوجد ادمنيه*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end end
 --     Source ALOMDA     -- 
 if Constructor(msg) then
 if text == "المدراء" and ChCheck(msg) or text == "مدراء" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:Managers:'..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA..'iven:Managers:'..msg.chat_id_)
 text = "⌁︙قائمة المدراء ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5644,13 +5644,13 @@ end end
 if #List == 0 then 
 text = "⌁︙*لا يوجد مدراء*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end 
 if text == "المنظفين" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:Cleaner:'..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA..'iven:Cleaner:'..msg.chat_id_)
 text = "⌁︙قائمة المنظفين ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5659,15 +5659,15 @@ end end
 if #List == 0 then 
 text = "⌁︙*لا يوجد منظفين*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end end 
 --     Source ALOMDA     --
 if BasicConstructor(msg) then
 if text == "المنشئين" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:Constructor:'..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA..'iven:Constructor:'..msg.chat_id_)
 text = "⌁︙قائمة المنشئين ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5676,15 +5676,15 @@ end end
 if #List == 0 then 
 text = "⌁︙*لا يوجد منشئين*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end end 
 --     Source ALOMDA     --
-if AbsConstructor(msg) then
+if ivenConstructor(msg) then
 if text == "المنشئين الاساسيين" and ChCheck(msg) or text == "منشئين اساسيين" and ChCheck(msg) or text == "المنشئين الاساسين" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_)
 text = "⌁︙قائمة المنشئين الاساسيين ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5693,7 +5693,7 @@ end end
 if #List == 0 then 
 text = "⌁︙*لا يوجد منشئين اساسيين*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end 
 end 
 if text ==("المنشئ") and ChCheck(msg) or text ==("المالك") and ChCheck(msg) then
@@ -5704,11 +5704,11 @@ if data.members_[i].status_.ID == "ChatMemberStatusCreator" then
 Manager_id = admins[i].user_id_
 tdcli_function ({ID = "GetUser",user_id_ = Manager_id},function(arg,dp) 
 if dp.first_name_ == false then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙حساب المنشئ محذوف", 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙حساب المنشئ محذوف", 1, "md")
 return false  
 end
 local UserName = (dp.username_ or "src_web")
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙منشئ المجموعه ↫ ["..dp.first_name_.."](T.me/"..UserName..")", 1, "md")  
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙منشئ المجموعه ↫ ["..dp.first_name_.."](T.me/"..UserName..")", 1, "md")  
 end,nil)   
 end
 end
@@ -5717,10 +5717,10 @@ end
 --     Source ALOMDA     --
 if Admin(msg) then
 if text == "المكتومين" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:Muted:'..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA..'iven:Muted:'..msg.chat_id_)
 text = "⌁︙قائمة المكتومين ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5729,14 +5729,14 @@ end end
 if #List == 0 then 
 text = "⌁︙*لا يوجد مكتومين*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end 
 --     Source ALOMDA     --
 if text == "المقيدين" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:Tkeed:'..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA..'iven:Tkeed:'..msg.chat_id_)
 text = "⌁︙قائمة المقيدين ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5745,14 +5745,14 @@ end end
 if #List == 0 then
 text = "⌁︙*لا يوجد مقيدين*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end 
 --     Source ALOMDA     --
 if text == "المحظورين" and ChCheck(msg) or text == "المحضورين" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:Ban:'..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA..'iven:Ban:'..msg.chat_id_)
 text = "⌁︙قائمة المحظورين ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5761,10 +5761,10 @@ end end
 if #List == 0 then 
 text = "⌁︙*لا يوجد محظورين*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end 
 if text == "قائمه المنع" and ChCheck(msg) then
-local List = DevAbs:hkeys(ALOMDA..'Abs:Filters:'..msg.chat_id_)
+local List = Deviven:hkeys(ALOMDA..'iven:Filters:'..msg.chat_id_)
 text = "⌁︙قائمة المنع ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k, v in pairs(List) do
 text = text..k..'~ ❨ '..v..' ❩\n'
@@ -5772,15 +5772,15 @@ end
 if #List == 0 then
 text = "⌁︙لا توجد كلمات ممنوعه"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, 'md')
 end
 end 
 --     Source ALOMDA     --
 if text == "المطايه" and ChCheck(msg) or text == "المطاية" and ChCheck(msg) then
-local List = DevAbs:smembers(ALOMDA..'User:Donky:'..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA..'User:Donky:'..msg.chat_id_)
 text = "⌁︙قائمة مطاية المجموعه 😹💔 ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5789,14 +5789,14 @@ end end
 if #List == 0 then
 text = "⌁︙*لا يوجد مطايه كلها اوادم* 😹💔"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end
 --     Source ALOMDA     --
 if text == "المطورين الثانويين" and SecondSudo(msg) or text == "الثانويين" and SecondSudo(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:SecondSudo:')
+local List = Deviven:smembers(ALOMDA..'iven:SecondSudo:')
 text = "⌁︙قائمة المطورين الثانويين ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5805,17 +5805,17 @@ end end
 if #List == 0 then
 text = "⌁︙*عذرا لم يتم رفع اي مطورين ثانويين*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end 
 --     Source ALOMDA     --
 if SudoBot(msg) then
 if text == "قائمه العام" and ChCheck(msg) or text == "المحظورين عام" and ChCheck(msg) or text == "المكتومين عام" and ChCheck(msg) or text == "↫ قائمه العام ⌁" and ChCheck(msg) then 
-local BanAll = DevAbs:smembers(ALOMDA..'Abs:BanAll:')
-local MuteAll = DevAbs:smembers(ALOMDA..'Abs:MuteAll:')
+local BanAll = Deviven:smembers(ALOMDA..'iven:BanAll:')
+local MuteAll = Deviven:smembers(ALOMDA..'iven:MuteAll:')
 if #BanAll ~= 0 then 
 text = "⌁︙قائمة المحظورين عام ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(BanAll) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5827,7 +5827,7 @@ end
 if #MuteAll ~= 0 then 
 text = text.."⌁︙قائمة المكتومين عام ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(MuteAll) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5841,15 +5841,15 @@ text = text
 else
 text = "⌁︙*لم يتم حظر او كتم اي عضو*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end 
 --     Source ALOMDA     --
 if text == "المطورين" and ChCheck(msg) or text == "↫ المطورين ⌁" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:SudoBot:')
+local List = Deviven:smembers(ALOMDA..'iven:SudoBot:')
 text = "⌁︙قائمة المطورين ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local sudouser = DevAbs:get(ALOMDA..'Abs:Sudos'..v) 
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local sudouser = Deviven:get(ALOMDA..'iven:Sudos'..v) 
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."] ↬ Gps : "..(sudouser or 0).."\n"
 else
@@ -5858,14 +5858,14 @@ end end
 if #List == 0 then
 text = "⌁︙*عذرا لم يتم رفع اي مطورين*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end 
 --     Source ALOMDA     --
 if text == "المدراء العامين" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:ManagerAll:')
+local List = Deviven:smembers(ALOMDA..'iven:ManagerAll:')
 text = "⌁︙قائمة المدراء العامين ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5874,14 +5874,14 @@ end end
 if #List == 0 then 
 text = "⌁︙*لا يوجد مدراء عامين*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end
 --     Source ALOMDA     --
 if text == "المميزين عام" and ChCheck(msg) or text == "المميزين العامين" and ChCheck(msg) then 
-local List = DevAbs:smembers(ALOMDA..'Abs:VipAll:')
+local List = Deviven:smembers(ALOMDA..'iven:VipAll:')
 text = "⌁︙قائمة المميزين العام ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5890,15 +5890,15 @@ end end
 if #List == 0 then 
 text = "⌁︙*لا يوجد مميزين عام*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end 
 --     Source ALOMDA     -- 
 if text == "الادمنيه العامين" and ChCheck(msg) then 
-local abs =  'Abs:AdminAll:'
-local List = DevAbs:smembers(ALOMDA..abs)
+local iven =  'iven:AdminAll:'
+local List = Deviven:smembers(ALOMDA..iven)
 text = "⌁︙قائمة الادمنيه العامين ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local username = DevAbs:get(ALOMDA..'Save:UserName'..v)
+local username = Deviven:get(ALOMDA..'Save:UserName'..v)
 if username then
 text = text..""..k.."~ : [@"..username.."]\n"
 else
@@ -5907,12 +5907,12 @@ end end
 if #List == 0 then
 text = "⌁︙*لا يوجد ادمنيه عامين*"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, text, 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, text, 1, "md")
 end  
 --     Source ALOMDA     --
 if text ==("رفع المنشئ") and ChCheck(msg) or text ==("رفع المالك") and ChCheck(msg) then 
 tdcli_function ({ID = "GetChannelMembers",channel_id_ = msg.chat_id_:gsub("-100",""),filter_ = {ID = "ChannelMembersAdministrators"},offset_ = 0,limit_ = 100},function(arg,data) 
-DevAbs:del(ALOMDA..'Abs:AbsConstructor:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:ivenConstructor:'..msg.chat_id_)
 local admins = data.members_
 for i=0 , #admins do
 if data.members_[i].status_.ID == "ChatMemberStatusCreator" then
@@ -5921,12 +5921,12 @@ end
 end
 tdcli_function ({ID = "GetUser",user_id_ = Manager_id},function(arg,dp) 
 if dp.first_name_ == false then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙حساب المنشئ محذوف", 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙حساب المنشئ محذوف", 1, "md")
 return false  
 end
 local UserName = (dp.username_ or "src_web")
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم رفع منشئ المجموعه ↫ ["..dp.first_name_.."](T.me/"..UserName..")", 1, "md") 
-DevAbs:sadd(ALOMDA.."Abs:AbsConstructor:"..msg.chat_id_,dp.id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم رفع منشئ المجموعه ↫ ["..dp.first_name_.."](T.me/"..UserName..")", 1, "md") 
+Deviven:sadd(ALOMDA.."iven:ivenConstructor:"..msg.chat_id_,dp.id_)
 end,nil)   
 end,nil)   
 end
@@ -5937,20 +5937,20 @@ if text == 'منع' and tonumber(msg.reply_to_message_id_) > 0 and ChCheck(msg) 
 function filter_by_reply(extra, result, success) 
 if result.content_.sticker_ then
 local idsticker = result.content_.sticker_.sticker_.persistent_id_
-DevAbs:sadd(ALOMDA.."Abs:FilterSteckr"..msg.chat_id_,idsticker)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم منع الملصق بنجاح لن يتم ارساله مجددا', 1, 'md')
+Deviven:sadd(ALOMDA.."iven:FilterSteckr"..msg.chat_id_,idsticker)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم منع الملصق بنجاح لن يتم ارساله مجددا', 1, 'md')
 return false
 end
 if result.content_.ID == "MessagePhoto" then
 local photo = result.content_.photo_.id_
-DevAbs:sadd(ALOMDA.."Abs:FilterPhoto"..msg.chat_id_,photo)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم منع الصوره بنجاح لن يتم ارسالها مجددا', 1, 'md')
+Deviven:sadd(ALOMDA.."iven:FilterPhoto"..msg.chat_id_,photo)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم منع الصوره بنجاح لن يتم ارسالها مجددا', 1, 'md')
 return false
 end
 if result.content_.animation_ then
 local idanimation = result.content_.animation_.animation_.persistent_id_
-DevAbs:sadd(ALOMDA.."Abs:FilterAnimation"..msg.chat_id_,idanimation)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم منع المتحركه بنجاح لن يتم ارسالها مجددا', 1, 'md')
+Deviven:sadd(ALOMDA.."iven:FilterAnimation"..msg.chat_id_,idanimation)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم منع المتحركه بنجاح لن يتم ارسالها مجددا', 1, 'md')
 return false
 end
 end
@@ -5961,20 +5961,20 @@ if text == 'الغاء منع' and tonumber(msg.reply_to_message_id_) > 0 and Ch
 function unfilter_by_reply(extra, result, success) 
 if result.content_.sticker_ then
 local idsticker = result.content_.sticker_.sticker_.persistent_id_
-DevAbs:srem(ALOMDA.."Abs:FilterSteckr"..msg.chat_id_,idsticker)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء منع الملصق يمكنهم ارساله الان', 1, 'md')
+Deviven:srem(ALOMDA.."iven:FilterSteckr"..msg.chat_id_,idsticker)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء منع الملصق يمكنهم ارساله الان', 1, 'md')
 return false
 end
 if result.content_.ID == "MessagePhoto" then
 local photo = result.content_.photo_.id_
-DevAbs:srem(ALOMDA.."Abs:FilterPhoto"..msg.chat_id_,photo)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء منع الصوره يمكنهم ارسالها الان', 1, 'md')
+Deviven:srem(ALOMDA.."iven:FilterPhoto"..msg.chat_id_,photo)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء منع الصوره يمكنهم ارسالها الان', 1, 'md')
 return false
 end
 if result.content_.animation_.animation_ then
 local idanimation = result.content_.animation_.animation_.persistent_id_
-DevAbs:srem(ALOMDA.."Abs:FilterAnimation"..msg.chat_id_,idanimation)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء منع المتحركه يمكنهم ارسالها الان', 1, 'md')
+Deviven:srem(ALOMDA.."iven:FilterAnimation"..msg.chat_id_,idanimation)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء منع المتحركه يمكنهم ارسالها الان', 1, 'md')
 return false
 end
 end
@@ -5983,39 +5983,39 @@ end
 end
 --     Source ALOMDA     --
 if text and (text == "تفعيل تحويل الصيغ" or text == "تفعيل التحويل") and Manager(msg) and ChCheck(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل تحويل الصيغ'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Thwel:Abs'..msg.chat_id_) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل تحويل الصيغ'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Thwel:iven'..msg.chat_id_) 
 end
 if text and (text == "تعطيل تحويل الصيغ" or text == "تعطيل التحويل") and Manager(msg) and ChCheck(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل تحويل الصيغ'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Thwel:Abs'..msg.chat_id_,true)  
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل تحويل الصيغ'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Thwel:iven'..msg.chat_id_,true)  
 end
-if text == 'تحويل' and not DevAbs:get(ALOMDA..'Abs:Thwel:Abs'..msg.chat_id_) then  
+if text == 'تحويل' and not Deviven:get(ALOMDA..'iven:Thwel:iven'..msg.chat_id_) then  
 if tonumber(msg.reply_to_message_id_) > 0 then 
 function ThwelByReply(extra, result, success)
 if result.content_.photo_ then 
-local Abs = json:decode(https.request('https://api.telegram.org/bot'.. TokenBot..'/getfile?file_id='..result.content_.photo_.sizes_[1].photo_.persistent_id_)) 
-download_to_file('https://api.telegram.org/file/bot'..TokenBot..'/'..Abs.result.file_path,msg.sender_user_id_..'.png') 
+local iven = json:decode(https.request('https://api.telegram.org/bot'.. TokenBot..'/getfile?file_id='..result.content_.photo_.sizes_[1].photo_.persistent_id_)) 
+download_to_file('https://api.telegram.org/file/bot'..TokenBot..'/'..iven.result.file_path,msg.sender_user_id_..'.png') 
 sendSticker(msg.chat_id_, msg.id_, 0, 1,nil, './'..msg.sender_user_id_..'.png')
 os.execute('rm -rf ./'..msg.sender_user_id_..'.png') 
 end   
 if result.content_.sticker_ then 
-local Abs = json:decode(https.request('https://api.telegram.org/bot'.. TokenBot..'/getfile?file_id='..result.content_.sticker_.sticker_.persistent_id_)) 
-download_to_file('https://api.telegram.org/file/bot'..TokenBot..'/'..Abs.result.file_path,msg.sender_user_id_..'.jpg') 
+local iven = json:decode(https.request('https://api.telegram.org/bot'.. TokenBot..'/getfile?file_id='..result.content_.sticker_.sticker_.persistent_id_)) 
+download_to_file('https://api.telegram.org/file/bot'..TokenBot..'/'..iven.result.file_path,msg.sender_user_id_..'.jpg') 
 sendPhoto(msg.chat_id_, msg.id_, 0, 1,nil, './'..msg.sender_user_id_..'.jpg','⌁︙تم تحويل الملصق الى صوره')     
 os.execute('rm -rf ./'..msg.sender_user_id_..'.jpg') 
 end
 if result.content_.audio_ then 
-local Abs = json:decode(https.request('https://api.telegram.org/bot'.. TokenBot..'/getfile?file_id='..result.content_.audio_.audio_.persistent_id_)) 
-download_to_file('https://api.telegram.org/file/bot'..TokenBot..'/'..Abs.result.file_path,msg.sender_user_id_..'.ogg') 
+local iven = json:decode(https.request('https://api.telegram.org/bot'.. TokenBot..'/getfile?file_id='..result.content_.audio_.audio_.persistent_id_)) 
+download_to_file('https://api.telegram.org/file/bot'..TokenBot..'/'..iven.result.file_path,msg.sender_user_id_..'.ogg') 
 sendVoice(msg.chat_id_, msg.id_, 0, 1,nil, './'..msg.sender_user_id_..'.ogg',"⌁︙تم تحويل الـMp3 الى بصمه")
 os.execute('rm -rf ./'..msg.sender_user_id_..'.ogg') 
 end   
 if result.content_.voice_ then 
-local Abs = json:decode(https.request('https://api.telegram.org/bot'.. TokenBot..'/getfile?file_id='..result.content_.voice_.voice_.persistent_id_)) 
-download_to_file('https://api.telegram.org/file/bot'..TokenBot..'/'..Abs.result.file_path,msg.sender_user_id_..'.mp3') 
+local iven = json:decode(https.request('https://api.telegram.org/bot'.. TokenBot..'/getfile?file_id='..result.content_.voice_.voice_.persistent_id_)) 
+download_to_file('https://api.telegram.org/file/bot'..TokenBot..'/'..iven.result.file_path,msg.sender_user_id_..'.mp3') 
 sendAudio(msg.chat_id_, msg.id_, 0, 1,nil, './'..msg.sender_user_id_..'.mp3')  
 os.execute('rm -rf ./'..msg.sender_user_id_..'.mp3') 
 end
@@ -6027,17 +6027,17 @@ end
 if text ==("كشف") and msg.reply_to_message_id_ ~= 0 and ChCheck(msg) or text ==("ايدي") and msg.reply_to_message_id_ ~= 0 and ChCheck(msg) then 
 function id_by_reply(extra, result, success) 
 tdcli_function ({ID = "GetUser",user_id_ = result.sender_user_id_},function(arg,data) 
-local user_msgs = DevAbs:get(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..data.id_) or 0
-local user_nkt = tonumber(DevAbs:get(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..data.id_) or 0)
-if DevAbs:sismember(ALOMDA..'Abs:BanAll:',result.sender_user_id_) then
+local user_msgs = Deviven:get(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..data.id_) or 0
+local user_nkt = tonumber(Deviven:get(ALOMDA..'iven:GamesNumber'..msg.chat_id_..data.id_) or 0)
+if Deviven:sismember(ALOMDA..'iven:BanAll:',result.sender_user_id_) then
 Tkeed = 'محظور عام'
-elseif DevAbs:sismember(ALOMDA..'Abs:MuteAll:',result.sender_user_id_) then
+elseif Deviven:sismember(ALOMDA..'iven:MuteAll:',result.sender_user_id_) then
 Tkeed = 'مكتوم عام'
-elseif DevAbs:sismember(ALOMDA..'Abs:Ban:'..msg.chat_id_,result.sender_user_id_) then
+elseif Deviven:sismember(ALOMDA..'iven:Ban:'..msg.chat_id_,result.sender_user_id_) then
 Tkeed = 'محظور'
-elseif DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_,result.sender_user_id_) then
+elseif Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_,result.sender_user_id_) then
 Tkeed = 'مكتوم'
-elseif DevAbs:sismember(ALOMDA..'Abs:Tkeed:'..msg.chat_id_,result.sender_user_id_) then
+elseif Deviven:sismember(ALOMDA..'iven:Tkeed:'..msg.chat_id_,result.sender_user_id_) then
 Tkeed = 'مقيد'
 else
 Tkeed = false
@@ -6047,8 +6047,8 @@ Tked = '\n⌁︙القيود ↫ '..Tkeed
 else 
 Tked = '' 
 end
-if DevAbs:sismember(ALOMDA..'Abs:SudoBot:',result.sender_user_id_) and SudoBot(msg) then
-sudobot = '\n⌁︙عدد الكروبات ↫ '..(DevAbs:get(ALOMDA..'Abs:Sudos'..result.sender_user_id_) or 0)..'' 
+if Deviven:sismember(ALOMDA..'iven:SudoBot:',result.sender_user_id_) and SudoBot(msg) then
+sudobot = '\n⌁︙عدد الكروبات ↫ '..(Deviven:get(ALOMDA..'iven:Sudos'..result.sender_user_id_) or 0)..'' 
 else 
 sudobot = '' 
 end
@@ -6058,13 +6058,13 @@ else
 CustomTitle = '' 
 end
 if data.first_name_ == false then 
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙الحساب محذوف', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙الحساب محذوف', 1, 'md')
 return false  end
 if data.username_ == false then
 Text = '⌁︙اسمه ↫ ['..CatchName(data.first_name_,20)..'](tg://user?id='..result.sender_user_id_..')\n⌁︙ايديه ↫ ❨ `'..result.sender_user_id_..'` ❩\n⌁︙رتبته ↫ '..IdRank(result.sender_user_id_, msg.chat_id_)..''..sudobot..'\n⌁︙رسائله ↫ ❨ '..user_msgs..' ❩\n⌁︙تفاعله ↫ '..formsgs(user_msgs)..''..CustomTitle..'\n⌁︙نقاطه ↫ ❨ '..user_nkt..' ❩'..Tked
 SendText(msg.chat_id_,Text,msg.id_/2097152/0.5,'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙معرفه ↫ [@'..data.username_..']\n⌁︙ايديه ↫ ❨ `'..result.sender_user_id_..'` ❩\n⌁︙رتبته ↫ '..IdRank(result.sender_user_id_, msg.chat_id_)..''..sudobot..'\n⌁︙رسائله ↫ ❨ '..user_msgs..' ❩\n⌁︙تفاعله ↫ '..formsgs(user_msgs)..''..CustomTitle..'\n⌁︙نقاطه ↫ ❨ '..user_nkt..' ❩'..Tked, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙معرفه ↫ [@'..data.username_..']\n⌁︙ايديه ↫ ❨ `'..result.sender_user_id_..'` ❩\n⌁︙رتبته ↫ '..IdRank(result.sender_user_id_, msg.chat_id_)..''..sudobot..'\n⌁︙رسائله ↫ ❨ '..user_msgs..' ❩\n⌁︙تفاعله ↫ '..formsgs(user_msgs)..''..CustomTitle..'\n⌁︙نقاطه ↫ ❨ '..user_nkt..' ❩'..Tked, 1, 'md')
 end
 end,nil)
 end 
@@ -6074,32 +6074,32 @@ if text and text:match('^كشف @(.*)') and ChCheck(msg) or text and text:match(
 local username = text:match('^كشف @(.*)') or text:match('^ايدي @(.*)')
 tdcli_function ({ID = "SearchPublicChat",username_ = username},function(extra, res, success) 
 if res and res.message_ and res.message_ == "USERNAME_NOT_OCCUPIED" then 
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙*المعرف غير صحيح*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙*المعرف غير صحيح*', 1, 'md')
 return false  end
 if res.type_.ID == "ChannelChatInfo" then 
 if res.type_.channel_.is_supergroup_ == false then
 local ch = 'قناة'
 local chn = '⌁︙نوع الحساب ↫ ❨ '..ch..' ❩\n⌁︙الايدي ↫ ❨ `'..res.id_..'` ❩\n⌁︙المعرف ↫ ❨ [@'..username..'] ❩\n⌁︙الاسم ↫ ❨ ['..res.title_..'] ❩'
-Dev_Abs(msg.chat_id_, msg.id_, 1,chn, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,chn, 1, 'md')
 else
 local gr = 'مجموعه'
 local grr = '⌁︙نوع الحساب ↫ ❨ '..gr..' ❩\n⌁︙الايدي ↫ ❨ '..res.id_..' ❩\n⌁︙المعرف ↫ ❨ [@'..username..'] ❩\n⌁︙الاسم ↫ ❨ ['..res.title_..'] ❩'
-Dev_Abs(msg.chat_id_, msg.id_, 1,grr, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,grr, 1, 'md')
 end
 return false  end
 if res.id_ then  
 tdcli_function ({ID = "GetUser",user_id_ = res.id_},function(arg,data) 
-local user_msgs = DevAbs:get(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..res.id_) or 0
-local user_nkt = tonumber(DevAbs:get(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..res.id_) or 0)
-if DevAbs:sismember(ALOMDA..'Abs:BanAll:',res.id_) then
+local user_msgs = Deviven:get(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..res.id_) or 0
+local user_nkt = tonumber(Deviven:get(ALOMDA..'iven:GamesNumber'..msg.chat_id_..res.id_) or 0)
+if Deviven:sismember(ALOMDA..'iven:BanAll:',res.id_) then
 Tkeed = 'محظور عام'
-elseif DevAbs:sismember(ALOMDA..'Abs:MuteAll:',res.id_) then
+elseif Deviven:sismember(ALOMDA..'iven:MuteAll:',res.id_) then
 Tkeed = 'مكتوم عام'
-elseif DevAbs:sismember(ALOMDA..'Abs:Ban:'..msg.chat_id_,res.id_) then
+elseif Deviven:sismember(ALOMDA..'iven:Ban:'..msg.chat_id_,res.id_) then
 Tkeed = 'محظور'
-elseif DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_,res.id_) then
+elseif Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_,res.id_) then
 Tkeed = 'مكتوم'
-elseif DevAbs:sismember(ALOMDA..'Abs:Tkeed:'..msg.chat_id_,res.id_) then
+elseif Deviven:sismember(ALOMDA..'iven:Tkeed:'..msg.chat_id_,res.id_) then
 Tkeed = 'مقيد'
 else
 Tkeed = false
@@ -6109,8 +6109,8 @@ Tked = '\n⌁︙القيود ↫ '..Tkeed
 else 
 Tked = '' 
 end
-if DevAbs:sismember(ALOMDA..'Abs:SudoBot:',res.id_) and SudoBot(msg) then
-sudobot = '\n⌁︙عدد الكروبات ↫ '..(DevAbs:get(ALOMDA..'Abs:Sudos'..res.id_) or 0)..'' 
+if Deviven:sismember(ALOMDA..'iven:SudoBot:',res.id_) and SudoBot(msg) then
+sudobot = '\n⌁︙عدد الكروبات ↫ '..(Deviven:get(ALOMDA..'iven:Sudos'..res.id_) or 0)..'' 
 else 
 sudobot = '' 
 end
@@ -6120,9 +6120,9 @@ else
 CustomTitle = '' 
 end
 if data.first_name_ == false then
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙الحساب محذوف', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙الحساب محذوف', 1, 'md')
 return false  end
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙معرفه ↫ [@'..data.username_..']\n⌁︙ايديه ↫ ❨ `'..res.id_..'` ❩\n⌁︙رتبته ↫ '..IdRank(res.id_, msg.chat_id_)..''..sudobot..'\n⌁︙رسائله ↫ ❨ '..user_msgs..' ❩\n⌁︙تفاعله ↫ '..formsgs(user_msgs)..''..CustomTitle..'\n⌁︙نقاطه ↫ ❨ '..user_nkt..' ❩'..Tked, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙معرفه ↫ [@'..data.username_..']\n⌁︙ايديه ↫ ❨ `'..res.id_..'` ❩\n⌁︙رتبته ↫ '..IdRank(res.id_, msg.chat_id_)..''..sudobot..'\n⌁︙رسائله ↫ ❨ '..user_msgs..' ❩\n⌁︙تفاعله ↫ '..formsgs(user_msgs)..''..CustomTitle..'\n⌁︙نقاطه ↫ ❨ '..user_nkt..' ❩'..Tked, 1, 'md')
 end,nil)
 end 
 end,nil)
@@ -6132,20 +6132,20 @@ if text and text:match('كشف (%d+)') and ChCheck(msg) or text and text:match('
 local iduser = text:match('كشف (%d+)') or text:match('ايدي (%d+)')  
 tdcli_function ({ID = "GetUser",user_id_ = iduser},function(arg,data) 
 if data.message_ == "User not found" then
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙لم يتم التعرف على الحساب', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙لم يتم التعرف على الحساب', 1, 'md')
 return false  
 end
-local user_msgs = DevAbs:get(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..iduser) or 0
-local user_nkt = tonumber(DevAbs:get(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..iduser) or 0)
-if DevAbs:sismember(ALOMDA..'Abs:BanAll:',iduser) then
+local user_msgs = Deviven:get(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..iduser) or 0
+local user_nkt = tonumber(Deviven:get(ALOMDA..'iven:GamesNumber'..msg.chat_id_..iduser) or 0)
+if Deviven:sismember(ALOMDA..'iven:BanAll:',iduser) then
 Tkeed = 'محظور عام'
-elseif DevAbs:sismember(ALOMDA..'Abs:MuteAll:',iduser) then
+elseif Deviven:sismember(ALOMDA..'iven:MuteAll:',iduser) then
 Tkeed = 'مكتوم عام'
-elseif DevAbs:sismember(ALOMDA..'Abs:Ban:'..msg.chat_id_,iduser) then
+elseif Deviven:sismember(ALOMDA..'iven:Ban:'..msg.chat_id_,iduser) then
 Tkeed = 'محظور'
-elseif DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_,iduser) then
+elseif Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_,iduser) then
 Tkeed = 'مكتوم'
-elseif DevAbs:sismember(ALOMDA..'Abs:Tkeed:'..msg.chat_id_,iduser) then
+elseif Deviven:sismember(ALOMDA..'iven:Tkeed:'..msg.chat_id_,iduser) then
 Tkeed = 'مقيد'
 else
 Tkeed = false
@@ -6155,8 +6155,8 @@ Tked = '\n⌁︙القيود ↫ '..Tkeed
 else 
 Tked = '' 
 end
-if DevAbs:sismember(ALOMDA..'Abs:SudoBot:',iduser) and SudoBot(msg) then
-sudobot = '\n⌁︙عدد الكروبات ↫ '..(DevAbs:get(ALOMDA..'Abs:Sudos'..iduser) or 0)..'' 
+if Deviven:sismember(ALOMDA..'iven:SudoBot:',iduser) and SudoBot(msg) then
+sudobot = '\n⌁︙عدد الكروبات ↫ '..(Deviven:get(ALOMDA..'iven:Sudos'..iduser) or 0)..'' 
 else 
 sudobot = '' 
 end
@@ -6166,13 +6166,13 @@ else
 CustomTitle = '' 
 end
 if data.first_name_ == false then
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙الحساب محذوف', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙الحساب محذوف', 1, 'md')
 return false  end
 if data.username_ == false then
 Text = '⌁︙اسمه ↫ ['..CatchName(data.first_name_,20)..'](tg://user?id='..iduser..')\n⌁︙ايديه ↫ ❨ `'..iduser..'` ❩\n⌁︙رتبته ↫ '..IdRank(data.id_, msg.chat_id_)..''..sudobot..'\n⌁︙رسائله ↫ ❨ '..user_msgs..' ❩\n⌁︙تفاعله ↫ '..formsgs(user_msgs)..''..CustomTitle..'\n⌁︙نقاطه ↫ ❨ '..user_nkt..' ❩'..Tked
 SendText(msg.chat_id_,Text,msg.id_/2097152/0.5,'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙معرفه ↫ [@'..data.username_..']\n⌁︙ايديه ↫ ❨ `'..iduser..'` ❩\n⌁︙رتبته ↫ '..IdRank(data.id_, msg.chat_id_)..''..sudobot..'\n⌁︙رسائله ↫ ❨ '..user_msgs..' ❩\n⌁︙تفاعله ↫ '..formsgs(user_msgs)..''..CustomTitle..'\n⌁︙نقاطه ↫ ❨ '..user_nkt..' ❩'..Tked, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙معرفه ↫ [@'..data.username_..']\n⌁︙ايديه ↫ ❨ `'..iduser..'` ❩\n⌁︙رتبته ↫ '..IdRank(data.id_, msg.chat_id_)..''..sudobot..'\n⌁︙رسائله ↫ ❨ '..user_msgs..' ❩\n⌁︙تفاعله ↫ '..formsgs(user_msgs)..''..CustomTitle..'\n⌁︙نقاطه ↫ ❨ '..user_nkt..' ❩'..Tked, 1, 'md')
 end
 end,nil)
 return false 
@@ -6180,12 +6180,12 @@ end
 --     Source ALOMDA     --
 if text == 'كشف القيود' and tonumber(msg.reply_to_message_id_) > 0 and Admin(msg) and ChCheck(msg) then 
 function kshf_by_reply(extra, result, success)
-if DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_,result.sender_user_id_) then muted = 'مكتوم' else muted = 'غير مكتوم' end
-if DevAbs:sismember(ALOMDA..'Abs:Ban:'..msg.chat_id_,result.sender_user_id_) then banned = 'محظور' else banned = 'غير محظور' end
-if DevAbs:sismember(ALOMDA..'Abs:BanAll:',result.sender_user_id_) then banall = 'محظور عام' else banall = 'غير محظور عام' end
-if DevAbs:sismember(ALOMDA..'Abs:MuteAll:',result.sender_user_id_) then muteall = 'مكتوم عام' else muteall = 'غير مكتوم عام' end
-if DevAbs:sismember(ALOMDA..'Abs:Tkeed:',result.sender_user_id_) then tkeed = 'مقيد' else tkeed = 'غير مقيد' end
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الحظر العام ↫ '..banall..'\n⌁︙الكتم العام ↫ '..muteall..'\n⌁︙الحظر ↫ '..banned..'\n⌁︙الكتم ↫ '..muted..'\n⌁︙التقيد ↫ '..tkeed..'', 1, 'md')  
+if Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_,result.sender_user_id_) then muted = 'مكتوم' else muted = 'غير مكتوم' end
+if Deviven:sismember(ALOMDA..'iven:Ban:'..msg.chat_id_,result.sender_user_id_) then banned = 'محظور' else banned = 'غير محظور' end
+if Deviven:sismember(ALOMDA..'iven:BanAll:',result.sender_user_id_) then banall = 'محظور عام' else banall = 'غير محظور عام' end
+if Deviven:sismember(ALOMDA..'iven:MuteAll:',result.sender_user_id_) then muteall = 'مكتوم عام' else muteall = 'غير مكتوم عام' end
+if Deviven:sismember(ALOMDA..'iven:Tkeed:',result.sender_user_id_) then tkeed = 'مقيد' else tkeed = 'غير مقيد' end
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الحظر العام ↫ '..banall..'\n⌁︙الكتم العام ↫ '..muteall..'\n⌁︙الحظر ↫ '..banned..'\n⌁︙الكتم ↫ '..muted..'\n⌁︙التقيد ↫ '..tkeed..'', 1, 'md')  
 end
 getMessage(msg.chat_id_, tonumber(msg.reply_to_message_id_),kshf_by_reply) 
 end
@@ -6193,14 +6193,14 @@ if text and text:match('^كشف القيود @(.*)') and Admin(msg) and ChCheck(
 local username = text:match('^كشف القيود @(.*)') 
 function kshf_by_username(extra, result, success)
 if result.id_ then
-if DevAbs:sismember(ALOMDA..'Abs:Muted:'..msg.chat_id_,result.id_) then muted = 'مكتوم' else muted = 'غير مكتوم' end
-if DevAbs:sismember(ALOMDA..'Abs:Ban:'..msg.chat_id_,result.id_) then banned = 'محظور' else banned = 'غير محظور' end
-if DevAbs:sismember(ALOMDA..'Abs:BanAll:',result.id_) then banall = 'محظور عام' else banall = 'غير محظور عام' end
-if DevAbs:sismember(ALOMDA..'Abs:MuteAll:',result.id_) then muteall = 'مكتوم عام' else muteall = 'غير مكتوم عام' end
-if DevAbs:sismember(ALOMDA..'Abs:Tkeed:',result.id_) then tkeed = 'مقيد' else tkeed = 'غير مقيد' end
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الحظر العام ↫ '..banall..'\n⌁︙الكتم العام ↫ '..muteall..'\n⌁︙الحظر ↫ '..banned..'\n⌁︙الكتم ↫ '..muted..'\n⌁︙التقيد ↫ '..tkeed..'', 1, 'md')  
+if Deviven:sismember(ALOMDA..'iven:Muted:'..msg.chat_id_,result.id_) then muted = 'مكتوم' else muted = 'غير مكتوم' end
+if Deviven:sismember(ALOMDA..'iven:Ban:'..msg.chat_id_,result.id_) then banned = 'محظور' else banned = 'غير محظور' end
+if Deviven:sismember(ALOMDA..'iven:BanAll:',result.id_) then banall = 'محظور عام' else banall = 'غير محظور عام' end
+if Deviven:sismember(ALOMDA..'iven:MuteAll:',result.id_) then muteall = 'مكتوم عام' else muteall = 'غير مكتوم عام' end
+if Deviven:sismember(ALOMDA..'iven:Tkeed:',result.id_) then tkeed = 'مقيد' else tkeed = 'غير مقيد' end
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الحظر العام ↫ '..banall..'\n⌁︙الكتم العام ↫ '..muteall..'\n⌁︙الحظر ↫ '..banned..'\n⌁︙الكتم ↫ '..muted..'\n⌁︙التقيد ↫ '..tkeed..'', 1, 'md')  
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')  
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')  
 end
 end
 resolve_username(username,kshf_by_username) 
@@ -6208,54 +6208,54 @@ end
 if text == 'رفع القيود' and tonumber(msg.reply_to_message_id_) > 0 and Admin(msg) and ChCheck(msg) then 
 function unbanreply(extra, result, success) 
 if tonumber(result.sender_user_id_) == tonumber(ALOMDA) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙انا البوت وليس لدي قيود', 1, 'md')  
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙انا البوت وليس لدي قيود', 1, 'md')  
 return false  
 end 
 ReplyStatus(msg,result.sender_user_id_,"Reply","⌁︙تم رفع قيوده")  
 HTTPS.request("https://api.telegram.org/bot" .. TokenBot .. "/restrictChatMember?chat_id=" ..msg.chat_id_.. "&user_id=" ..result.sender_user_id_.. "&can_send_messages=True&can_send_media_messages=True&can_send_other_messages=True&can_add_web_page_previews=True")  
-DevAbs:srem(ALOMDA..'Abs:Tkeed:'..msg.chat_id_,result.sender_user_id_) DevAbs:srem(ALOMDA..'Abs:Ban:'..msg.chat_id_,result.sender_user_id_) DevAbs:srem(ALOMDA..'Abs:Muted:'..msg.chat_id_,result.sender_user_id_)   
+Deviven:srem(ALOMDA..'iven:Tkeed:'..msg.chat_id_,result.sender_user_id_) Deviven:srem(ALOMDA..'iven:Ban:'..msg.chat_id_,result.sender_user_id_) Deviven:srem(ALOMDA..'iven:Muted:'..msg.chat_id_,result.sender_user_id_)   
 end
 getMessage(msg.chat_id_, tonumber(msg.reply_to_message_id_),unbanreply) 
 end
 if text and text:match('^رفع القيود (%d+)') and Admin(msg) and ChCheck(msg) then 
 local user = text:match('رفع القيود (%d+)') 
 if tonumber(user) == tonumber(ALOMDA) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙انا البوت وليس لدي قيود', 1, 'md')  
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙انا البوت وليس لدي قيود', 1, 'md')  
 return false  
 end 
 tdcli_function ({ID = "GetUser",user_id_ = user},function(arg,data) 
 if data and data.code_ and data.code_ == 6 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لم استطع استخراج المعلومات', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لم استطع استخراج المعلومات', 1, 'md') 
 return false  
 end
 ReplyStatus(msg,user,"Reply","⌁︙تم رفع قيوده")  
 HTTPS.request("https://api.telegram.org/bot" .. TokenBot .. "/restrictChatMember?chat_id=" ..msg.chat_id_.. "&user_id=" ..user.. "&can_send_messages=True&can_send_media_messages=True&can_send_other_messages=True&can_add_web_page_previews=True")  
-DevAbs:srem(ALOMDA..'Abs:Tkeed:'..msg.chat_id_,user) DevAbs:srem(ALOMDA..'Abs:Ban:'..msg.chat_id_,user) DevAbs:srem(ALOMDA..'Abs:Muted:'..msg.chat_id_,user)   
+Deviven:srem(ALOMDA..'iven:Tkeed:'..msg.chat_id_,user) Deviven:srem(ALOMDA..'iven:Ban:'..msg.chat_id_,user) Deviven:srem(ALOMDA..'iven:Muted:'..msg.chat_id_,user)   
 end,nil)  
 end
 if text and text:match('^رفع القيود @(.*)') and Admin(msg) and ChCheck(msg) then  
 local username = text:match('رفع القيود @(.*)')  
 function unbanusername(extra,result,success)  
 if result and result.message_ and result.message_ == "USERNAME_NOT_OCCUPIED" then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')  
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*المعرف غير صحيح*', 1, 'md')  
 return false  
 end
 if result and result.type_ and result.type_.channel_ and result.type_.channel_.ID == "Channel" then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙هذا معرف قناة وليس معرف حساب', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙هذا معرف قناة وليس معرف حساب', 1, 'md') 
 return false  
 end
 if tonumber(result.id_) == tonumber(ALOMDA) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙انا البوت وليس لدي قيود', 1, 'md')  
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙انا البوت وليس لدي قيود', 1, 'md')  
 return false  
 end 
 tdcli_function ({ID = "GetUser",user_id_ = result.id_},function(arg,data) 
 if data and data.code_ and data.code_ == 6 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لم استطع استخراج المعلومات', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لم استطع استخراج المعلومات', 1, 'md') 
 return false  
 end
 ReplyStatus(msg,result.id_,"Reply","⌁︙تم رفع قيوده")  
 HTTPS.request("https://api.telegram.org/bot" .. TokenBot .. "/restrictChatMember?chat_id=" ..msg.chat_id_.. "&user_id=" ..result.id_.. "&can_send_messages=True&can_send_media_messages=True&can_send_other_messages=True&can_add_web_page_previews=True")  
-DevAbs:srem(ALOMDA..'Abs:Tkeed:'..msg.chat_id_,result.id_) DevAbs:srem(ALOMDA..'Abs:Ban:'..msg.chat_id_,result.id_) DevAbs:srem(ALOMDA..'Abs:Muted:'..msg.chat_id_,result.id_)   
+Deviven:srem(ALOMDA..'iven:Tkeed:'..msg.chat_id_,result.id_) Deviven:srem(ALOMDA..'iven:Ban:'..msg.chat_id_,result.id_) Deviven:srem(ALOMDA..'iven:Muted:'..msg.chat_id_,result.id_)   
 end,nil)   
 end  
 resolve_username(username,unbanusername) 
@@ -6346,52 +6346,52 @@ local List = {
 - ɢᴀᴍᴇ ➥• #game .
 ]]}
 local Text_Rand = List[math.random(#List)]
-DevAbs:set(ALOMDA.."Abs:GpIds:Text"..msg.chat_id_,Text_Rand)
+Deviven:set(ALOMDA.."iven:GpIds:Text"..msg.chat_id_,Text_Rand)
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم تغير كليشة الايدي")  
 end
 --     Source ALOMDA     --
 if SecondSudo(msg) then
 if text and text:match("^تعيين الايدي العام$") or text and text:match("^تعين الايدي العام$") or text and text:match("^تعيين كليشة الايدي$") then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙رجائا اتبع التعليمات للتعيين \n⌁︙لطبع كليشة الايدي ارسل كليشه تحتوي على النصوص التي باللغه الانجليزيه ادناه ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n `#username` ↬ لطبع المعرف\n `#id` ↬ لطبع الايدي \n `#photos` ↬ لطبع عدد الصور \n `#stast` ↬ لطبع الرتب \n `#msgs` ↬ لطبع عدد الرسائل \n `#msgday` ↬ لطبع الرسائل اليوميه \n `#CustomTitle` ↬ لطبع اللقب \n `#bio` ↬ لطبع البايو \n `#auto` ↬ لطبع التفاعل \n `#game` ↬ لطبع عدد النقاط \n `#cont` ↬ لطبع عدد الجهات \n `#edit` ↬ لطبع عدد السحكات \n `#Description` ↬ لطبع تعليق الصور\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉', 1, 'md')
-DevAbs:set("ALOMDA:New:id:"..ALOMDA..msg.sender_user_id_,'ALOMDATEAM')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙رجائا اتبع التعليمات للتعيين \n⌁︙لطبع كليشة الايدي ارسل كليشه تحتوي على النصوص التي باللغه الانجليزيه ادناه ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n `#username` ↬ لطبع المعرف\n `#id` ↬ لطبع الايدي \n `#photos` ↬ لطبع عدد الصور \n `#stast` ↬ لطبع الرتب \n `#msgs` ↬ لطبع عدد الرسائل \n `#msgday` ↬ لطبع الرسائل اليوميه \n `#CustomTitle` ↬ لطبع اللقب \n `#bio` ↬ لطبع البايو \n `#auto` ↬ لطبع التفاعل \n `#game` ↬ لطبع عدد النقاط \n `#cont` ↬ لطبع عدد الجهات \n `#edit` ↬ لطبع عدد السحكات \n `#Description` ↬ لطبع تعليق الصور\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉', 1, 'md')
+Deviven:set("ALOMDA:New:id:"..ALOMDA..msg.sender_user_id_,'ALOMDATEAM')
 return "ALOMDATEAM"
 end
-if text and DevAbs:get("ALOMDA:New:id:"..ALOMDA..msg.sender_user_id_) then 
+if text and Deviven:get("ALOMDA:New:id:"..ALOMDA..msg.sender_user_id_) then 
 if text == 'الغاء' then   
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ كليشة الايدي', 1, 'md')
-DevAbs:del("ALOMDA:New:id:"..ALOMDA..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ كليشة الايدي', 1, 'md')
+Deviven:del("ALOMDA:New:id:"..ALOMDA..msg.sender_user_id_)
 return false
 end
-DevAbs:del("ALOMDA:New:id:"..ALOMDA..msg.sender_user_id_)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ كليشة الايدي العامه', 1, 'md')
-DevAbs:set(ALOMDA.."Abs:AllIds:Text",text)
+Deviven:del("ALOMDA:New:id:"..ALOMDA..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ كليشة الايدي العامه', 1, 'md')
+Deviven:set(ALOMDA.."iven:AllIds:Text",text)
 return false
 end
 if text and text:match("^حذف الايدي العام$") or text and text:match("^مسح الايدي العام$") or text and text:match("^حذف كليشة الايدي$") then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف كليشة الايدي العامه")  
-DevAbs:del(ALOMDA.."Abs:AllIds:Text")
+Deviven:del(ALOMDA.."iven:AllIds:Text")
 end
 end
 --     Source ALOMDA     --
 if text and text:match("^تعيين الايدي$") and ChCheck(msg) or text and text:match("^تعين الايدي$") and ChCheck(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙رجائا اتبع التعليمات للتعيين \n⌁︙لطبع كليشة الايدي ارسل كليشه تحتوي على النصوص التي باللغه الانجليزيه ادناه ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n `#username` ↬ لطبع المعرف\n `#id` ↬ لطبع الايدي \n `#photos` ↬ لطبع عدد الصور \n `#stast` ↬ لطبع الرتب \n `#msgs` ↬ لطبع عدد الرسائل \n `#msgday` ↬ لطبع الرسائل اليوميه \n `#CustomTitle` ↬ لطبع اللقب \n `#bio` ↬ لطبع البايو \n `#auto` ↬ لطبع التفاعل \n `#game` ↬ لطبع عدد النقاط \n `#cont` ↬ لطبع عدد الجهات \n `#edit` ↬ لطبع عدد السحكات \n `#Description` ↬ لطبع تعليق الصور\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉', 1, 'md')
-DevAbs:set("ALOMDA:New:id:"..ALOMDA..msg.chat_id_..msg.sender_user_id_,'ALOMDATEAM')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙رجائا اتبع التعليمات للتعيين \n⌁︙لطبع كليشة الايدي ارسل كليشه تحتوي على النصوص التي باللغه الانجليزيه ادناه ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n `#username` ↬ لطبع المعرف\n `#id` ↬ لطبع الايدي \n `#photos` ↬ لطبع عدد الصور \n `#stast` ↬ لطبع الرتب \n `#msgs` ↬ لطبع عدد الرسائل \n `#msgday` ↬ لطبع الرسائل اليوميه \n `#CustomTitle` ↬ لطبع اللقب \n `#bio` ↬ لطبع البايو \n `#auto` ↬ لطبع التفاعل \n `#game` ↬ لطبع عدد النقاط \n `#cont` ↬ لطبع عدد الجهات \n `#edit` ↬ لطبع عدد السحكات \n `#Description` ↬ لطبع تعليق الصور\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉', 1, 'md')
+Deviven:set("ALOMDA:New:id:"..ALOMDA..msg.chat_id_..msg.sender_user_id_,'ALOMDATEAM')
 return "ALOMDATEAM"
 end
-if text and Manager(msg) and DevAbs:get("ALOMDA:New:id:"..ALOMDA..msg.chat_id_..msg.sender_user_id_) then 
+if text and Manager(msg) and Deviven:get("ALOMDA:New:id:"..ALOMDA..msg.chat_id_..msg.sender_user_id_) then 
 if text == 'الغاء' then   
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ كليشة الايدي', 1, 'md')
-DevAbs:del("ALOMDA:New:id:"..ALOMDA..msg.chat_id_..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ كليشة الايدي', 1, 'md')
+Deviven:del("ALOMDA:New:id:"..ALOMDA..msg.chat_id_..msg.sender_user_id_)
 return false
 end
-DevAbs:del("ALOMDA:New:id:"..ALOMDA..msg.chat_id_..msg.sender_user_id_)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ الكليشه الجديده', 1, 'md')
-DevAbs:set(ALOMDA.."Abs:GpIds:Text"..msg.chat_id_,text)
+Deviven:del("ALOMDA:New:id:"..ALOMDA..msg.chat_id_..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ الكليشه الجديده', 1, 'md')
+Deviven:set(ALOMDA.."iven:GpIds:Text"..msg.chat_id_,text)
 return false
 end
 if text and text:match("^حذف الايدي$") and ChCheck(msg) or text and text:match("^مسح الايدي$") and ChCheck(msg) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف كليشة الايدي")  
-DevAbs:del(ALOMDA.."Abs:GpIds:Text"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:GpIds:Text"..msg.chat_id_)
 end
 end
 --     Source ALOMDA     --
@@ -6403,19 +6403,19 @@ function ALOMDATEAM(extra,abbas,success)
 if abbas.username_ then username = '@'..abbas.username_ else username = 'لا يوجد' end
 if GetCustomTitle(msg.sender_user_id_,msg.chat_id_) ~= false then CustomTitle = GetCustomTitle(msg.sender_user_id_,msg.chat_id_) else CustomTitle = 'لا يوجد' end
 local function getpro(extra, abbas, success) 
-local msgsday = DevAbs:get(ALOMDA..'Abs:UsersMsgs'..ALOMDA..os.date('%d')..':'..msg.chat_id_..':'..msg.sender_user_id_) or 0
-local edit_msg = DevAbs:get(ALOMDA..'Abs:EditMsg'..msg.chat_id_..msg.sender_user_id_) or 0
-local user_msgs = DevAbs:get(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
-local user_nkt = tonumber(DevAbs:get(ALOMDA..'Abs:GamesNumber'..msg.chat_id_..msg.sender_user_id_) or 0)
-local cont = (tonumber(DevAbs:get(ALOMDA..'Abs:ContactNumber'..msg.chat_id_..':'..msg.sender_user_id_)) or 0)
-local msguser = tonumber(DevAbs:get(ALOMDA..'Abs:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_))
+local msgsday = Deviven:get(ALOMDA..'iven:UsersMsgs'..ALOMDA..os.date('%d')..':'..msg.chat_id_..':'..msg.sender_user_id_) or 0
+local edit_msg = Deviven:get(ALOMDA..'iven:EditMsg'..msg.chat_id_..msg.sender_user_id_) or 0
+local user_msgs = Deviven:get(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_)
+local user_nkt = tonumber(Deviven:get(ALOMDA..'iven:GamesNumber'..msg.chat_id_..msg.sender_user_id_) or 0)
+local cont = (tonumber(Deviven:get(ALOMDA..'iven:ContactNumber'..msg.chat_id_..':'..msg.sender_user_id_)) or 0)
+local msguser = tonumber(Deviven:get(ALOMDA..'iven:UsersMsgs'..msg.chat_id_..':'..msg.sender_user_id_))
 local Texting = {"مو صوره ظيم بالنبي ،🤤💞","مقتنع بصورتك !؟ 😹🖤","ملاك وناسيك بكروبنه ،🤤💞","وفالله ،🤤💞","كشخه برب ،😉🤍","لزكت بيها دغيرها عاد ،😒😕","صورتك مامرتاحلها ،🙄😶","حلغوم والله ،🥺💘","مو صوره غنبله براسها ٦٠ حظ ،😹🤍"}
 local Description = Texting[math.random(#Texting)]
 if abbas.photos_[0] then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Id'..msg.chat_id_) then 
-if not DevAbs:get(ALOMDA..'Abs:Lock:Id:Photo'..msg.chat_id_) then 
-if DevAbs:get(ALOMDA.."Abs:AllIds:Text") then
-newpicid = DevAbs:get(ALOMDA.."Abs:AllIds:Text")
+if not Deviven:get(ALOMDA..'iven:Lock:Id'..msg.chat_id_) then 
+if not Deviven:get(ALOMDA..'iven:Lock:Id:Photo'..msg.chat_id_) then 
+if Deviven:get(ALOMDA.."iven:AllIds:Text") then
+newpicid = Deviven:get(ALOMDA.."iven:AllIds:Text")
 newpicid = newpicid:gsub('#username',(username or 'لا يوجد'))
 newpicid = newpicid:gsub('#CustomTitle',(CustomTitle or 'لا يوجد'))
 newpicid = newpicid:gsub('#bio',(GetBio(msg.sender_user_id_) or 'لا يوجد'))
@@ -6432,10 +6432,10 @@ newpicid = newpicid:gsub('#Description',(Description or 'لا يوجد'))
 else
 newpicid = "⌁︙"..Description.."\n⌁︙معرفك ↫ ❨ "..username.." ❩\n⌁︙ايديك ↫ ❨ "..msg.sender_user_id_.." ❩\n⌁︙رتبتك ↫ "..IdRank(msg.sender_user_id_, msg.chat_id_).."\n⌁︙رسائلك ↫ ❨ "..user_msgs.." ❩\n⌁︙سحكاتك ↫ ❨ "..edit_msg.." ❩\n⌁︙تفاعلك ↫ "..formsgs(msguser).."\n⌁︙نقاطك ↫ ❨ "..user_nkt.." ❩\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 end 
-if not DevAbs:get(ALOMDA.."Abs:GpIds:Text"..msg.chat_id_) then 
+if not Deviven:get(ALOMDA.."iven:GpIds:Text"..msg.chat_id_) then 
 sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, abbas.photos_[0].sizes_[1].photo_.persistent_id_,newpicid,msg.id_,msg.id_.."")
 else 
-local new_id = DevAbs:get(ALOMDA.."Abs:GpIds:Text"..msg.chat_id_)
+local new_id = Deviven:get(ALOMDA.."iven:GpIds:Text"..msg.chat_id_)
 local new_id = new_id:gsub('#username',(username or 'لا يوجد'))
 local new_id = new_id:gsub('#CustomTitle',(CustomTitle or 'لا يوجد'))
 local new_id = new_id:gsub('#bio',(GetBio(msg.sender_user_id_) or 'لا يوجد'))
@@ -6452,8 +6452,8 @@ local new_id = new_id:gsub('#Description',(Description or 'لا يوجد'))
 sendPhoto(msg.chat_id_, msg.id_, 0, 1, nil, abbas.photos_[0].sizes_[1].photo_.persistent_id_,new_id,msg.id_,msg.id_.."")
 end
 else
-if DevAbs:get(ALOMDA.."Abs:AllIds:Text") then
-newallid = DevAbs:get(ALOMDA.."Abs:AllIds:Text")
+if Deviven:get(ALOMDA.."iven:AllIds:Text") then
+newallid = Deviven:get(ALOMDA.."iven:AllIds:Text")
 newallid = newallid:gsub('#username',(username or 'لا يوجد'))
 newallid = newallid:gsub('#CustomTitle',(CustomTitle or 'لا يوجد'))
 newallid = newallid:gsub('#bio',(GetBio(msg.sender_user_id_) or 'لا يوجد'))
@@ -6470,10 +6470,10 @@ newallid = newallid:gsub('#Description',(Description or 'لا يوجد'))
 else
 newallid = "⌁︙معرفك ↫ ❨ "..username.." ❩\n⌁︙ايديك ↫ ❨ "..msg.sender_user_id_.." ❩\n⌁︙رتبتك ↫ "..IdRank(msg.sender_user_id_, msg.chat_id_).."\n⌁︙رسائلك ↫ ❨ "..user_msgs.." ❩\n⌁︙سحكاتك ↫ ❨ "..edit_msg.." ❩\n⌁︙تفاعلك ↫ "..formsgs(msguser).."\n⌁︙نقاطك ↫ ❨ "..user_nkt.." ❩"
 end 
-if not DevAbs:get(ALOMDA.."Abs:GpIds:Text"..msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, newallid, 1, 'html')
+if not Deviven:get(ALOMDA.."iven:GpIds:Text"..msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, newallid, 1, 'html')
 else
-local new_id = DevAbs:get(ALOMDA.."Abs:GpIds:Text"..msg.chat_id_)
+local new_id = Deviven:get(ALOMDA.."iven:GpIds:Text"..msg.chat_id_)
 local new_id = new_id:gsub('#username',(username or 'لا يوجد'))
 local new_id = new_id:gsub('#CustomTitle',(CustomTitle or 'لا يوجد'))
 local new_id = new_id:gsub('#bio',(GetBio(msg.sender_user_id_) or 'لا يوجد'))
@@ -6487,15 +6487,15 @@ local new_id = new_id:gsub('#id',(msg.sender_user_id_ or 'لا يوجد'))
 local new_id = new_id:gsub('#auto',(formsgs(msguser) or 'لا يوجد'))
 local new_id = new_id:gsub('#stast',(IdRank(msg.sender_user_id_, msg.chat_id_) or 'لا يوجد'))
 local new_id = new_id:gsub('#Description',(Description or 'لا يوجد'))
-Dev_Abs(msg.chat_id_, msg.id_, 1, new_id, 1, 'html')  
+Dev_iven(msg.chat_id_, msg.id_, 1, new_id, 1, 'html')  
 end
 end
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عذرا الايدي معطل ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عذرا الايدي معطل ', 1, 'md')
 end
 else
-if DevAbs:get(ALOMDA.."Abs:AllIds:Text") then
-notpicid = DevAbs:get(ALOMDA.."Abs:AllIds:Text")
+if Deviven:get(ALOMDA.."iven:AllIds:Text") then
+notpicid = Deviven:get(ALOMDA.."iven:AllIds:Text")
 notpicid = notpicid:gsub('#username',(username or 'لا يوجد'))
 notpicid = notpicid:gsub('#CustomTitle',(CustomTitle or 'لا يوجد'))
 notpicid = notpicid:gsub('#bio',(GetBio(msg.sender_user_id_) or 'لا يوجد'))
@@ -6512,14 +6512,14 @@ notpicid = notpicid:gsub('#Description',(Description or 'لا يوجد'))
 else
 notpicid = "⌁︙لا استطيع عرض صورتك لانك قمت بحظر البوت او انك لاتمتلك صوره في بروفايلك\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙معرفك ↫ ❨ "..username.." ❩\n⌁︙ايديك ↫ ❨ "..msg.sender_user_id_.." ❩\n⌁︙رتبتك ↫ "..IdRank(msg.sender_user_id_, msg.chat_id_).."\n⌁︙رسائلك ↫ ❨ "..user_msgs.." ❩\n⌁︙سحكاتك ↫ ❨ "..edit_msg.." ❩\n⌁︙تفاعلك ↫ "..formsgs(msguser).."\n⌁︙نقاطك ↫ ❨ "..user_nkt.." ❩\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 end 
-if not DevAbs:get(ALOMDA..'Abs:Lock:Id'..msg.chat_id_) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Id:Photo'..msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, notpicid, 1, 'html')
+if not Deviven:get(ALOMDA..'iven:Lock:Id'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Id:Photo'..msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, notpicid, 1, 'html')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙معرفك ↫ ❨ "..username.." ❩\n⌁︙ايديك ↫ ❨ "..msg.sender_user_id_.." ❩\n⌁︙رتبتك ↫ "..IdRank(msg.sender_user_id_, msg.chat_id_).."\n⌁︙رسائلك ↫ ❨ "..user_msgs.." ❩\n⌁︙سحكاتك ↫ ❨ "..edit_msg.." ❩\n⌁︙رسائلك ↫ ❨ "..user_msgs.." ❩\n⌁︙تفاعلك ↫ "..formsgs(msguser).."\n⌁︙نقاطك ↫ ❨ "..user_nkt.." ❩", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙معرفك ↫ ❨ "..username.." ❩\n⌁︙ايديك ↫ ❨ "..msg.sender_user_id_.." ❩\n⌁︙رتبتك ↫ "..IdRank(msg.sender_user_id_, msg.chat_id_).."\n⌁︙رسائلك ↫ ❨ "..user_msgs.." ❩\n⌁︙سحكاتك ↫ ❨ "..edit_msg.." ❩\n⌁︙رسائلك ↫ ❨ "..user_msgs.." ❩\n⌁︙تفاعلك ↫ "..formsgs(msguser).."\n⌁︙نقاطك ↫ ❨ "..user_nkt.." ❩", 1, 'md')
 end
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عذرا الايدي معطل', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عذرا الايدي معطل', 1, 'md')
 end end end
 tdcli_function ({ ID = "GetUserProfilePhotos", user_id_ = msg.sender_user_id_, offset_ = 0, limit_ = 1 }, getpro, nil)
 end
@@ -6532,98 +6532,98 @@ if Admin(msg) then
 if text and text:match("^قفل (.*)$") then
 local LockText = {string.match(text, "^(قفل) (.*)$")}
 if LockText[2] == "التعديل" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل التعديل")  
-DevAbs:set(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙التعديل بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙التعديل بالفعل مقفل في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "التعديل الميديا" or LockText[2] == "تعديل الميديا" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل تعديل الميديا")  
-DevAbs:set(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تعديل الميديا بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تعديل الميديا بالفعل مقفل في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الفارسيه" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Farsi'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Farsi'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الفارسيه")  
-DevAbs:set(ALOMDA..'Abs:Lock:Farsi'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Farsi'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الفارسيه بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الفارسيه بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الفشار" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Fshar'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Fshar'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الفشار")  
-DevAbs:del(ALOMDA..'Abs:Lock:Fshar'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Fshar'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الفشار بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الفشار بالفعل مقفل في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الطائفيه" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Taf'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Taf'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الطائفيه")  
-DevAbs:del(ALOMDA..'Abs:Lock:Taf'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Taf'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الطائفيه بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الطائفيه بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الكفر" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Kfr'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Kfr'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الكفر")  
-DevAbs:del(ALOMDA..'Abs:Lock:Kfr'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Kfr'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الكفر بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الكفر بالفعل مقفل في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الفارسيه بالطرد" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:FarsiBan'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:FarsiBan'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الفارسيه بالطرد")  
-DevAbs:set(ALOMDA..'Abs:Lock:FarsiBan'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:FarsiBan'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الفارسيه بالطرد بالفعل مقفله ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الفارسيه بالطرد بالفعل مقفله ', 1, 'md')
 end
 end
 if LockText[2] == "البوتات" or LockText[2] == "البوتات بالحذف" then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل البوتات بالحذف")  
-DevAbs:set(ALOMDA.."Abs:Lock:Bots"..msg.chat_id_,"del")  
+Deviven:set(ALOMDA.."iven:Lock:Bots"..msg.chat_id_,"del")  
 end
 if LockText[2] == "البوتات بالطرد" then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل البوتات بالطرد")  
-DevAbs:set(ALOMDA.."Abs:Lock:Bots"..msg.chat_id_,"kick")  
+Deviven:set(ALOMDA.."iven:Lock:Bots"..msg.chat_id_,"kick")  
 end
 if LockText[2] == "البوتات بالتقييد" or LockText[2] == "البوتات بالتقيد" then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل البوتات بالتقيد")  
-DevAbs:set(ALOMDA.."Abs:Lock:Bots"..msg.chat_id_,"ked")  
+Deviven:set(ALOMDA.."iven:Lock:Bots"..msg.chat_id_,"ked")  
 end
 if LockText[2] == "التكرار" or LockText[2] == "التكرار بالحذف" then 
-DevAbs:hset(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_ ,"Spam:User","del")  
+Deviven:hset(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_ ,"Spam:User","del")  
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل التكرار بالحذف")  
 end
 if LockText[2] == "التكرار بالطرد" then 
-DevAbs:hset(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_ ,"Spam:User","kick")  
+Deviven:hset(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_ ,"Spam:User","kick")  
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل التكرار بالطرد")  
 end
 if LockText[2] == "التكرار بالتقيد" or LockText[2] == "التكرار بالتقييد" then 
-DevAbs:hset(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_ ,"Spam:User","keed")  
+Deviven:hset(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_ ,"Spam:User","keed")  
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل التكرار بالتقيد")  
 end
 if LockText[2] == "التكرار بالكتم" then 
-DevAbs:hset(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_ ,"Spam:User","mute")  
+Deviven:hset(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_ ,"Spam:User","mute")  
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل التكرار بالكتم")  
 end
 if BasicConstructor(msg) then
 if LockText[2] == "التثبيت" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Pin'..msg.chat_id_) then
-tdcli_function ({ ID = "GetChannelFull",  channel_id_ = msg.chat_id_:gsub("-100","") }, function(arg,data)  DevAbs:set(ALOMDA.."Abs:PinnedMsg"..msg.chat_id_,data.pinned_message_id_)  end,nil)
+if not Deviven:get(ALOMDA..'iven:Lock:Pin'..msg.chat_id_) then
+tdcli_function ({ ID = "GetChannelFull",  channel_id_ = msg.chat_id_:gsub("-100","") }, function(arg,data)  Deviven:set(ALOMDA.."iven:PinnedMsg"..msg.chat_id_,data.pinned_message_id_)  end,nil)
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل التثبيت")  
-DevAbs:set(ALOMDA..'Abs:Lock:Pin'..msg.chat_id_,true)
-DevAbs:sadd(ALOMDA.."Abs:Lock:Pinpin",msg.chat_id_) 
+Deviven:set(ALOMDA..'iven:Lock:Pin'..msg.chat_id_,true)
+Deviven:sadd(ALOMDA.."iven:Lock:Pinpin",msg.chat_id_) 
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙التثبيت بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙التثبيت بالفعل مقفل في المجموعه', 1, 'md')
 end end end
 end
 end
@@ -6633,184 +6633,184 @@ if Admin(msg) then
 if text and (text:match("^ضع تكرار (%d+)$") or text:match("^وضع تكرار (%d+)$")) then   
 local TextSpam = text:match("ضع تكرار (%d+)$") or text:match("وضع تكرار (%d+)$")
 if tonumber(TextSpam) < 2 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙قم بتحديد عدد اكبر من 2 للتكرار', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙قم بتحديد عدد اكبر من 2 للتكرار', 1, 'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم وضع عدد التكرار ↫ '..TextSpam, 1, 'md')
-DevAbs:hset(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_ ,"Num:Spam" ,TextSpam) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم وضع عدد التكرار ↫ '..TextSpam, 1, 'md')
+Deviven:hset(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_ ,"Num:Spam" ,TextSpam) 
 end
 end
 if text and (text:match("^ضع زمن التكرار (%d+)$") or text:match("^وضع زمن التكرار (%d+)$")) then  
 local TextSpam = text:match("ضع زمن التكرار (%d+)$") or text:match("وضع زمن التكرار (%d+)$")
-DevAbs:hset(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_ ,"Num:Spam:Time" ,TextSpam) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم وضع زمن التكرار ↫ '..TextSpam, 1, 'md')
+Deviven:hset(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_ ,"Num:Spam:Time" ,TextSpam) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم وضع زمن التكرار ↫ '..TextSpam, 1, 'md')
 end
 --     Source ALOMDA     --
 if Manager(msg) then
 if text and text == 'تفعيل الايدي بالصوره' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Id:Photo'..msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الايدي بالصوره بالتاكيد مفعل', 1, 'md')
+if not Deviven:get(ALOMDA..'iven:Lock:Id:Photo'..msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الايدي بالصوره بالتاكيد مفعل', 1, 'md')
 else
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل الايدي بالصوره'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Lock:Id:Photo'..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل الايدي بالصوره'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Lock:Id:Photo'..msg.chat_id_)
 end end
 if text and text == 'تعطيل الايدي بالصوره' and ChCheck(msg) then
-if DevAbs:get(ALOMDA..'Abs:Lock:Id:Photo'..msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الايدي بالصوره بالتاكيد معطل', 1, 'md')
+if Deviven:get(ALOMDA..'iven:Lock:Id:Photo'..msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الايدي بالصوره بالتاكيد معطل', 1, 'md')
 else
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل الايدي بالصوره'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Lock:Id:Photo'..msg.chat_id_,true)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل الايدي بالصوره'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Lock:Id:Photo'..msg.chat_id_,true)
 end end 
 
 if text and text == 'تفعيل الايدي' and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Id'..msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الايدي بالتاكيد مفعل ', 1, 'md')
+if not Deviven:get(ALOMDA..'iven:Lock:Id'..msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الايدي بالتاكيد مفعل ', 1, 'md')
 else
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل الايدي بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Lock:Id'..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل الايدي بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Lock:Id'..msg.chat_id_)
 end end 
 if text and text == 'تعطيل الايدي' and ChCheck(msg) then
-if DevAbs:get(ALOMDA..'Abs:Lock:Id'..msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الايدي بالتاكيد معطل ', 1, 'md')
+if Deviven:get(ALOMDA..'iven:Lock:Id'..msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الايدي بالتاكيد معطل ', 1, 'md')
 else
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل الايدي بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Lock:Id'..msg.chat_id_,true)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل الايدي بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Lock:Id'..msg.chat_id_,true)
 end end
 end
 --     Source ALOMDA     --
 if text == 'ضع رابط' or text == 'وضع رابط' or text == 'ضع الرابط' or text == 'وضع الرابط' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙ارسل رابط المجموعه او رابط قناة المجموعه', 1, 'md')
-DevAbs:setex(ALOMDA.."Abs:Set:Groups:Links"..msg.chat_id_..""..msg.sender_user_id_,300,true) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙ارسل رابط المجموعه او رابط قناة المجموعه', 1, 'md')
+Deviven:setex(ALOMDA.."iven:Set:Groups:Links"..msg.chat_id_..""..msg.sender_user_id_,300,true) 
 end
 if text == 'انشاء رابط' or text == 'انشاء الرابط' then
 local LinkGp = json:decode(https.request('https://api.telegram.org/bot'..TokenBot..'/exportChatInviteLink?chat_id='..msg.chat_id_))
-if not DevAbs:get(ALOMDA.."Abs:Groups:Links"..msg.chat_id_)  then 
+if not Deviven:get(ALOMDA.."iven:Groups:Links"..msg.chat_id_)  then 
 if LinkGp.ok == true then 
 LinkGroup = LinkGp.result
-DevAbs:set(ALOMDA.."Abs:Groups:Links"..msg.chat_id_,LinkGroup) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم انشاء رابط جديد ارسل ↫ الرابط', 1, 'md')
+Deviven:set(ALOMDA.."iven:Groups:Links"..msg.chat_id_,LinkGroup) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم انشاء رابط جديد ارسل ↫ الرابط', 1, 'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙ليست لدي صلاحية دعوة المستخدمين عبر الرابط يرجى التحقق من الصلاحيات', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙ليست لدي صلاحية دعوة المستخدمين عبر الرابط يرجى التحقق من الصلاحيات', 1, 'md')
 end
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙ارسل رابط المجموعه او رابط قناة المجموعه', 1, 'md')
-DevAbs:setex(ALOMDA.."Abs:Set:Groups:Links"..msg.chat_id_..""..msg.sender_user_id_,300,true) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙ارسل رابط المجموعه او رابط قناة المجموعه', 1, 'md')
+Deviven:setex(ALOMDA.."iven:Set:Groups:Links"..msg.chat_id_..""..msg.sender_user_id_,300,true) 
 end
 end
 end
 --     Source ALOMDA     --
 if Admin(msg) then
 if text and text:match("^تفعيل الترحيب$") and ChCheck(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل الترحيب بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA.."Abs:Lock:Welcome"..msg.chat_id_,true)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل الترحيب بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA.."iven:Lock:Welcome"..msg.chat_id_,true)
 end
 if text and text:match("^تعطيل الترحيب$") and ChCheck(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل الترحيب بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA.."Abs:Lock:Welcome"..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل الترحيب بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA.."iven:Lock:Welcome"..msg.chat_id_)
 end
-if DevAbs:get(ALOMDA..'Abs:setwelcome'..msg.chat_id_..':'..msg.sender_user_id_) then 
+if Deviven:get(ALOMDA..'iven:setwelcome'..msg.chat_id_..':'..msg.sender_user_id_) then 
 if text == 'الغاء' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ كليشة الترحيب', 1, 'md')
-DevAbs:del(ALOMDA..'Abs:setwelcome'..msg.chat_id_..':'..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ كليشة الترحيب', 1, 'md')
+Deviven:del(ALOMDA..'iven:setwelcome'..msg.chat_id_..':'..msg.sender_user_id_)
 return false  
 end 
-DevAbs:del(ALOMDA..'Abs:setwelcome'..msg.chat_id_..':'..msg.sender_user_id_)
-DevAbs:set(ALOMDA..'Abs:Groups:Welcomes'..msg.chat_id_,text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ كليشة الترحيب', 1, 'md')
+Deviven:del(ALOMDA..'iven:setwelcome'..msg.chat_id_..':'..msg.sender_user_id_)
+Deviven:set(ALOMDA..'iven:Groups:Welcomes'..msg.chat_id_,text)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ كليشة الترحيب', 1, 'md')
 return false   
 end
 if text and text:match("^ضع ترحيب$") and ChCheck(msg) or text and text:match("^وضع ترحيب$") and ChCheck(msg) or text and text:match("^اضف ترحيب$") and ChCheck(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي الترحيب الان\n⌁︙تستطيع اضافة مايلي ↫ ⤈\n⌁︙دالة عرض الاسم ↫ firstname\n⌁︙دالة عرض المعرف ↫ username', 1, 'md')
-DevAbs:set(ALOMDA..'Abs:setwelcome'..msg.chat_id_..':'..msg.sender_user_id_,true)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي الترحيب الان\n⌁︙تستطيع اضافة مايلي ↫ ⤈\n⌁︙دالة عرض الاسم ↫ firstname\n⌁︙دالة عرض المعرف ↫ username', 1, 'md')
+Deviven:set(ALOMDA..'iven:setwelcome'..msg.chat_id_..':'..msg.sender_user_id_,true)
 end
 if text and text:match("^حذف الترحيب$") and ChCheck(msg) or text and text:match("^حذف ترحيب$") and ChCheck(msg) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف الترحيب")  
-DevAbs:del(ALOMDA..'Abs:Groups:Welcomes'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Groups:Welcomes'..msg.chat_id_)
 end
 if text and text:match("^جلب الترحيب$") and ChCheck(msg) or text and text:match("^جلب ترحيب$") and ChCheck(msg) or text and text:match("^الترحيب$") and ChCheck(msg) then
-local wel = DevAbs:get(ALOMDA..'Abs:Groups:Welcomes'..msg.chat_id_)
+local wel = Deviven:get(ALOMDA..'iven:Groups:Welcomes'..msg.chat_id_)
 if wel then
-Dev_Abs(msg.chat_id_, msg.id_, 1, wel, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, wel, 1, 'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لم يتم وضع الترحيب \n⌁︙ارسل ↫ ضع ترحيب للحفظ ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لم يتم وضع الترحيب \n⌁︙ارسل ↫ ضع ترحيب للحفظ ', 1, 'md')
 end
 end
 --     Source ALOMDA     --
-if DevAbs:get(ALOMDA..'Abs:SetDescription'..msg.chat_id_..':'..msg.sender_user_id_) then  
+if Deviven:get(ALOMDA..'iven:SetDescription'..msg.chat_id_..':'..msg.sender_user_id_) then  
 if text == 'الغاء' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء حفظ الوصف", 1, 'md')
-DevAbs:del(ALOMDA..'Abs:SetDescription'..msg.chat_id_..':'..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء حفظ الوصف", 1, 'md')
+Deviven:del(ALOMDA..'iven:SetDescription'..msg.chat_id_..':'..msg.sender_user_id_)
 return false  
 end 
-DevAbs:del(ALOMDA..'Abs:SetDescription'..msg.chat_id_..':'..msg.sender_user_id_)
+Deviven:del(ALOMDA..'iven:SetDescription'..msg.chat_id_..':'..msg.sender_user_id_)
 https.request('https://api.telegram.org/bot'..TokenBot..'/setChatDescription?chat_id='..msg.chat_id_..'&description='..text) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم تغيير وصف المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم تغيير وصف المجموعه', 1, 'md')
 return false  
 end 
 if text and text:match("^ضع وصف$") and ChCheck(msg) or text and text:match("^وضع وصف$") and ChCheck(msg) then  
-DevAbs:set(ALOMDA..'Abs:SetDescription'..msg.chat_id_..':'..msg.sender_user_id_,true)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي الوصف الان', 1, 'md')
+Deviven:set(ALOMDA..'iven:SetDescription'..msg.chat_id_..':'..msg.sender_user_id_,true)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي الوصف الان', 1, 'md')
 end
 --     Source ALOMDA     --
 if text and text == "منع" and msg.reply_to_message_id_ == 0 and ChCheck(msg) then       
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل لي الكلمه الان", 1, 'md') 
-DevAbs:set(ALOMDA.."Abs:SetFilters"..msg.sender_user_id_..msg.chat_id_,"add")  
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل لي الكلمه الان", 1, 'md') 
+Deviven:set(ALOMDA.."iven:SetFilters"..msg.sender_user_id_..msg.chat_id_,"add")  
 return false  
 end    
-if DevAbs:get(ALOMDA.."Abs:SetFilters"..msg.sender_user_id_..msg.chat_id_) == "add" then
+if Deviven:get(ALOMDA.."iven:SetFilters"..msg.sender_user_id_..msg.chat_id_) == "add" then
 if text == 'الغاء' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر المنع', 1, 'md')
-DevAbs:del(ALOMDA.."Abs:SetFilters"..msg.sender_user_id_..msg.chat_id_)  
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر المنع', 1, 'md')
+Deviven:del(ALOMDA.."iven:SetFilters"..msg.sender_user_id_..msg.chat_id_)  
 return false  
 end   
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم منع الكلمه ↫ "..text, 1, 'html')
-DevAbs:del(ALOMDA.."Abs:SetFilters"..msg.sender_user_id_..msg.chat_id_)  
-DevAbs:hset(ALOMDA..'Abs:Filters:'..msg.chat_id_, text,'newword')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم منع الكلمه ↫ "..text, 1, 'html')
+Deviven:del(ALOMDA.."iven:SetFilters"..msg.sender_user_id_..msg.chat_id_)  
+Deviven:hset(ALOMDA..'iven:Filters:'..msg.chat_id_, text,'newword')
 return false
 end
 if text and text == "الغاء منع" and msg.reply_to_message_id_ == 0 and ChCheck(msg) then       
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل لي الكلمه الان", 1, 'md') 
-DevAbs:set(ALOMDA.."Abs:SetFilters"..msg.sender_user_id_..msg.chat_id_,"del")  
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل لي الكلمه الان", 1, 'md') 
+Deviven:set(ALOMDA.."iven:SetFilters"..msg.sender_user_id_..msg.chat_id_,"del")  
 return false  
 end    
-if DevAbs:get(ALOMDA.."Abs:SetFilters"..msg.sender_user_id_..msg.chat_id_) == "del" then   
+if Deviven:get(ALOMDA.."iven:SetFilters"..msg.sender_user_id_..msg.chat_id_) == "del" then   
 if text == 'الغاء' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر الغاء المنع', 1, 'md')
-DevAbs:del(ALOMDA.."Abs:SetFilters"..msg.sender_user_id_..msg.chat_id_)  
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر الغاء المنع', 1, 'md')
+Deviven:del(ALOMDA.."iven:SetFilters"..msg.sender_user_id_..msg.chat_id_)  
 return false  
 end   
-if not DevAbs:hget(ALOMDA..'Abs:Filters:'..msg.chat_id_, text) then  
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙الكلمه ↫ "..text.." غير ممنوعه", 1, 'html')
-DevAbs:del(ALOMDA.."Abs:SetFilters"..msg.sender_user_id_..msg.chat_id_)  
+if not Deviven:hget(ALOMDA..'iven:Filters:'..msg.chat_id_, text) then  
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙الكلمه ↫ "..text.." غير ممنوعه", 1, 'html')
+Deviven:del(ALOMDA.."iven:SetFilters"..msg.sender_user_id_..msg.chat_id_)  
 else
-DevAbs:hdel(ALOMDA..'Abs:Filters:'..msg.chat_id_, text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙الكلمه ↫ "..text.." تم الغاء منعها", 1, 'html')
-DevAbs:del(ALOMDA.."Abs:SetFilters"..msg.sender_user_id_..msg.chat_id_)  
+Deviven:hdel(ALOMDA..'iven:Filters:'..msg.chat_id_, text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙الكلمه ↫ "..text.." تم الغاء منعها", 1, 'html')
+Deviven:del(ALOMDA.."iven:SetFilters"..msg.sender_user_id_..msg.chat_id_)  
 end
 return false
 end
 --     Source ALOMDA     --
 if SudoBot(msg) then
 if text and text == "الاحصائيات" and ChCheck(msg) or text and text == "↫ الاحصائيات ⌁" then
-local gps = DevAbs:scard(ALOMDA.."Abs:Groups") local users = DevAbs:scard(ALOMDA.."Abs:Users") 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙احصائيات البوت ↫ ⤈\n⌁︙عدد المشتركين ↫ ❨ '..users..' ❩\n⌁︙عدد المجموعات ↫ ❨ '..gps..' ❩', 1, 'md')
+local gps = Deviven:scard(ALOMDA.."iven:Groups") local users = Deviven:scard(ALOMDA.."iven:Users") 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙احصائيات البوت ↫ ⤈\n⌁︙عدد المشتركين ↫ ❨ '..users..' ❩\n⌁︙عدد المجموعات ↫ ❨ '..gps..' ❩', 1, 'md')
 end
 if text and text == "المشتركين" and ChCheck(msg) or text and text == "↫ المشتركين ⌁" then
-local users = DevAbs:scard(ALOMDA.."Abs:Users")
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عدد المشتركين ↫ ❨ '..users..' ❩', 1, 'md')
+local users = Deviven:scard(ALOMDA.."iven:Users")
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عدد المشتركين ↫ ❨ '..users..' ❩', 1, 'md')
 end
 end
 --     Source ALOMDA     --
 if text and text == 'المجموعات' and ChCheck(msg) or text and text == '↫ المجموعات ⌁' then
 if not SudoBot(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطورين فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطورين فقط ', 1, 'md')
 else
-local List = DevAbs:smembers(ALOMDA.."Abs:Groups")
+local List = Deviven:smembers(ALOMDA.."iven:Groups")
 local t = '⌁︙مجموعات البوت ↫ ⤈ \n'
 for k,v in pairs(List) do
 t = t..k.."~ : `"..v.."`\n" 
@@ -6818,14 +6818,14 @@ end
 if #List == 0 then
 t = '⌁︙لا يوجد مجموعات مفعله'
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1,t, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,t, 1, 'md')
 end end
 --     Source ALOMDA     --
 if text and text:match('^تنظيف (%d+)$') and ChCheck(msg) then  
-if not DevAbs:get(ALOMDA..'Delete:Time'..msg.chat_id_..':'..msg.sender_user_id_) then  
+if not Deviven:get(ALOMDA..'Delete:Time'..msg.chat_id_..':'..msg.sender_user_id_) then  
 local Number = tonumber(text:match('^تنظيف (%d+)$')) 
 if Number > 1000 then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لاتستطيع تنظيف اكثر من 1000 رساله', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لاتستطيع تنظيف اكثر من 1000 رساله', 1, 'md')
 return false  
 end  
 local Message = msg.id_
@@ -6833,12 +6833,12 @@ for i=1,tonumber(Number) do
 DeleteMessage(msg.chat_id_,{[0]=Message})
 Message = Message - 1048576 
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم تنظيف *'..Number..'* من الرسائل', 1, 'md')
-DevAbs:setex(ALOMDA..'Delete:Time'..msg.chat_id_..':'..msg.sender_user_id_,300,true)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم تنظيف *'..Number..'* من الرسائل', 1, 'md')
+Deviven:setex(ALOMDA..'Delete:Time'..msg.chat_id_..':'..msg.sender_user_id_,300,true)
 end 
 end
 if text == "تنظيف المشتركين" and SecondSudo(msg) and ChCheck(msg) then 
-local pv = DevAbs:smembers(ALOMDA.."Abs:Users")
+local pv = Deviven:smembers(ALOMDA.."iven:Users")
 local sendok = 0
 for i = 1, #pv do
 tdcli_function({ID='GetChat',chat_id_ = pv[i]
@@ -6848,15 +6848,15 @@ chat_id_ = pv[i], action_ = {  ID = "SendMessageTypingAction", progress_ = 100}
 },function(arg,data) 
 if data.ID and data.ID == "Ok" then
 else
-DevAbs:srem(ALOMDA.."Abs:Users",pv[i])
+Deviven:srem(ALOMDA.."iven:Users",pv[i])
 sendok = sendok + 1
 end
 if #pv == i then 
 if sendok == 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙*لا يوجد مشتركين وهميين*', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙*لا يوجد مشتركين وهميين*', 1, 'md')
 else
 local ok = #pv - sendok
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عدد المشتركين الان ↫ { '..#pv..' }\n⌁︙تم حذف ↫ { '..sendok..' } من المشتركين\n⌁︙العدد الحقيقي الان  ↫ ( '..ok..' ) \n', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عدد المشتركين الان ↫ { '..#pv..' }\n⌁︙تم حذف ↫ { '..sendok..' } من المشتركين\n⌁︙العدد الحقيقي الان  ↫ ( '..ok..' ) \n', 1, 'md')
 end
 end
 end,nil)
@@ -6866,32 +6866,32 @@ return false
 end
 --     Source ALOMDA     --
 if text == "تنظيف الكروبات" and SecondSudo(msg) and ChCheck(msg) or text == "تنظيف المجموعات" and SecondSudo(msg) and ChCheck(msg) then 
-local group = DevAbs:smembers(ALOMDA.."Abs:Groups")
+local group = Deviven:smembers(ALOMDA.."iven:Groups")
 local w = 0
 local q = 0
 for i = 1, #group do
 tdcli_function({ID='GetChat',chat_id_ = group[i]
 },function(arg,data)
 if data and data.type_ and data.type_.channel_ and data.type_.channel_.status_ and data.type_.channel_.status_.ID == "ChatMemberStatusMember" then
-DevAbs:srem(ALOMDA.."Abs:Groups",group[i]) 
+Deviven:srem(ALOMDA.."iven:Groups",group[i]) 
 changeChatMemberStatus(group[i], ALOMDA, "Left")
 w = w + 1
 end
 if data and data.type_ and data.type_.channel_ and data.type_.channel_.status_ and data.type_.channel_.status_.ID == "ChatMemberStatusLeft" then
-DevAbs:srem(ALOMDA.."Abs:Groups",group[i]) 
+Deviven:srem(ALOMDA.."iven:Groups",group[i]) 
 q = q + 1
 end
 if data and data.type_ and data.type_.channel_ and data.type_.channel_.status_ and data.type_.channel_.status_.ID == "ChatMemberStatusKicked" then
-DevAbs:srem(ALOMDA.."Abs:Groups",group[i]) 
+Deviven:srem(ALOMDA.."iven:Groups",group[i]) 
 q = q + 1
 end
 if data and data.code_ and data.code_ == 400 then
-DevAbs:srem(ALOMDA.."Abs:Groups",group[i]) 
+Deviven:srem(ALOMDA.."iven:Groups",group[i]) 
 w = w + 1
 end
 if #group == i then 
 if (w + q) == 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙*لاتوجد مجموعات وهميه*', 1, 'md')   
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙*لاتوجد مجموعات وهميه*', 1, 'md')   
 else
 local ALOMDAgp2 = (w + q)
 local ALOMDAgp3 = #group - ALOMDAgp2
@@ -6905,7 +6905,7 @@ ALOMDAgp1 = ''
 else
 ALOMDAgp1 = '\n⌁︙تم حذف ↫ { '..w..' } مجموعه بسبب تنزيل البوت الى عضو'
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1,'⌁︙عدد الكروبات الان ↫ { '..#group..' }'..ALOMDAgp1..''..ALOMDAgp2..'\n⌁︙العدد الحقيقي الان  ↫ ( '..ALOMDAgp3..' ) \n ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1,'⌁︙عدد الكروبات الان ↫ { '..#group..' }'..ALOMDAgp1..''..ALOMDAgp2..'\n⌁︙العدد الحقيقي الان  ↫ ( '..ALOMDAgp3..' ) \n ', 1, 'md')
 end end
 end,nil)
 end
@@ -6914,26 +6914,26 @@ end
 end
 --     Source ALOMDA     --
 if text == "تفعيل امسح" and Constructor(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل امسح بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Lock:Clean'..msg.chat_id_,true)  
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل امسح بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Lock:Clean'..msg.chat_id_,true)  
 end
 if text == "تعطيل امسح" and Constructor(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل امسح بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Lock:Clean'..msg.chat_id_) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل امسح بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Lock:Clean'..msg.chat_id_) 
 end
 if Cleaner(msg) then
-if DevAbs:get(ALOMDA..'Abs:Lock:Clean'..msg.chat_id_) then 
+if Deviven:get(ALOMDA..'iven:Lock:Clean'..msg.chat_id_) then 
 if text == "الميديا" and SourceCh(msg) or text == "عدد الميديا" and SourceCh(msg) then 
-local M = DevAbs:scard(ALOMDA.."Abs:cleaner"..msg.chat_id_)
+local M = Deviven:scard(ALOMDA.."iven:cleaner"..msg.chat_id_)
 if M ~= 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙عدد الميديا ↫ "..M, 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙عدد الميديا ↫ "..M, 1, 'md') 
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لاتوجد ميديا هنا", 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لاتوجد ميديا هنا", 1, 'md') 
 end end
 if text == "امسح" and SourceCh(msg) or text == "تنظيف ميديا" and SourceCh(msg) or text == "تنظيف الميديا" and SourceCh(msg) then
-local List = DevAbs:smembers(ALOMDA.."Abs:cleaner"..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA.."iven:cleaner"..msg.chat_id_)
 local Del = 0
 for k,v in pairs(List) do
 Del = (Del + 1)
@@ -6942,34 +6942,34 @@ DeleteMessage(msg.chat_id_,{[0]=Message})
 Message = Message - 1048576 
 end
 if Del ~= 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف "..Del.." من الميديا", 1, 'md') 
-DevAbs:del(ALOMDA.."Abs:cleaner"..msg.chat_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف "..Del.." من الميديا", 1, 'md') 
+Deviven:del(ALOMDA.."iven:cleaner"..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لاتوجد ميديا هنا", 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لاتوجد ميديا هنا", 1, 'md') 
 end end 
 end
 end
 --     Source ALOMDA     --
 if Admin(msg) then
 if text == "تنظيف تعديل" or text == "تنظيف التعديل" and SourceCh(msg) then   
-Abs_Del = {[0]= msg.id_}
+iven_Del = {[0]= msg.id_}
 local Message = msg.id_
 for i=1,100 do
 Message = Message - 1048576
-Abs_Del[i] = Message
+iven_Del[i] = Message
 end
-tdcli_function({ID = "GetMessages",chat_id_ = msg.chat_id_,message_ids_ = Abs_Del},function(arg,data)
+tdcli_function({ID = "GetMessages",chat_id_ = msg.chat_id_,message_ids_ = iven_Del},function(arg,data)
 new = 0
-Abs_Del2 = {}
+iven_Del2 = {}
 for i=0 ,data.total_count_ do
 if data.messages_[i] and (not data.messages_[i].edit_date_ or data.messages_[i].edit_date_ ~= 0) then
-Abs_Del2[new] = data.messages_[i].id_
+iven_Del2[new] = data.messages_[i].id_
 new = new + 1
 end
 end
-DeleteMessage(msg.chat_id_,Abs_Del2)
+DeleteMessage(msg.chat_id_,iven_Del2)
 end,nil)  
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم تنظيف 100 من الرسائل المعدله', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم تنظيف 100 من الرسائل المعدله', 1, 'md')
 end
 --     Source ALOMDA     --
 if ChatType == 'sp' or ChatType == 'gp'  then
@@ -6977,77 +6977,77 @@ if Admin(msg) then
 if text and text:match("^فتح (.*)$") then
 local UnLockText = {string.match(text, "^(فتح) (.*)$")}
 if UnLockText[2] == "التعديل" then
-if DevAbs:get(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح التعديل")  
-DevAbs:del(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙التعديل بالفعل مفتوح في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙التعديل بالفعل مفتوح في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "التعديل الميديا" or UnLockText[2] == "تعديل الميديا" then
-if DevAbs:get(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح تعديل الميديا")  
-DevAbs:del(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تعديل الميديا بالفعل مفتوح في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تعديل الميديا بالفعل مفتوح في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الفارسيه" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Farsi'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Farsi'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الفارسيه")  
-DevAbs:del(ALOMDA..'Abs:Lock:Farsi'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Farsi'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الفارسيه بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الفارسيه بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الفشار" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Fshar'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Fshar'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الفشار")  
-DevAbs:set(ALOMDA..'Abs:Lock:Fshar'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Fshar'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الفشار بالفعل مفتوح في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الفشار بالفعل مفتوح في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الطائفيه" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Taf'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Taf'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الطائفيه")  
-DevAbs:set(ALOMDA..'Abs:Lock:Taf'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Taf'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الطائفيه بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الطائفيه بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الكفر" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Kfr'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Kfr'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الكفر")  
-DevAbs:set(ALOMDA..'Abs:Lock:Kfr'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Kfr'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الكفر بالفعل مفتوح في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الكفر بالفعل مفتوح في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الفارسيه بالطرد" then
-if DevAbs:get(ALOMDA..'Abs:Lock:FarsiBan'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:FarsiBan'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الفارسيه بالطرد")  
-DevAbs:del(ALOMDA..'Abs:Lock:FarsiBan'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:FarsiBan'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الفارسيه بالطرد بالفعل مفتوحه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الفارسيه بالطرد بالفعل مفتوحه', 1, 'md')
 end
 end
 if UnLockText[2] == "البوتات" or UnLockText[2] == "البوتات بالطرد" or UnLockText[2] == "البوتات بالتقييد" or UnLockText[2] == "البوتات بالتقيد" then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح البوتات")  
-DevAbs:del(ALOMDA.."Abs:Lock:Bots"..msg.chat_id_)  
+Deviven:del(ALOMDA.."iven:Lock:Bots"..msg.chat_id_)  
 end
 if UnLockText[2] == "التكرار" then 
-DevAbs:hdel(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_ ,"Spam:User")  
+Deviven:hdel(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_ ,"Spam:User")  
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح التكرار")  
 end
 if BasicConstructor(msg) then
 if UnLockText[2] == "التثبيت" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Pin'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Pin'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح التثبيت")  
-DevAbs:del(ALOMDA..'Abs:Lock:Pin'..msg.chat_id_)
-DevAbs:srem(ALOMDA.."Abs:Lock:Pinpin",msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Pin'..msg.chat_id_)
+Deviven:srem(ALOMDA.."iven:Lock:Pinpin",msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙التثبيت بالفعل مفتوح في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙التثبيت بالفعل مفتوح في المجموعه', 1, 'md')
 end end end
 end
 end
@@ -7056,179 +7056,179 @@ if Admin(msg) then
 if text and text:match("^قفل (.*)$") then
 local LockText = {string.match(text, "^(قفل) (.*)$")}
 if LockText[2] == "الدردشه" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Text'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Text'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الدردشه")  
-DevAbs:set(ALOMDA..'Abs:Lock:Text'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Text'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الدردشه بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الدردشه بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الاونلاين" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Inline'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Inline'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الاونلاين")  
-DevAbs:set(ALOMDA..'Abs:Lock:Inline'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Inline'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الاونلاين بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الاونلاين بالفعل مقفل في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الصور" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Photo'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Photo'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الصور")  
-DevAbs:set(ALOMDA..'Abs:Lock:Photo'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Photo'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الصور بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الصور بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الكلايش" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Spam'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Spam'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الكلايش")  
-DevAbs:set(ALOMDA..'Abs:Lock:Spam'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Spam'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الكلايش بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الكلايش بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الدخول" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Join'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Join'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الدخول")  
-DevAbs:set(ALOMDA..'Abs:Lock:Join'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Join'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الدخول بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الدخول بالفعل مقفل في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الفيديو" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Videos'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Videos'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الفيديو")  
-DevAbs:set(ALOMDA..'Abs:Lock:Videos'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Videos'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الفيديو بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الفيديو بالفعل مقفل في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "المتحركه" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Gifs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Gifs'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل المتحركه")  
-DevAbs:set(ALOMDA..'Abs:Lock:Gifs'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Gifs'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المتحركه بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المتحركه بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الاغاني" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Music'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Music'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الاغاني")  
-DevAbs:set(ALOMDA..'Abs:Lock:Music'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Music'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الاغاني بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الاغاني بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الصوت" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Voice'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Voice'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الصوت")  
-DevAbs:set(ALOMDA..'Abs:Lock:Voice'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Voice'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الصوت بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الصوت بالفعل مقفل في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الروابط" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الروابط")  
-DevAbs:set(ALOMDA..'Abs:Lock:Links'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Links'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الروابط بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الروابط بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "المواقع" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Location'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Location'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل المواقع")  
-DevAbs:set(ALOMDA..'Abs:Lock:Location'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Location'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المواقع بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المواقع بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "المعرف" or LockText[2] == "المعرفات" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل المعرفات")  
-DevAbs:set(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Tags'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المعرفات بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المعرفات بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الملفات" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Document'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Document'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الملفات")  
-DevAbs:set(ALOMDA..'Abs:Lock:Document'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Document'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الملفات بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الملفات بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الهاشتاك" or LockText[2] == "التاك" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الهاشتاك")  
-DevAbs:set(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الهاشتاك بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الهاشتاك بالفعل مقفل في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الجهات" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Contact'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Contact'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الجهات")  
-DevAbs:set(ALOMDA..'Abs:Lock:Contact'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Contact'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '️⌁︙الجهات بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '️⌁︙الجهات بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الشبكات" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الشبكات")  
-DevAbs:set(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_,true) 
+Deviven:set(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_,true) 
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الشبكات بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الشبكات بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "العربيه" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل العربيه")  
-DevAbs:set(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العربيه بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العربيه بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الانكليزيه" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الانكليزيه")  
-DevAbs:set(ALOMDA..'Abs:Lock:English'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:English'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الانكليزيه بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الانكليزيه بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الملصقات" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Stickers'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Stickers'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الملصقات")  
-DevAbs:set(ALOMDA..'Abs:Lock:Stickers'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Stickers'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الملصقات بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الملصقات بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الماركداون" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Markdown'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Markdown'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الماركداون")  
-DevAbs:set(ALOMDA..'Abs:Lock:Markdown'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Markdown'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الماركداون بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الماركداون بالفعل مقفل في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "الاشعارات" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:TagServr'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:TagServr'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل الاشعارات")  
-DevAbs:set(ALOMDA..'Abs:Lock:TagServr'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:TagServr'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الاشعارات بالفعل مقفله في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الاشعارات بالفعل مقفله في المجموعه', 1, 'md')
 end
 end
 if LockText[2] == "التوجيه" then
-if not DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل التوجيه")  
-DevAbs:set(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_,true)
+Deviven:set(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_,true)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙التوجيه بالفعل مقفل في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙التوجيه بالفعل مقفل في المجموعه', 1, 'md')
 end
 end
 end
@@ -7238,179 +7238,179 @@ if Admin(msg) then
 if text and text:match("^فتح (.*)$") then
 local UnLockText = {string.match(text, "^(فتح) (.*)$")}
 if UnLockText[2] == "الدردشه" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Text'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Text'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الدردشه")  
-DevAbs:del(ALOMDA..'Abs:Lock:Text'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Text'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الدردشه بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الدردشه بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الصور" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Photo'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Photo'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الصور")  
-DevAbs:del(ALOMDA..'Abs:Lock:Photo'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Photo'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الصور بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الصور بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الكلايش" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Spam'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Spam'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الكلايش")  
-DevAbs:del(ALOMDA..'Abs:Lock:Spam'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Spam'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الكلايش بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الكلايش بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الدخول" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Join'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Join'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الدخول")  
-DevAbs:del(ALOMDA..'Abs:Lock:Join'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Join'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الدخول بالفعل مفتوح في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الدخول بالفعل مفتوح في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الفيديو" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Videos'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Videos'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الفيديو")  
-DevAbs:del(ALOMDA..'Abs:Lock:Videos'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Videos'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الفيديو بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الفيديو بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الملفات" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Document'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Document'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الملفات")  
-DevAbs:del(ALOMDA..'Abs:Lock:Document'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Document'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الملفات بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الملفات بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الاونلاين" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Inline'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Inline'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الاونلاين")  
-DevAbs:del(ALOMDA..'Abs:Lock:Inline'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Inline'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الاونلاين بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الاونلاين بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الماركداون" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Markdown'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Markdown'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الماركداون")  
-DevAbs:del(ALOMDA..'Abs:Lock:Markdown'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Markdown'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الماركداون بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الماركداون بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "المتحركه" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Gifs'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Gifs'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح المتحركه")  
-DevAbs:del(ALOMDA..'Abs:Lock:Gifs'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Gifs'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المتحركه بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المتحركه بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الاغاني" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Music'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Music'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الاغاني")  
-DevAbs:del(ALOMDA..'Abs:Lock:Music'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Music'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الاغاني بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الاغاني بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الصوت" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Voice'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Voice'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الصوت")  
-DevAbs:del(ALOMDA..'Abs:Lock:Voice'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Voice'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الصوت بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الصوت بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الروابط" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الروابط")  
-DevAbs:del(ALOMDA..'Abs:Lock:Links'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Links'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الروابط بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الروابط بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "المواقع" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Location'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Location'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح المواقع")  
-DevAbs:del(ALOMDA..'Abs:Lock:Location'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Location'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المواقع بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المواقع بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "المعرف" or UnLockText[2] == "المعرفات" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح المعرفات")  
-DevAbs:del(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Tags'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المعرفات بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المعرفات بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الهاشتاك" or UnLockText[2] == "التاك" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الهاشتاك")  
-DevAbs:del(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الهاشتاك بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الهاشتاك بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الجهات" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Contact'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Contact'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الجهات")  
-DevAbs:del(ALOMDA..'Abs:Lock:Contact'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Contact'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الجهات بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الجهات بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الشبكات" then
-if DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الشبكات")  
-DevAbs:del(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الشبكات بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الشبكات بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "العربيه" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح العربيه")  
-DevAbs:del(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙العربيه بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙العربيه بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الانكليزيه" then
-if DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الانكليزيه")  
-DevAbs:del(ALOMDA..'Abs:Lock:English'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:English'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الانكليزيه بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الانكليزيه بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الاشعارات" then
-if DevAbs:get(ALOMDA..'Abs:Lock:TagServr'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:TagServr'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الاشعارات")  
-DevAbs:del(ALOMDA..'Abs:Lock:TagServr'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:TagServr'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الاشعارات بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الاشعارات بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "الملصقات" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Stickers'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Stickers'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح الملصقات")  
-DevAbs:del(ALOMDA..'Abs:Lock:Stickers'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Stickers'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙الملصقات بالفعل مفتوحه في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙الملصقات بالفعل مفتوحه في المجموعه', 1, 'md')
 end
 end
 if UnLockText[2] == "التوجيه" then
-if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح التوجيه")  
-DevAbs:del(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙التوجيه بالفعل مفتوح في المجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙التوجيه بالفعل مفتوح في المجموعه', 1, 'md')
 end
 end
 end
@@ -7418,24 +7418,24 @@ end
 --     Source ALOMDA     --
 if text and text:match("^قفل التفليش$") or text and text:match("^تفعيل الحمايه القصوى$") then
 if not Constructor(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمنشئين فقط', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمنشئين فقط', 1, 'md')
 else
-DevAbs:set(ALOMDA.."Abs:Lock:Bots"..msg.chat_id_,"del") DevAbs:hset(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_ ,"Spam:User","keed") 
-LockList ={'Abs:Lock:Links','Abs:Lock:Contact','Abs:Lock:Forwards','Abs:Lock:Videos','Abs:Lock:Gifs','Abs:Lock:EditMsgs','Abs:Lock:Stickers','Abs:Lock:Farsi','Abs:Lock:Spam','Abs:Lock:WebLinks','Abs:Lock:Photo'}
+Deviven:set(ALOMDA.."iven:Lock:Bots"..msg.chat_id_,"del") Deviven:hset(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_ ,"Spam:User","keed") 
+LockList ={'iven:Lock:Links','iven:Lock:Contact','iven:Lock:Forwards','iven:Lock:Videos','iven:Lock:Gifs','iven:Lock:EditMsgs','iven:Lock:Stickers','iven:Lock:Farsi','iven:Lock:Spam','iven:Lock:WebLinks','iven:Lock:Photo'}
 for i,Lock in pairs(LockList) do
-DevAbs:set(ALOMDA..Lock..msg.chat_id_,true)
+Deviven:set(ALOMDA..Lock..msg.chat_id_,true)
 end
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل التفليش")  
 end
 end
 if text and text:match("^فتح التفليش$") then
 if not Constructor(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمنشئين فقط', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمنشئين فقط', 1, 'md')
 else
-DevAbs:hdel(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_ ,"Spam:User") 
-UnLockList ={'Abs:Lock:Links','Abs:Lock:Contact','Abs:Lock:Forwards','Abs:Lock:Videos','Abs:Lock:Gifs','Abs:Lock:EditMsgs','Abs:Lock:Stickers','Abs:Lock:Farsi','Abs:Lock:Spam','Abs:Lock:WebLinks','Abs:Lock:Photo'}
+Deviven:hdel(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_ ,"Spam:User") 
+UnLockList ={'iven:Lock:Links','iven:Lock:Contact','iven:Lock:Forwards','iven:Lock:Videos','iven:Lock:Gifs','iven:Lock:EditMsgs','iven:Lock:Stickers','iven:Lock:Farsi','iven:Lock:Spam','iven:Lock:WebLinks','iven:Lock:Photo'}
 for i,UnLock in pairs(UnLockList) do
-DevAbs:del(ALOMDA..UnLock..msg.chat_id_)
+Deviven:del(ALOMDA..UnLock..msg.chat_id_)
 end
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح التفليش")  
 end
@@ -7443,25 +7443,25 @@ end
 --     Source ALOMDA     --
 if text and text:match("^قفل الكل$") then
 if not Constructor(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمنشئين فقط', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمنشئين فقط', 1, 'md')
 else
-DevAbs:del(ALOMDA..'Abs:Lock:Fshar'..msg.chat_id_) DevAbs:del(ALOMDA..'Abs:Lock:Taf'..msg.chat_id_) DevAbs:del(ALOMDA..'Abs:Lock:Kfr'..msg.chat_id_) 
-DevAbs:set(ALOMDA.."Abs:Lock:Bots"..msg.chat_id_,"del") DevAbs:hset(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_ ,"Spam:User","keed") 
-LockList ={'Abs:Lock:EditMsgs','Abs:Lock:Farsi','Abs:Lock:TagServr','Abs:Lock:Inline','Abs:Lock:Photo','Abs:Lock:Spam','Abs:Lock:Videos','Abs:Lock:Gifs','Abs:Lock:Music','Abs:Lock:Voice','Abs:Lock:Links','Abs:Lock:Location','Abs:Lock:Tags','Abs:Lock:Stickers','Abs:Lock:Markdown','Abs:Lock:Forwards','Abs:Lock:Document','Abs:Lock:Contact','Abs:Lock:Hashtak','Abs:Lock:WebLinks'}
+Deviven:del(ALOMDA..'iven:Lock:Fshar'..msg.chat_id_) Deviven:del(ALOMDA..'iven:Lock:Taf'..msg.chat_id_) Deviven:del(ALOMDA..'iven:Lock:Kfr'..msg.chat_id_) 
+Deviven:set(ALOMDA.."iven:Lock:Bots"..msg.chat_id_,"del") Deviven:hset(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_ ,"Spam:User","keed") 
+LockList ={'iven:Lock:EditMsgs','iven:Lock:Farsi','iven:Lock:TagServr','iven:Lock:Inline','iven:Lock:Photo','iven:Lock:Spam','iven:Lock:Videos','iven:Lock:Gifs','iven:Lock:Music','iven:Lock:Voice','iven:Lock:Links','iven:Lock:Location','iven:Lock:Tags','iven:Lock:Stickers','iven:Lock:Markdown','iven:Lock:Forwards','iven:Lock:Document','iven:Lock:Contact','iven:Lock:Hashtak','iven:Lock:WebLinks'}
 for i,Lock in pairs(LockList) do
-DevAbs:set(ALOMDA..Lock..msg.chat_id_,true)
+Deviven:set(ALOMDA..Lock..msg.chat_id_,true)
 end
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم قفل جميع الاوامر")  
 end
 end
 if text and text:match("^فتح الكل$") then
 if not Constructor(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمنشئين فقط', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمنشئين فقط', 1, 'md')
 else
-DevAbs:set(ALOMDA..'Abs:Lock:Fshar'..msg.chat_id_,true) DevAbs:set(ALOMDA..'Abs:Lock:Taf'..msg.chat_id_,true) DevAbs:set(ALOMDA..'Abs:Lock:Kfr'..msg.chat_id_,true) DevAbs:hdel(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_ ,"Spam:User") 
-UnLockList ={'Abs:Lock:EditMsgs','Abs:Lock:Text','Abs:Lock:Arabic','Abs:Lock:English','Abs:Lock:Join','Abs:Lock:Bots','Abs:Lock:Farsi','Abs:Lock:FarsiBan','Abs:Lock:TagServr','Abs:Lock:Inline','Abs:Lock:Photo','Abs:Lock:Spam','Abs:Lock:Videos','Abs:Lock:Gifs','Abs:Lock:Music','Abs:Lock:Voice','Abs:Lock:Links','Abs:Lock:Location','Abs:Lock:Tags','Abs:Lock:Stickers','Abs:Lock:Markdown','Abs:Lock:Forwards','Abs:Lock:Document','Abs:Lock:Contact','Abs:Lock:Hashtak','Abs:Lock:WebLinks'}
+Deviven:set(ALOMDA..'iven:Lock:Fshar'..msg.chat_id_,true) Deviven:set(ALOMDA..'iven:Lock:Taf'..msg.chat_id_,true) Deviven:set(ALOMDA..'iven:Lock:Kfr'..msg.chat_id_,true) Deviven:hdel(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_ ,"Spam:User") 
+UnLockList ={'iven:Lock:EditMsgs','iven:Lock:Text','iven:Lock:Arabic','iven:Lock:English','iven:Lock:Join','iven:Lock:Bots','iven:Lock:Farsi','iven:Lock:FarsiBan','iven:Lock:TagServr','iven:Lock:Inline','iven:Lock:Photo','iven:Lock:Spam','iven:Lock:Videos','iven:Lock:Gifs','iven:Lock:Music','iven:Lock:Voice','iven:Lock:Links','iven:Lock:Location','iven:Lock:Tags','iven:Lock:Stickers','iven:Lock:Markdown','iven:Lock:Forwards','iven:Lock:Document','iven:Lock:Contact','iven:Lock:Hashtak','iven:Lock:WebLinks'}
 for i,UnLock in pairs(UnLockList) do
-DevAbs:del(ALOMDA..UnLock..msg.chat_id_)
+Deviven:del(ALOMDA..UnLock..msg.chat_id_)
 end
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم فتح جميع الاوامر")  
 end
@@ -7471,10 +7471,10 @@ if Admin(msg) then
 if text and (text:match("^ضع سبام (%d+)$") or text:match("^وضع سبام (%d+)$")) then
 local SetSpam = text:match("ضع سبام (%d+)$") or text:match("وضع سبام (%d+)$")
 if tonumber(SetSpam) < 40 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙اختر عدد اكبر من 40 حرف ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙اختر عدد اكبر من 40 حرف ', 1, 'md')
 else
-DevAbs:set(ALOMDA..'Abs:Spam:Text'..msg.chat_id_,SetSpam)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم وضع عدد السبام ↫'..SetSpam, 1, 'md')
+Deviven:set(ALOMDA..'iven:Spam:Text'..msg.chat_id_,SetSpam)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم وضع عدد السبام ↫'..SetSpam, 1, 'md')
 end
 end
 end
@@ -7490,58 +7490,58 @@ if GetInfo.result.can_invite_users == true then INV = '✔️' else INV = '✖�
 if GetInfo.result.can_pin_messages == true then PIN = '✔️' else PIN = '✖️' end
 if GetInfo.result.can_restrict_members == true then BAN = '✔️' else BAN = '✖️' end
 if GetInfo.result.can_promote_members == true then VIP = '✔️' else VIP = '✖️' end 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙صلاحيات البوت هي ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙حذف الرسائل ↫ '..DEL..'\n⌁︙دعوة المستخدمين ↫ '..INV..'\n⌁︙حظر المستخدمين ↫ '..BAN..'\n⌁︙تثبيت الرسائل ↫ '..PIN..'\n⌁︙تغيير المعلومات ↫ '..EDT..'\n⌁︙اضافة مشرفين ↫ '..VIP..'\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙صلاحيات البوت هي ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙حذف الرسائل ↫ '..DEL..'\n⌁︙دعوة المستخدمين ↫ '..INV..'\n⌁︙حظر المستخدمين ↫ '..BAN..'\n⌁︙تثبيت الرسائل ↫ '..PIN..'\n⌁︙تغيير المعلومات ↫ '..EDT..'\n⌁︙اضافة مشرفين ↫ '..VIP..'\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉', 1, 'md')
 end end
 if text and text:match("^تغير رد المطور (.*)$") then
 local Text = text:match("^تغير رد المطور (.*)$") 
-DevAbs:set(ALOMDA.."Abs:SudoBot:Rd"..msg.chat_id_,Text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المطور الى ↫ "..Text, 1, 'md')
+Deviven:set(ALOMDA.."iven:SudoBot:Rd"..msg.chat_id_,Text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المطور الى ↫ "..Text, 1, 'md')
 end
 if text and text:match("^تغير رد منشئ الاساسي (.*)$") then
 local Text = text:match("^تغير رد منشئ الاساسي (.*)$") 
-DevAbs:set(ALOMDA.."Abs:BasicConstructor:Rd"..msg.chat_id_,Text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المنشئ الاساسي الى ↫ "..Text, 1, 'md')
+Deviven:set(ALOMDA.."iven:BasicConstructor:Rd"..msg.chat_id_,Text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المنشئ الاساسي الى ↫ "..Text, 1, 'md')
 end
 if text and text:match("^تغير رد المنشئ (.*)$") then
 local Text = text:match("^تغير رد المنشئ (.*)$") 
-DevAbs:set(ALOMDA.."Abs:Constructor:Rd"..msg.chat_id_,Text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المنشئ الى ↫ "..Text, 1, 'md')
+Deviven:set(ALOMDA.."iven:Constructor:Rd"..msg.chat_id_,Text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المنشئ الى ↫ "..Text, 1, 'md')
 end
 if text and text:match("^تغير رد المدير (.*)$") then
 local Text = text:match("^تغير رد المدير (.*)$") 
-DevAbs:set(ALOMDA.."Abs:Managers:Rd"..msg.chat_id_,Text) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المدير الى ↫ "..Text, 1, 'md')
+Deviven:set(ALOMDA.."iven:Managers:Rd"..msg.chat_id_,Text) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المدير الى ↫ "..Text, 1, 'md')
 end
 if text and text:match("^تغير رد الادمن (.*)$") then
 local Text = text:match("^تغير رد الادمن (.*)$") 
-DevAbs:set(ALOMDA.."Abs:Admins:Rd"..msg.chat_id_,Text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد الادمن الى ↫ "..Text, 1, 'md')
+Deviven:set(ALOMDA.."iven:Admins:Rd"..msg.chat_id_,Text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد الادمن الى ↫ "..Text, 1, 'md')
 end
 if text and text:match("^تغير رد المميز (.*)$") then
 local Text = text:match("^تغير رد المميز (.*)$") 
-DevAbs:set(ALOMDA.."Abs:VipMem:Rd"..msg.chat_id_,Text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المميز الى ↫ "..Text, 1, 'md')
+Deviven:set(ALOMDA.."iven:VipMem:Rd"..msg.chat_id_,Text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المميز الى ↫ "..Text, 1, 'md')
 end
 if text and text:match("^تغير رد المنظف (.*)$") then
 local Text = text:match("^تغير رد المنظف (.*)$") 
-DevAbs:set(ALOMDA.."Abs:Cleaner:Rd"..msg.chat_id_,Text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المنظف الى ↫ "..Text, 1, 'md')
+Deviven:set(ALOMDA.."iven:Cleaner:Rd"..msg.chat_id_,Text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد المنظف الى ↫ "..Text, 1, 'md')
 end
 if text and text:match("^تغير رد العضو (.*)$") then
 local Text = text:match("^تغير رد العضو (.*)$") 
-DevAbs:set(ALOMDA.."Abs:mem:Rd"..msg.chat_id_,Text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد العضو الى ↫ "..Text, 1, 'md')
+Deviven:set(ALOMDA.."iven:mem:Rd"..msg.chat_id_,Text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم تغير رد العضو الى ↫ "..Text, 1, 'md')
 end
 if text == "حذف ردود الرتب" or text == "مسح ردود الرتب" then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف جميع ردود الرتب", 1, 'md')
-DevAbs:del(ALOMDA.."Abs:mem:Rd"..msg.chat_id_)
-DevAbs:del(ALOMDA.."Abs:Cleaner:Rd"..msg.chat_id_)
-DevAbs:del(ALOMDA.."Abs:VipMem:Rd"..msg.chat_id_)
-DevAbs:del(ALOMDA.."Abs:Admins:Rd"..msg.chat_id_)
-DevAbs:del(ALOMDA.."Abs:Managers:Rd"..msg.chat_id_)
-DevAbs:del(ALOMDA.."Abs:Constructor:Rd"..msg.chat_id_)
-DevAbs:del(ALOMDA.."Abs:BasicConstructor:Rd"..msg.chat_id_)
-DevAbs:del(ALOMDA.."Abs:SudoBot:Rd"..msg.chat_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف جميع ردود الرتب", 1, 'md')
+Deviven:del(ALOMDA.."iven:mem:Rd"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:Cleaner:Rd"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:VipMem:Rd"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:Admins:Rd"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:Managers:Rd"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:Constructor:Rd"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:BasicConstructor:Rd"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:SudoBot:Rd"..msg.chat_id_)
 end
 end
 --     Source ALOMDA     --
@@ -7563,12 +7563,12 @@ ab = ' ✯'
 end
 text = text.."~ [@"..data.username_..']'..ab.."\n"
 if #admins == 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتوجد بوتات هنا*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتوجد بوتات هنا*", 1, 'md')
 return false end
 if #admins == i then 
 local a = '┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙*عدد البوتات هنا* ↫ '..n..'\n'
 local f = '⌁︙*عدد البوتات المرفوعه* ↫ '..t..'\n⌁︙*ملاحضه علامة الـ*✯ *تعني ان البوت ادمن في هذه المجموعه*'
-Dev_Abs(msg.chat_id_, msg.id_, 1, text..a..f, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, text..a..f, 1, 'md')
 end
 end,nil)
 end
@@ -7589,9 +7589,9 @@ end
 c = c + 1
 end     
 if (c - x) == 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*لاتوجد بوتات هنا*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*لاتوجد بوتات هنا*", 1, 'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙*عدد البوتات هنا* ↫ "..c.."\n⌁︙*عدد البوتات المرفوعه* ↫ "..x.."\n⌁︙*تم طرد* ↫ "..(c - x).." *من البوتات*", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙*عدد البوتات هنا* ↫ "..c.."\n⌁︙*عدد البوتات المرفوعه* ↫ "..x.."\n⌁︙*تم طرد* ↫ "..(c - x).." *من البوتات*", 1, 'md')
 end 
 end,nil)  
 end 
@@ -7604,106 +7604,106 @@ local txts = {string.match(text, "^(حذف) (.*)$")}
 local txtss = {string.match(text, "^(مسح) (.*)$")}
 if Sudo(msg) then 
 if txts[2] == 'الثانويين' or txtss[2] == 'الثانويين' or txts[2] == 'المطورين الثانويين' or txtss[2] == 'المطورين الثانويين' then
-DevAbs:del(ALOMDA..'Abs:SecondSudo:')
+Deviven:del(ALOMDA..'iven:SecondSudo:')
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المطورين الثانويين")  
 end
 end
 if SecondSudo(msg) then 
 if txts[2] == 'المطورين' or txtss[2] == 'المطورين' then
-DevAbs:del(ALOMDA..'Abs:SudoBot:')
+Deviven:del(ALOMDA..'iven:SudoBot:')
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المطورين")  
 end
 if txts[2] == 'قائمه العام' or txtss[2] == 'قائمه العام' then
-DevAbs:del(ALOMDA..'Abs:BanAll:')
-DevAbs:del(ALOMDA..'Abs:MuteAll:')
+Deviven:del(ALOMDA..'iven:BanAll:')
+Deviven:del(ALOMDA..'iven:MuteAll:')
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف قائمة العام")  
 end
 end
 if SudoBot(msg) then
 if txts[2] == 'الادمنيه العامين' or txts[2] == 'الادمنيه العام' or txtss[2] == 'الادمنيه العامين' or txtss[2] == 'الادمنيه العام' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف الادمنيه العامين")  
-DevAbs:del(ALOMDA..'Abs:AdminAll:')
+Deviven:del(ALOMDA..'iven:AdminAll:')
 end
 if txts[2] == 'المميزين عام' or txts[2] == 'المميزين العامين' or txtss[2] == 'المميزين عام' or txtss[2] == 'المميزين العامين' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المميزين عام")  
-DevAbs:del(ALOMDA..'Abs:VipAll:')
+Deviven:del(ALOMDA..'iven:VipAll:')
 end
 if txts[2] == 'المدراء العامين' or txts[2] == 'المدراء العام' or txtss[2] == 'المدراء العامين' or txtss[2] == 'المدراء العام' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المدراء العامين")  
-DevAbs:del(ALOMDA..'Abs:ManagerAll:')
+Deviven:del(ALOMDA..'iven:ManagerAll:')
 end
 end
-if AbsConstructor(msg) then
+if ivenConstructor(msg) then
 if txts[2] == 'المنشئين الاساسيين' or txtss[2] == 'المنشئين الاساسيين' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المنشئين الاساسيين")  
-DevAbs:del(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_)
 end
 end
 if BasicConstructor(msg) then
 if txts[2] == 'المنشئين' or txtss[2] == 'المنشئين' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المنشئين")  
-DevAbs:del(ALOMDA..'Abs:Constructor:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Constructor:'..msg.chat_id_)
 end end
 if Constructor(msg) then
 if txts[2] == 'المدراء' or txtss[2] == 'المدراء' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المدراء")  
-DevAbs:del(ALOMDA..'Abs:Managers:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Managers:'..msg.chat_id_)
 end 
 if txts[2] == 'المنظفين' or txtss[2] == 'المنظفين' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المنظفين")  
-DevAbs:del(ALOMDA..'Abs:Cleaner:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Cleaner:'..msg.chat_id_)
 end end
 if Manager(msg) then
 if txts[2] == 'الادمنيه' or txtss[2] == 'الادمنيه' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف الادمنيه")  
-DevAbs:del(ALOMDA..'Abs:Admins:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Admins:'..msg.chat_id_)
 end
 end
 if txts[2] == 'المطايه' or txtss[2] == 'المطايه' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المطايه")  
-DevAbs:del(ALOMDA..'User:Donky:'..msg.chat_id_)
+Deviven:del(ALOMDA..'User:Donky:'..msg.chat_id_)
 end
 if txts[2] == 'الرابط' or txtss[2] == 'الرابط' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف رابط المجموعه")  
-DevAbs:del(ALOMDA.."Abs:Groups:Links"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:Groups:Links"..msg.chat_id_)
 end
 if txts[2] == 'المميزين' or txtss[2] == 'المميزين' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المميزين")  
-DevAbs:del(ALOMDA..'Abs:VipMem:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:VipMem:'..msg.chat_id_)
 end
 if txts[2] == 'المكتومين' or txtss[2] == 'المكتومين' then
-DevAbs:del(ALOMDA..'Abs:Muted:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Muted:'..msg.chat_id_)
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المكتومين")  
 end
 if txts[2] == 'المقيدين' or txtss[2] == 'المقيدين' then     
-local List = DevAbs:smembers(ALOMDA..'Abs:Tkeed:'..msg.chat_id_)
+local List = Deviven:smembers(ALOMDA..'iven:Tkeed:'..msg.chat_id_)
 for k,v in pairs(List) do   
 HTTPS.request("https://api.telegram.org/bot"..TokenBot.."/restrictChatMember?chat_id="..msg.chat_id_.."&user_id="..v.."&can_send_messages=True&can_send_media_messages=True&can_send_other_messages=True&can_add_web_page_previews=True") 
-DevAbs:srem(ALOMDA..'Abs:Tkeed:'..msg.chat_id_, v)
+Deviven:srem(ALOMDA..'iven:Tkeed:'..msg.chat_id_, v)
 end 
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المقيدين")  
 end
 if txts[2] == 'قائمه المنع' or txtss[2] == 'قائمه المنع' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف قائمة المنع")  
-DevAbs:del(ALOMDA..'Abs:Filters:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Filters:'..msg.chat_id_)
 end
 if txts[2] == 'قوائم المنع' or txtss[2] == 'قوائم المنع' then
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف قوائم المنع")  
-DevAbs:del(ALOMDA..'Abs:Filters:'..msg.chat_id_)
-DevAbs:del(ALOMDA.."Abs:FilterAnimation"..msg.chat_id_)
-DevAbs:del(ALOMDA.."Abs:FilterPhoto"..msg.chat_id_)
-DevAbs:del(ALOMDA.."Abs:FilterSteckr"..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Filters:'..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:FilterAnimation"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:FilterPhoto"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:FilterSteckr"..msg.chat_id_)
 end
 if txts[2] == 'قائمه منع المتحركات' or txtss[2] == 'قائمه منع المتحركات' then     
-DevAbs:del(ALOMDA.."Abs:FilterAnimation"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:FilterAnimation"..msg.chat_id_)
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف قائمة منع المتحركات")  
 end
 if txts[2] == 'قائمه منع الصور' or txtss[2] == 'قائمه منع الصور' then     
-DevAbs:del(ALOMDA.."Abs:FilterPhoto"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:FilterPhoto"..msg.chat_id_)
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف قائمة منع الصور")  
 end
 if txts[2] == 'قائمه منع الملصقات' or txtss[2] == 'قائمه منع الملصقات' then     
-DevAbs:del(ALOMDA.."Abs:FilterSteckr"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:FilterSteckr"..msg.chat_id_)
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف قائمة منع الملصقات")  
 end
 end
@@ -7711,22 +7711,22 @@ end
 --     Source ALOMDA     --
 if text and text:match("^حذف القوائم$") and ChCheck(msg) or text and text:match("^مسح القوائم$") and ChCheck(msg) then
 if not BasicConstructor(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمنشئ الاساسي فقط', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمنشئ الاساسي فقط', 1, 'md')
 else
-DevAbs:del(ALOMDA..'Abs:Ban:'..msg.chat_id_) DevAbs:del(ALOMDA..'Abs:Admins:'..msg.chat_id_) DevAbs:del(ALOMDA..'User:Donky:'..msg.chat_id_) DevAbs:del(ALOMDA..'Abs:VipMem:'..msg.chat_id_) DevAbs:del(ALOMDA..'Abs:Filters:'..msg.chat_id_) DevAbs:del(ALOMDA..'Abs:Muted:'..msg.chat_id_)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف ↫ ❨ قائمة المنع • المحظورين • المكتومين • الادمنيه • المميزين • المطايه ❩ بنجاح \n ✓", 1, 'md')
+Deviven:del(ALOMDA..'iven:Ban:'..msg.chat_id_) Deviven:del(ALOMDA..'iven:Admins:'..msg.chat_id_) Deviven:del(ALOMDA..'User:Donky:'..msg.chat_id_) Deviven:del(ALOMDA..'iven:VipMem:'..msg.chat_id_) Deviven:del(ALOMDA..'iven:Filters:'..msg.chat_id_) Deviven:del(ALOMDA..'iven:Muted:'..msg.chat_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف ↫ ❨ قائمة المنع • المحظورين • المكتومين • الادمنيه • المميزين • المطايه ❩ بنجاح \n ✓", 1, 'md')
 end end
 --     Source ALOMDA     --
 if text and text:match("^حذف جميع الرتب$") and ChCheck(msg) or text and text:match("^مسح جميع الرتب$") and ChCheck(msg) or text and text:match("^تنزيل جميع الرتب$") and ChCheck(msg) then
-if not AbsConstructor(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لمنشئ المجموعه فقط', 1, 'md')
+if not ivenConstructor(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لمنشئ المجموعه فقط', 1, 'md')
 else
-local basicconstructor = DevAbs:smembers(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_)
-local constructor = DevAbs:smembers(ALOMDA..'Abs:Constructor:'..msg.chat_id_)
-local Managers = DevAbs:smembers(ALOMDA..'Abs:Managers:'..msg.chat_id_)
-local admins = DevAbs:smembers(ALOMDA..'Abs:Admins:'..msg.chat_id_)
-local vipmem = DevAbs:smembers(ALOMDA..'Abs:VipMem:'..msg.chat_id_)
-local donky = DevAbs:smembers(ALOMDA..'User:Donky:'..msg.chat_id_)
+local basicconstructor = Deviven:smembers(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_)
+local constructor = Deviven:smembers(ALOMDA..'iven:Constructor:'..msg.chat_id_)
+local Managers = Deviven:smembers(ALOMDA..'iven:Managers:'..msg.chat_id_)
+local admins = Deviven:smembers(ALOMDA..'iven:Admins:'..msg.chat_id_)
+local vipmem = Deviven:smembers(ALOMDA..'iven:VipMem:'..msg.chat_id_)
+local donky = Deviven:smembers(ALOMDA..'User:Donky:'..msg.chat_id_)
 if #basicconstructor ~= 0 then basicconstructort = 'المنشئين الاساسيين • ' else basicconstructort = '' end
 if #constructor ~= 0 then constructort = 'المنشئين • ' else constructort = '' end
 if #Managers ~= 0 then Managerst = 'المدراء • ' else Managerst = '' end
@@ -7734,79 +7734,79 @@ if #admins ~= 0 then adminst = 'الادمنيه • ' else adminst = '' end
 if #vipmem ~= 0 then vipmemt = 'المميزين • ' else vipmemt = '' end
 if #donky ~= 0 then donkyt = 'المطايه • ' else donkyt = '' end
 if #basicconstructor ~= 0 or #constructor ~= 0 or #Managers ~= 0 or #admins ~= 0 or #vipmem ~= 0 or #donky ~= 0 then 
-DevAbs:del(ALOMDA..'Abs:BasicConstructor:'..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:Constructor:'..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:Managers:'..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:Admins:'..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:VipMem:'..msg.chat_id_)
-DevAbs:del(ALOMDA..'User:Donky:'..msg.chat_id_)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف جميع الرتب التاليه ↫ ❨ "..basicconstructort..''..constructort..''..Managerst..''..adminst..''..vipmemt..''..donkyt.." ❩ بنجاح \n ✓", 1, 'md')
+Deviven:del(ALOMDA..'iven:BasicConstructor:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Constructor:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Managers:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Admins:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:VipMem:'..msg.chat_id_)
+Deviven:del(ALOMDA..'User:Donky:'..msg.chat_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف جميع الرتب التاليه ↫ ❨ "..basicconstructort..''..constructort..''..Managerst..''..adminst..''..vipmemt..''..donkyt.." ❩ بنجاح \n ✓", 1, 'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لاتوجد رتب هنا", 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لاتوجد رتب هنا", 1, 'md')
 end 
 end 
 end
 --     Source ALOMDA     --
 if Admin(msg) then 
 if text and text:match("^الاعدادات$") and ChCheck(msg) then
-if not DevAbs:get(ALOMDA..'Abs:Spam:Text'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Spam:Text'..msg.chat_id_) then
 spam_c = 400
 else
-spam_c = DevAbs:get(ALOMDA..'Abs:Spam:Text'..msg.chat_id_)
+spam_c = Deviven:get(ALOMDA..'iven:Spam:Text'..msg.chat_id_)
 end
 --     Source ALOMDA     --
-if DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_, "Spam:User") == "kick" then     
+if Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_, "Spam:User") == "kick" then     
 flood = "بالطرد"     
-elseif DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Spam:User") == "keed" then     
+elseif Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Spam:User") == "keed" then     
 flood = "بالتقيد"     
-elseif DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Spam:User") == "mute" then     
+elseif Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Spam:User") == "mute" then     
 flood = "بالكتم"           
-elseif DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Spam:User") == "del" then     
+elseif Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Spam:User") == "del" then     
 flood = "بالحذف"
 else     
 flood = "مفتوح"     
 end
 --     Source ALOMDA     --
-if DevAbs:get(ALOMDA.."Abs:Lock:Bots"..msg.chat_id_) == "del" then
+if Deviven:get(ALOMDA.."iven:Lock:Bots"..msg.chat_id_) == "del" then
 lock_bots = "بالحذف"
-elseif DevAbs:get(ALOMDA.."Abs:Lock:Bots"..msg.chat_id_) == "ked" then
+elseif Deviven:get(ALOMDA.."iven:Lock:Bots"..msg.chat_id_) == "ked" then
 lock_bots = "بالتقيد"   
-elseif DevAbs:get(ALOMDA.."Abs:Lock:Bots"..msg.chat_id_) == "kick" then
+elseif Deviven:get(ALOMDA.."iven:Lock:Bots"..msg.chat_id_) == "kick" then
 lock_bots = "بالطرد"    
 else
 lock_bots = "مفتوحه"    
 end
 --     Source ALOMDA     --
-if DevAbs:get(ALOMDA..'Abs:Lock:Text'..msg.chat_id_) then mute_text = 'مقفله' else mute_text = 'مفتوحه'end
-if DevAbs:get(ALOMDA..'Abs:Lock:Photo'..msg.chat_id_) then mute_photo = 'مقفله' else mute_photo = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Videos'..msg.chat_id_) then mute_video = 'مقفله' else mute_video = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Gifs'..msg.chat_id_) then mute_gifs = 'مقفله' else mute_gifs = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Music'..msg.chat_id_) then mute_music = 'مقفله' else mute_music = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Inline'..msg.chat_id_) then mute_in = 'مقفله' else mute_in = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Voice'..msg.chat_id_) then mute_voice = 'مقفله' else mute_voice = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_) then mute_edit = 'مقفله' else mute_edit = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then mute_links = 'مقفله' else mute_links = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Pin'..msg.chat_id_) then lock_pin = 'مقفله' else lock_pin = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Stickers'..msg.chat_id_) then lock_sticker = 'مقفله' else lock_sticker = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:TagServr'..msg.chat_id_) then lock_tgservice = 'مقفله' else lock_tgservice = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then lock_wp = 'مقفله' else lock_wp = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then lock_htag = 'مقفله' else lock_htag = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then lock_tag = 'مقفله' else lock_tag = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Location'..msg.chat_id_) then lock_location = 'مقفله' else lock_location = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Contact'..msg.chat_id_) then lock_contact = 'مقفله' else lock_contact = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then lock_english = 'مقفله' else lock_english = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then lock_arabic = 'مقفله' else lock_arabic = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then lock_forward = 'مقفله' else lock_forward = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Document'..msg.chat_id_) then lock_file = 'مقفله' else lock_file = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Markdown'..msg.chat_id_) then markdown = 'مقفله' else markdown = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Spam'..msg.chat_id_) then lock_spam = 'مقفله' else lock_spam = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Join'..msg.chat_id_) then lock_Join = 'مقفل' else lock_Join = 'مفتوح' end
-if DevAbs:get(ALOMDA.."Abs:Lock:Welcome"..msg.chat_id_) then send_welcome = 'مقفله' else send_welcome = 'مفتوحه' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Fshar'..msg.chat_id_) then lock_fshar = 'مفتوح' else lock_fshar = 'مقفل' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Kfr'..msg.chat_id_) then lock_kaf = 'مفتوح' else lock_kaf = 'مقفل' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Taf'..msg.chat_id_) then lock_taf = 'مفتوحه' else lock_taf = 'مقفله' end
-if DevAbs:get(ALOMDA..'Abs:Lock:Farsi'..msg.chat_id_) then lock_farsi = 'مقفله' else lock_farsi = 'مفتوحه' end
-local Flood_Num = DevAbs:hget(ALOMDA.."Abs:Spam:Group:User"..msg.chat_id_,"Num:Spam") or 5
+if Deviven:get(ALOMDA..'iven:Lock:Text'..msg.chat_id_) then mute_text = 'مقفله' else mute_text = 'مفتوحه'end
+if Deviven:get(ALOMDA..'iven:Lock:Photo'..msg.chat_id_) then mute_photo = 'مقفله' else mute_photo = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Videos'..msg.chat_id_) then mute_video = 'مقفله' else mute_video = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Gifs'..msg.chat_id_) then mute_gifs = 'مقفله' else mute_gifs = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Music'..msg.chat_id_) then mute_music = 'مقفله' else mute_music = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Inline'..msg.chat_id_) then mute_in = 'مقفله' else mute_in = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Voice'..msg.chat_id_) then mute_voice = 'مقفله' else mute_voice = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_) then mute_edit = 'مقفله' else mute_edit = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then mute_links = 'مقفله' else mute_links = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Pin'..msg.chat_id_) then lock_pin = 'مقفله' else lock_pin = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Stickers'..msg.chat_id_) then lock_sticker = 'مقفله' else lock_sticker = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:TagServr'..msg.chat_id_) then lock_tgservice = 'مقفله' else lock_tgservice = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then lock_wp = 'مقفله' else lock_wp = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then lock_htag = 'مقفله' else lock_htag = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then lock_tag = 'مقفله' else lock_tag = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Location'..msg.chat_id_) then lock_location = 'مقفله' else lock_location = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Contact'..msg.chat_id_) then lock_contact = 'مقفله' else lock_contact = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then lock_english = 'مقفله' else lock_english = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then lock_arabic = 'مقفله' else lock_arabic = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then lock_forward = 'مقفله' else lock_forward = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Document'..msg.chat_id_) then lock_file = 'مقفله' else lock_file = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Markdown'..msg.chat_id_) then markdown = 'مقفله' else markdown = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Spam'..msg.chat_id_) then lock_spam = 'مقفله' else lock_spam = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Join'..msg.chat_id_) then lock_Join = 'مقفل' else lock_Join = 'مفتوح' end
+if Deviven:get(ALOMDA.."iven:Lock:Welcome"..msg.chat_id_) then send_welcome = 'مقفله' else send_welcome = 'مفتوحه' end
+if Deviven:get(ALOMDA..'iven:Lock:Fshar'..msg.chat_id_) then lock_fshar = 'مفتوح' else lock_fshar = 'مقفل' end
+if Deviven:get(ALOMDA..'iven:Lock:Kfr'..msg.chat_id_) then lock_kaf = 'مفتوح' else lock_kaf = 'مقفل' end
+if Deviven:get(ALOMDA..'iven:Lock:Taf'..msg.chat_id_) then lock_taf = 'مفتوحه' else lock_taf = 'مقفله' end
+if Deviven:get(ALOMDA..'iven:Lock:Farsi'..msg.chat_id_) then lock_farsi = 'مقفله' else lock_farsi = 'مفتوحه' end
+local Flood_Num = Deviven:hget(ALOMDA.."iven:Spam:Group:User"..msg.chat_id_,"Num:Spam") or 5
 --     Source ALOMDA     --
 local TXTE = "⌁︙اعدادات المجموعه ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 .."⌁︙الروابط ↫ "..mute_links.."\n"
@@ -7842,54 +7842,54 @@ local TXTE = "⌁︙اعدادات المجموعه ↫ ⤈\n┉ ≈ ┉ ≈ ┉
 .."⌁︙عدد التكرار ↫ "..Flood_Num.."\n"
 .."⌁︙عدد السبام ↫ "..spam_c.."\n"
 .."┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙[Source Channel](https://t.me/src_web)\n"
-Dev_Abs(msg.chat_id_, msg.id_, 1, TXTE, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, TXTE, 1, 'md')
 end
 end
 --     Source ALOMDA     --
 if text and text:match("^كول (.*)$") then
 local txt = {string.match(text, "^(كول) (.*)$")}
-Dev_Abs(msg.chat_id_,0, 1, txt[2], 1, 'md')
+Dev_iven(msg.chat_id_,0, 1, txt[2], 1, 'md')
 DeleteMessage(msg.chat_id_,{[0] = msg.id_})
 end
 --     Source ALOMDA     --
-if DevAbs:get(ALOMDA..'Abs:setrules'..msg.chat_id_..':'..msg.sender_user_id_) then 
+if Deviven:get(ALOMDA..'iven:setrules'..msg.chat_id_..':'..msg.sender_user_id_) then 
 if text == 'الغاء' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ قوانين المجموعه', 1, 'md')
-DevAbs:del(ALOMDA..'Abs:setrules'..msg.chat_id_..':'..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء حفظ قوانين المجموعه', 1, 'md')
+Deviven:del(ALOMDA..'iven:setrules'..msg.chat_id_..':'..msg.sender_user_id_)
 return false  
 end 
-DevAbs:del(ALOMDA..'Abs:setrules'..msg.chat_id_..':'..msg.sender_user_id_)
-DevAbs:set(ALOMDA..'Abs:rules'..msg.chat_id_,text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ قوانين المجموعه', 1, 'md')
+Deviven:del(ALOMDA..'iven:setrules'..msg.chat_id_..':'..msg.sender_user_id_)
+Deviven:set(ALOMDA..'iven:rules'..msg.chat_id_,text)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حفظ قوانين المجموعه', 1, 'md')
 return false   
 end
 if text and text:match("^ضع قوانين$") and ChCheck(msg) or text and text:match("^وضع قوانين$") and ChCheck(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي القوانين الان', 1, 'md')
-DevAbs:set(ALOMDA..'Abs:setrules'..msg.chat_id_..':'..msg.sender_user_id_,true)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي القوانين الان', 1, 'md')
+Deviven:set(ALOMDA..'iven:setrules'..msg.chat_id_..':'..msg.sender_user_id_,true)
 end
 end
 if text and text:match("^القوانين$") then
-local rules = DevAbs:get(ALOMDA..'Abs:rules'..msg.chat_id_)
-Dev_Abs(msg.chat_id_, msg.id_, 1, rules, 1, nil)
+local rules = Deviven:get(ALOMDA..'iven:rules'..msg.chat_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, rules, 1, nil)
 end
 --     Source ALOMDA     --
 if text == "تفعيل الزخرفه" and Manager(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل الزخرفه بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Zrf:Abs'..msg.chat_id_) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل الزخرفه بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Zrf:iven'..msg.chat_id_) 
 end
 if text == "تعطيل الزخرفه" and Manager(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل الزخرفه بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Zrf:Abs'..msg.chat_id_,true)  
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل الزخرفه بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Zrf:iven'..msg.chat_id_,true)  
 end
-if DevAbs:get(ALOMDA..'Zrf:Abs'..msg.chat_id_..''..msg.sender_user_id_) then 
+if Deviven:get(ALOMDA..'Zrf:iven'..msg.chat_id_..''..msg.sender_user_id_) then 
 if text and text == 'الغاء' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر الزخرفه', 1, 'md')
-DevAbs:del(ALOMDA..'Zrf:Abs'..msg.chat_id_..''..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر الزخرفه', 1, 'md')
+Deviven:del(ALOMDA..'Zrf:iven'..msg.chat_id_..''..msg.sender_user_id_)
 return false  
 end 
-UrlZrf = https.request('https://apiabs.ml/zrf.php?abs='..URL.escape(text)) 
+UrlZrf = https.request('https://apiiven.ml/zrf.php?iven='..URL.escape(text)) 
 Zrf = JSON.decode(UrlZrf) 
 t = "⌁︙قائمة الزخرفه ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 i = 0
@@ -7897,20 +7897,20 @@ for k,v in pairs(Zrf.ok) do
 i = i + 1
 t = t..i.."~ `"..v.."` \n"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, t, 1, 'md')
-DevAbs:del(ALOMDA..'Zrf:Abs'..msg.chat_id_..''..msg.sender_user_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, t, 1, 'md')
+Deviven:del(ALOMDA..'Zrf:iven'..msg.chat_id_..''..msg.sender_user_id_)
 return false   
 end
-if not DevAbs:get(ALOMDA..'Abs:Zrf:Abs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Zrf:iven'..msg.chat_id_) then
 if text == 'زخرفه' and SourceCh(msg) or text == 'الزخرفه' and SourceCh(msg) then  
-DevAbs:setex(ALOMDA.."Zrf:Abs"..msg.chat_id_..""..msg.sender_user_id_,300,true)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي الكلمه لزخرفتها \nيمكنك الزخرفة باللغه { en } ~ { ar } ', 1, 'md')
+Deviven:setex(ALOMDA.."Zrf:iven"..msg.chat_id_..""..msg.sender_user_id_,300,true)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي الكلمه لزخرفتها \nيمكنك الزخرفة باللغه { en } ~ { ar } ', 1, 'md')
 end
 end
-if not DevAbs:get(ALOMDA..'Abs:Zrf:Abs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Zrf:iven'..msg.chat_id_) then
 if text and text:match("^زخرفه (.*)$") and SourceCh(msg) or text and text:match("^زخرف (.*)$") and SourceCh(msg) then 
 local TextZrf = text:match("^زخرفه (.*)$") or text:match("^زخرف (.*)$") 
-UrlZrf = https.request('https://apiabs.ml/zrf.php?abs='..URL.escape(TextZrf)) 
+UrlZrf = https.request('https://apiiven.ml/zrf.php?iven='..URL.escape(TextZrf)) 
 Zrf = JSON.decode(UrlZrf) 
 t = "⌁︙قائمة الزخرفه ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 i = 0
@@ -7918,168 +7918,168 @@ for k,v in pairs(Zrf.ok) do
 i = i + 1
 t = t..i.."~ `"..v.."` \n"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, t, 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, t, 1, 'md')
 end
 end
 --     Source ALOMDA     --
 if text == "تفعيل الابراج" and Manager(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل الابراج بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Brg:Abs'..msg.chat_id_) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل الابراج بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Brg:iven'..msg.chat_id_) 
 end
 if text == "تعطيل الابراج" and Manager(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل الابراج بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Brg:Abs'..msg.chat_id_,true)  
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل الابراج بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Brg:iven'..msg.chat_id_,true)  
 end
-if not DevAbs:get(ALOMDA..'Abs:Brg:Abs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Brg:iven'..msg.chat_id_) then
 if text and text:match("^برج (.*)$") and SourceCh(msg) or text and text:match("^برجي (.*)$") and SourceCh(msg) then 
 local TextBrg = text:match("^برج (.*)$") or text:match("^برجي (.*)$") 
-UrlBrg = https.request('https://apiabs.ml/brg.php?brg='..URL.escape(TextBrg)) 
+UrlBrg = https.request('https://apiiven.ml/brg.php?brg='..URL.escape(TextBrg)) 
 Brg = JSON.decode(UrlBrg) 
-t = Brg.ok.abs  
-Dev_Abs(msg.chat_id_, msg.id_, 1, t, 1, 'html')
+t = Brg.ok.iven  
+Dev_iven(msg.chat_id_, msg.id_, 1, t, 1, 'html')
 end
 end
 --     Source ALOMDA     --
 if text and (text == "تفعيل اوامر النسب" or text == "تفعيل نسبه الحب" or text == "تفعيل نسبه الكره" or text == "تفعيل نسبه الرجوله" or text == "تفعيل نسبه الانوثه" or text == "تفعيل نسبه الغباء") and Manager(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل اوامر النسب'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Nsba:Abs'..msg.chat_id_) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل اوامر النسب'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Nsba:iven'..msg.chat_id_) 
 end
 if text and (text == "تعطيل اوامر النسب" or text == "تعطيل نسبه الحب" or text == "تعطيل نسبه الكره" or text == "تعطيل نسبه الرجوله" or text == "تعطيل نسبه الانوثه" or text == "تعطيل نسبه الغباء") and Manager(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل اوامر النسب'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Nsba:Abs'..msg.chat_id_,true)  
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل اوامر النسب'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Nsba:iven'..msg.chat_id_,true)  
 end
-if not DevAbs:get(ALOMDA..'Abs:Nsba:Abs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Nsba:iven'..msg.chat_id_) then
 if text == "نسبه الحب" and SourceCh(msg) or text == "نسبة الحب" and SourceCh(msg) then
-DevAbs:set(ALOMDA..'LoveNsba:Abs'..msg.chat_id_..msg.sender_user_id_,true) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙قم بارسل اسمين لحساب نسبة الحب بينهما كمثال ↫ جاك وروز', 1, 'md')
+Deviven:set(ALOMDA..'LoveNsba:iven'..msg.chat_id_..msg.sender_user_id_,true) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙قم بارسل اسمين لحساب نسبة الحب بينهما كمثال ↫ جاك وروز', 1, 'md')
 end
 end
-if text and text ~= "نسبه الحب" and text ~= "نسبة الحب" and DevAbs:get(ALOMDA..'LoveNsba:Abs'..msg.chat_id_..msg.sender_user_id_) then
+if text and text ~= "نسبه الحب" and text ~= "نسبة الحب" and Deviven:get(ALOMDA..'LoveNsba:iven'..msg.chat_id_..msg.sender_user_id_) then
 if text and text == 'الغاء' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر نسبة الحب ', 1, 'md')
-DevAbs:del(ALOMDA..'LoveNsba:Abs'..msg.chat_id_..msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر نسبة الحب ', 1, 'md')
+Deviven:del(ALOMDA..'LoveNsba:iven'..msg.chat_id_..msg.sender_user_id_) 
 return false 
 end 
-Abs = math.random(0,100);
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙نسبة الحب بين '..text..' هي : '..Abs..'%', 1, 'md')
-DevAbs:del(ALOMDA..'LoveNsba:Abs'..msg.chat_id_..msg.sender_user_id_) 
+iven = math.random(0,100);
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙نسبة الحب بين '..text..' هي : '..iven..'%', 1, 'md')
+Deviven:del(ALOMDA..'LoveNsba:iven'..msg.chat_id_..msg.sender_user_id_) 
 return false 
 end
-if not DevAbs:get(ALOMDA..'Abs:Nsba:Abs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Nsba:iven'..msg.chat_id_) then
 if text == "نسبه الكره" and SourceCh(msg) or text == "نسبة الكره" and SourceCh(msg) then
-DevAbs:set(ALOMDA..'HataNsba:Abs'..msg.chat_id_..msg.sender_user_id_,true) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙قم بارسل اسمين لحساب نسبة الكره بينهما كمثال ↫ جاك وروز', 1, 'md')
+Deviven:set(ALOMDA..'HataNsba:iven'..msg.chat_id_..msg.sender_user_id_,true) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙قم بارسل اسمين لحساب نسبة الكره بينهما كمثال ↫ جاك وروز', 1, 'md')
 end
 end
-if text and text ~= "نسبه الكره" and text ~= "نسبة الكره" and DevAbs:get(ALOMDA..'HataNsba:Abs'..msg.chat_id_..msg.sender_user_id_) then
+if text and text ~= "نسبه الكره" and text ~= "نسبة الكره" and Deviven:get(ALOMDA..'HataNsba:iven'..msg.chat_id_..msg.sender_user_id_) then
 if text and text == 'الغاء' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر نسبة الكره ', 1, 'md')
-DevAbs:del(ALOMDA..'HataNsba:Abs'..msg.chat_id_..msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر نسبة الكره ', 1, 'md')
+Deviven:del(ALOMDA..'HataNsba:iven'..msg.chat_id_..msg.sender_user_id_) 
 return false 
 end 
-Abs = math.random(0,100);
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙نسبة الكره بين '..text..' هي : '..Abs..'%', 1, 'md')
-DevAbs:del(ALOMDA..'HataNsba:Abs'..msg.chat_id_..msg.sender_user_id_) 
+iven = math.random(0,100);
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙نسبة الكره بين '..text..' هي : '..iven..'%', 1, 'md')
+Deviven:del(ALOMDA..'HataNsba:iven'..msg.chat_id_..msg.sender_user_id_) 
 return false 
 end
-if not DevAbs:get(ALOMDA..'Abs:Nsba:Abs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Nsba:iven'..msg.chat_id_) then
 if text and (text == "نسبه الرجوله" or text == "نسبة الرجوله" or text == "نسبه رجوله" or text == "نسبة رجوله") and SourceCh(msg) then
-DevAbs:set(ALOMDA..'RjolaNsba:Abs'..msg.chat_id_..msg.sender_user_id_,true) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙قم بارسل اسم الشخص لقياس نسبة رجولته كمثال ↫ جاك', 1, 'md')
+Deviven:set(ALOMDA..'RjolaNsba:iven'..msg.chat_id_..msg.sender_user_id_,true) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙قم بارسل اسم الشخص لقياس نسبة رجولته كمثال ↫ جاك', 1, 'md')
 end
 end
-if text and text ~= "نسبه الرجوله" and text ~= "نسبة الرجوله" and text ~= "نسبه رجوله" and text ~= "نسبة رجوله" and DevAbs:get(ALOMDA..'RjolaNsba:Abs'..msg.chat_id_..msg.sender_user_id_) then
+if text and text ~= "نسبه الرجوله" and text ~= "نسبة الرجوله" and text ~= "نسبه رجوله" and text ~= "نسبة رجوله" and Deviven:get(ALOMDA..'RjolaNsba:iven'..msg.chat_id_..msg.sender_user_id_) then
 if text and text == 'الغاء' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر نسبة الرجوله ', 1, 'md')
-DevAbs:del(ALOMDA..'RjolaNsba:Abs'..msg.chat_id_..msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر نسبة الرجوله ', 1, 'md')
+Deviven:del(ALOMDA..'RjolaNsba:iven'..msg.chat_id_..msg.sender_user_id_) 
 return false 
 end 
-Abs = math.random(0,100);
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙نسبة رجولة '..text..' هي : '..Abs..'%', 1, 'md')
-DevAbs:del(ALOMDA..'RjolaNsba:Abs'..msg.chat_id_..msg.sender_user_id_) 
+iven = math.random(0,100);
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙نسبة رجولة '..text..' هي : '..iven..'%', 1, 'md')
+Deviven:del(ALOMDA..'RjolaNsba:iven'..msg.chat_id_..msg.sender_user_id_) 
 return false 
 end
-if not DevAbs:get(ALOMDA..'Abs:Nsba:Abs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Nsba:iven'..msg.chat_id_) then
 if text and (text == "نسبه الانوثه" or text == "نسبة الانوثه" or text == "نسبه انوثه" or text == "نسبة انوثه") and SourceCh(msg) then
-DevAbs:set(ALOMDA..'AnothaNsba:Abs'..msg.chat_id_..msg.sender_user_id_,true) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙قم بارسل اسم الشخص لقياس نسبة انوثته كمثال ↫ روز', 1, 'md')
+Deviven:set(ALOMDA..'AnothaNsba:iven'..msg.chat_id_..msg.sender_user_id_,true) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙قم بارسل اسم الشخص لقياس نسبة انوثته كمثال ↫ روز', 1, 'md')
 end
 end
-if text and text ~= "نسبه الانوثه" and text ~= "نسبة الانوثه" and text ~= "نسبه انوثه" and text ~= "نسبة انوثه" and DevAbs:get(ALOMDA..'AnothaNsba:Abs'..msg.chat_id_..msg.sender_user_id_) then
+if text and text ~= "نسبه الانوثه" and text ~= "نسبة الانوثه" and text ~= "نسبه انوثه" and text ~= "نسبة انوثه" and Deviven:get(ALOMDA..'AnothaNsba:iven'..msg.chat_id_..msg.sender_user_id_) then
 if text and text == 'الغاء' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر نسبة الانوثه ', 1, 'md')
-DevAbs:del(ALOMDA..'AnothaNsba:Abs'..msg.chat_id_..msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر نسبة الانوثه ', 1, 'md')
+Deviven:del(ALOMDA..'AnothaNsba:iven'..msg.chat_id_..msg.sender_user_id_) 
 return false 
 end 
-Abs = math.random(0,100);
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙نسبة انوثة '..text..' هي : '..Abs..'%', 1, 'md')
-DevAbs:del(ALOMDA..'AnothaNsba:Abs'..msg.chat_id_..msg.sender_user_id_) 
+iven = math.random(0,100);
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙نسبة انوثة '..text..' هي : '..iven..'%', 1, 'md')
+Deviven:del(ALOMDA..'AnothaNsba:iven'..msg.chat_id_..msg.sender_user_id_) 
 return false 
 end
-if not DevAbs:get(ALOMDA..'Abs:Nsba:Abs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Nsba:iven'..msg.chat_id_) then
 if text and (text == "نسبه الغباء" or text == "نسبة الغباء") and SourceCh(msg) then
-DevAbs:set(ALOMDA..'StupidNsba:Abs'..msg.chat_id_..msg.sender_user_id_,true) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙قم بارسل اسم الشخص لقياس نسبة غبائه كمثال ↫ جاك او روز', 1, 'md')
+Deviven:set(ALOMDA..'StupidNsba:iven'..msg.chat_id_..msg.sender_user_id_,true) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙قم بارسل اسم الشخص لقياس نسبة غبائه كمثال ↫ جاك او روز', 1, 'md')
 end
 end
-if text and text ~= "نسبه الغباء" and text ~= "نسبة الغباء" and DevAbs:get(ALOMDA..'StupidNsba:Abs'..msg.chat_id_..msg.sender_user_id_) then
+if text and text ~= "نسبه الغباء" and text ~= "نسبة الغباء" and Deviven:get(ALOMDA..'StupidNsba:iven'..msg.chat_id_..msg.sender_user_id_) then
 if text and text == 'الغاء' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر نسبة الغباء ', 1, 'md')
-DevAbs:del(ALOMDA..'StupidNsba:Abs'..msg.chat_id_..msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم الغاء امر نسبة الغباء ', 1, 'md')
+Deviven:del(ALOMDA..'StupidNsba:iven'..msg.chat_id_..msg.sender_user_id_) 
 return false 
 end 
-Abs = math.random(0,100);
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙نسبة غباء '..text..' هي : '..Abs..'%', 1, 'md')
-DevAbs:del(ALOMDA..'StupidNsba:Abs'..msg.chat_id_..msg.sender_user_id_) 
+iven = math.random(0,100);
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙نسبة غباء '..text..' هي : '..iven..'%', 1, 'md')
+Deviven:del(ALOMDA..'StupidNsba:iven'..msg.chat_id_..msg.sender_user_id_) 
 return false 
 end
 --     Source ALOMDA     --
 if text == "تفعيل حساب العمر" and Manager(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل حساب العمر'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Age:Abs'..msg.chat_id_) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل حساب العمر'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Age:iven'..msg.chat_id_) 
 end
 if text == "تعطيل حساب العمر" and Manager(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل حساب العمر'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Age:Abs'..msg.chat_id_,true)  
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل حساب العمر'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Age:iven'..msg.chat_id_,true)  
 end
-if not DevAbs:get(ALOMDA..'Abs:Age:Abs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Age:iven'..msg.chat_id_) then
 if text and text:match("^احسب (.*)$") and SourceCh(msg) or text and text:match("^عمري (.*)$") and SourceCh(msg) then 
 local TextAge = text:match("^احسب (.*)$") or text:match("^عمري (.*)$") 
-UrlAge = https.request('https://apiabs.ml/age.php?age='..URL.escape(TextAge)) 
+UrlAge = https.request('https://apiiven.ml/age.php?age='..URL.escape(TextAge)) 
 Age = JSON.decode(UrlAge) 
-t = Age.ok.abs
-Dev_Abs(msg.chat_id_, msg.id_, 1, t, 1, 'html')
+t = Age.ok.iven
+Dev_iven(msg.chat_id_, msg.id_, 1, t, 1, 'html')
 end
 end
 --     Source ALOMDA     --
 if text == "تفعيل معاني الاسماء" and Manager(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل معاني الاسماء'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Mean:Abs'..msg.chat_id_) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل معاني الاسماء'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Mean:iven'..msg.chat_id_) 
 end
 if text == "تعطيل معاني الاسماء" and Manager(msg) and SourceCh(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل معاني الاسماء'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Mean:Abs'..msg.chat_id_,true)  
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل معاني الاسماء'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Mean:iven'..msg.chat_id_,true)  
 end
-if not DevAbs:get(ALOMDA..'Abs:Mean:Abs'..msg.chat_id_) then
+if not Deviven:get(ALOMDA..'iven:Mean:iven'..msg.chat_id_) then
 if text and text:match("^معنى الاسم (.*)$") and SourceCh(msg) or text and text:match("^معنى اسم (.*)$") and SourceCh(msg) then 
 local TextMean = text:match("^معنى الاسم (.*)$") or text:match("^معنى اسم (.*)$") 
-UrlMean = https.request('https://apiabs.ml/Mean.php?Abs='..URL.escape(TextMean)) 
+UrlMean = https.request('https://apiiven.ml/Mean.php?iven='..URL.escape(TextMean)) 
 Mean = JSON.decode(UrlMean) 
-t = Mean.ok.abs
-Dev_Abs(msg.chat_id_, msg.id_, 1, t, 1, 'html')
+t = Mean.ok.iven
+Dev_iven(msg.chat_id_, msg.id_, 1, t, 1, 'html')
 end
 end
 --     Source ALOMDA     --
 if text == "غنيلي" and SourceCh(msg) then
-data,res = https.request('https://apiabs.ml/Audios.php')
+data,res = https.request('https://apiiven.ml/Audios.php')
 if res == 200 then
 Audios = json:decode(data)
 if Audios.Info == true then
@@ -8095,99 +8095,99 @@ end
 end
 --     Source ALOMDA     --
 if Admin(msg) then
-if DevAbs:get(ALOMDA..'Abs:LockSettings'..msg.chat_id_) then 
-if text == "الروابط" then if DevAbs:get(ALOMDA..'Abs:Lock:Links'..msg.chat_id_) then mute_links = 'مقفله' else mute_links = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الروابط ↫ "..mute_links.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "المعرف" or text == "المعرفات" then if DevAbs:get(ALOMDA..'Abs:Lock:Tags'..msg.chat_id_) then lock_tag = 'مقفوله' else lock_tag = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙المعرف ↫ "..lock_tag.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "المتحركه" or text == "الملصقات المتحركه" then if DevAbs:get(ALOMDA..'Abs:Lock:Gifs'..msg.chat_id_) then mute_gifs = 'مقفوله' else mute_gifs = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙المتحركه ↫ "..mute_gifs.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الملصقات" then if DevAbs:get(ALOMDA..'Abs:Lock:Stickers'..msg.chat_id_) then lock_sticker = 'مقفوله' else lock_sticker = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الملصقات ↫ "..lock_sticker.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الصور" then if DevAbs:get(ALOMDA..'Abs:Lock:Photo'..msg.chat_id_) then mute_photo = 'مقفوله' else mute_photo = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الصور ↫ "..mute_photo.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الفيديو" or text == "الفيديوهات" then if DevAbs:get(ALOMDA..'Abs:Lock:Videos'..msg.chat_id_) then mute_video = 'مقفوله' else mute_video = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الفيديو ↫ "..mute_video.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الاونلاين" then if DevAbs:get(ALOMDA..'Abs:Lock:Inline'..msg.chat_id_) then mute_in = 'مقفل' else mute_in = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙الاونلاين ↫ "..mute_in.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الدردشه" then if DevAbs:get(ALOMDA..'Abs:Lock:Text'..msg.chat_id_) then mute_text = 'مقفله' else mute_text = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الدردشه ↫ "..mute_text.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "التوجيه" or text == "اعاده التوجيه" then if DevAbs:get(ALOMDA..'Abs:Lock:Forwards'..msg.chat_id_) then lock_forward = 'مقفل' else lock_forward = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙التوجيه ↫ "..lock_forward.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الاغاني" then if DevAbs:get(ALOMDA..'Abs:Lock:Music'..msg.chat_id_) then mute_music = 'مقفوله' else mute_music = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الاغاني ↫ "..mute_music.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الصوت" or text == "الصوتيات" then if DevAbs:get(ALOMDA..'Abs:Lock:Voice'..msg.chat_id_) then mute_voice = 'مقفول' else mute_voice = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙الصوت ↫ "..mute_voice.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الجهات" or text == "جهات الاتصال" then if DevAbs:get(ALOMDA..'Abs:Lock:Contact'..msg.chat_id_) then lock_contact = 'مقفوله' else lock_contact = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الجهات ↫ "..lock_contact.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الماركداون" then if DevAbs:get(ALOMDA..'Abs:Lock:Markdown'..msg.chat_id_) then markdown = 'مقفل' else markdown = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙الماركداون ↫ "..markdown.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الهاشتاك" then if DevAbs:get(ALOMDA..'Abs:Lock:Hashtak'..msg.chat_id_) then lock_htag = 'مقفل' else lock_htag = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙الهاشتاك ↫ "..lock_htag.."\n"Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "التعديل" then if DevAbs:get(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_) then mute_edit = 'مقفل' else mute_edit = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙التعديل ↫ "..mute_edit.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "التثبيت" then if DevAbs:get(ALOMDA..'Abs:Lock:Pin'..msg.chat_id_) then lock_pin = 'مقفل' else lock_pin = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙التثبيت ↫ "..lock_pin.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الاشعارات" then if DevAbs:get(ALOMDA..'Abs:Lock:TagServr'..msg.chat_id_) then lock_tgservice = 'مقفوله' else lock_tgservice = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الاشعارات ↫ "..lock_tgservice.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الكلايش" then if DevAbs:get(ALOMDA..'Abs:Lock:Spam'..msg.chat_id_) then lock_spam = 'مقفوله' else lock_spam = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الكلايش ↫ "..lock_spam.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الدخول" then if DevAbs:get(ALOMDA..'Abs:Lock:Join'..msg.chat_id_) then lock_Join = 'مقفول' else lock_Join = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙الدخول ↫ "..lock_Join.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الشبكات" then if DevAbs:get(ALOMDA..'Abs:Lock:WebLinks'..msg.chat_id_) then lock_wp = 'مقفوله' else lock_wp = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الشبكات ↫ "..lock_wp.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "المواقع" then if DevAbs:get(ALOMDA..'Abs:Lock:Location'..msg.chat_id_) then lock_location = 'مقفوله' else lock_location = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙المواقع ↫ "..lock_location.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "العربيه" then if DevAbs:get(ALOMDA..'Abs:Lock:Arabic'..msg.chat_id_) then lock_arabic = 'مقفوله' else lock_arabic = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙العربيه ↫ "..lock_arabic.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الانكليزيه" then if DevAbs:get(ALOMDA..'Abs:Lock:English'..msg.chat_id_) then lock_english = 'مقفوله' else lock_english = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الانكليزيه ↫ "..lock_english.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الكفر" then if DevAbs:get(ALOMDA..'Abs:Lock:Kfr'..msg.chat_id_) then lock_kaf = 'مفتوح' else lock_kaf = 'مقفل' end local ALOMDATEAM = "\n" .."⌁︙الكفر ↫ "..lock_kaf.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الفشار" then if DevAbs:get(ALOMDA..'Abs:Lock:Fshar'..msg.chat_id_) then lock_fshar = 'مفتوح' else lock_fshar = 'مقفل' end local ALOMDATEAM = "\n" .."⌁︙الفشار ↫ "..lock_fshar.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
-if text == "الطائفيه" then if DevAbs:get(ALOMDA..'Abs:Lock:Taf'..msg.chat_id_) then lock_taf = 'مفتوحه' else lock_taf = 'مقفله' end local ALOMDATEAM = "\n" .."⌁︙الطائفيه ↫ "..lock_taf.."\n" Dev_Abs(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if Deviven:get(ALOMDA..'iven:LockSettings'..msg.chat_id_) then 
+if text == "الروابط" then if Deviven:get(ALOMDA..'iven:Lock:Links'..msg.chat_id_) then mute_links = 'مقفله' else mute_links = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الروابط ↫ "..mute_links.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "المعرف" or text == "المعرفات" then if Deviven:get(ALOMDA..'iven:Lock:Tags'..msg.chat_id_) then lock_tag = 'مقفوله' else lock_tag = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙المعرف ↫ "..lock_tag.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "المتحركه" or text == "الملصقات المتحركه" then if Deviven:get(ALOMDA..'iven:Lock:Gifs'..msg.chat_id_) then mute_gifs = 'مقفوله' else mute_gifs = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙المتحركه ↫ "..mute_gifs.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الملصقات" then if Deviven:get(ALOMDA..'iven:Lock:Stickers'..msg.chat_id_) then lock_sticker = 'مقفوله' else lock_sticker = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الملصقات ↫ "..lock_sticker.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الصور" then if Deviven:get(ALOMDA..'iven:Lock:Photo'..msg.chat_id_) then mute_photo = 'مقفوله' else mute_photo = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الصور ↫ "..mute_photo.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الفيديو" or text == "الفيديوهات" then if Deviven:get(ALOMDA..'iven:Lock:Videos'..msg.chat_id_) then mute_video = 'مقفوله' else mute_video = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الفيديو ↫ "..mute_video.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الاونلاين" then if Deviven:get(ALOMDA..'iven:Lock:Inline'..msg.chat_id_) then mute_in = 'مقفل' else mute_in = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙الاونلاين ↫ "..mute_in.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الدردشه" then if Deviven:get(ALOMDA..'iven:Lock:Text'..msg.chat_id_) then mute_text = 'مقفله' else mute_text = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الدردشه ↫ "..mute_text.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "التوجيه" or text == "اعاده التوجيه" then if Deviven:get(ALOMDA..'iven:Lock:Forwards'..msg.chat_id_) then lock_forward = 'مقفل' else lock_forward = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙التوجيه ↫ "..lock_forward.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الاغاني" then if Deviven:get(ALOMDA..'iven:Lock:Music'..msg.chat_id_) then mute_music = 'مقفوله' else mute_music = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الاغاني ↫ "..mute_music.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الصوت" or text == "الصوتيات" then if Deviven:get(ALOMDA..'iven:Lock:Voice'..msg.chat_id_) then mute_voice = 'مقفول' else mute_voice = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙الصوت ↫ "..mute_voice.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الجهات" or text == "جهات الاتصال" then if Deviven:get(ALOMDA..'iven:Lock:Contact'..msg.chat_id_) then lock_contact = 'مقفوله' else lock_contact = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الجهات ↫ "..lock_contact.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الماركداون" then if Deviven:get(ALOMDA..'iven:Lock:Markdown'..msg.chat_id_) then markdown = 'مقفل' else markdown = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙الماركداون ↫ "..markdown.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الهاشتاك" then if Deviven:get(ALOMDA..'iven:Lock:Hashtak'..msg.chat_id_) then lock_htag = 'مقفل' else lock_htag = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙الهاشتاك ↫ "..lock_htag.."\n"Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "التعديل" then if Deviven:get(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_) then mute_edit = 'مقفل' else mute_edit = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙التعديل ↫ "..mute_edit.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "التثبيت" then if Deviven:get(ALOMDA..'iven:Lock:Pin'..msg.chat_id_) then lock_pin = 'مقفل' else lock_pin = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙التثبيت ↫ "..lock_pin.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الاشعارات" then if Deviven:get(ALOMDA..'iven:Lock:TagServr'..msg.chat_id_) then lock_tgservice = 'مقفوله' else lock_tgservice = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الاشعارات ↫ "..lock_tgservice.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الكلايش" then if Deviven:get(ALOMDA..'iven:Lock:Spam'..msg.chat_id_) then lock_spam = 'مقفوله' else lock_spam = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الكلايش ↫ "..lock_spam.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الدخول" then if Deviven:get(ALOMDA..'iven:Lock:Join'..msg.chat_id_) then lock_Join = 'مقفول' else lock_Join = 'مفتوح' end local ALOMDATEAM = "\n" .."⌁︙الدخول ↫ "..lock_Join.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الشبكات" then if Deviven:get(ALOMDA..'iven:Lock:WebLinks'..msg.chat_id_) then lock_wp = 'مقفوله' else lock_wp = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الشبكات ↫ "..lock_wp.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "المواقع" then if Deviven:get(ALOMDA..'iven:Lock:Location'..msg.chat_id_) then lock_location = 'مقفوله' else lock_location = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙المواقع ↫ "..lock_location.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "العربيه" then if Deviven:get(ALOMDA..'iven:Lock:Arabic'..msg.chat_id_) then lock_arabic = 'مقفوله' else lock_arabic = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙العربيه ↫ "..lock_arabic.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الانكليزيه" then if Deviven:get(ALOMDA..'iven:Lock:English'..msg.chat_id_) then lock_english = 'مقفوله' else lock_english = 'مفتوحه' end local ALOMDATEAM = "\n" .."⌁︙الانكليزيه ↫ "..lock_english.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الكفر" then if Deviven:get(ALOMDA..'iven:Lock:Kfr'..msg.chat_id_) then lock_kaf = 'مفتوح' else lock_kaf = 'مقفل' end local ALOMDATEAM = "\n" .."⌁︙الكفر ↫ "..lock_kaf.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الفشار" then if Deviven:get(ALOMDA..'iven:Lock:Fshar'..msg.chat_id_) then lock_fshar = 'مفتوح' else lock_fshar = 'مقفل' end local ALOMDATEAM = "\n" .."⌁︙الفشار ↫ "..lock_fshar.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
+if text == "الطائفيه" then if Deviven:get(ALOMDA..'iven:Lock:Taf'..msg.chat_id_) then lock_taf = 'مفتوحه' else lock_taf = 'مقفله' end local ALOMDATEAM = "\n" .."⌁︙الطائفيه ↫ "..lock_taf.."\n" Dev_iven(msg.chat_id_, msg.id_, 1, ALOMDATEAM, 1, 'md') end
 end
 --     Source ALOMDA     --
 if text == 'تفعيل كشف الاعدادات' and ChCheck(msg) then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل كشف الاعدادات'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:LockSettings'..msg.chat_id_,true)  
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل كشف الاعدادات'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:LockSettings'..msg.chat_id_,true)  
 end
 if text == 'تعطيل كشف الاعدادات' and ChCheck(msg) then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل كشف الاعدادات'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:LockSettings'..msg.chat_id_) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل كشف الاعدادات'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:LockSettings'..msg.chat_id_) 
 end
 --     Source ALOMDA     --
 if text == 'تفعيل اوامر التحشيش' and Manager(msg) and ChCheck(msg) then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل اوامر التحشيش'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Lock:Stupid'..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل اوامر التحشيش'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Lock:Stupid'..msg.chat_id_)
 end
 if text == 'تعطيل اوامر التحشيش' and Manager(msg) and ChCheck(msg) then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل اوامر التحشيش'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Lock:Stupid'..msg.chat_id_,true)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل اوامر التحشيش'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Lock:Stupid'..msg.chat_id_,true)
 end
 --     Source ALOMDA     --
 if text == 'تفعيل ردود المدير' and Manager(msg) and ChCheck(msg) then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل ردود المدير'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Lock:GpRed'..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل ردود المدير'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Lock:GpRed'..msg.chat_id_)
 end
 if text == 'تعطيل ردود المدير' and Manager(msg) and ChCheck(msg) then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل ردود المدير'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Lock:GpRed'..msg.chat_id_,true)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل ردود المدير'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Lock:GpRed'..msg.chat_id_,true)
 end
 --     Source ALOMDA     --
 if text == 'تفعيل ردود المطور' and Manager(msg) and ChCheck(msg) then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل ردود المطور'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Lock:AllRed'..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل ردود المطور'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Lock:AllRed'..msg.chat_id_)
 end
 if text == 'تعطيل ردود المطور' and Manager(msg) and ChCheck(msg) then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل ردود المطور'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Lock:AllRed'..msg.chat_id_,true)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل ردود المطور'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Lock:AllRed'..msg.chat_id_,true)
 end
 --     Source ALOMDA     --
 if SecondSudo(msg) then
 if text == 'تفعيل المغادره' or text == '↫ تفعيل المغادره ⌁' then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل المغادره بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA.."Abs:Left:Bot"..ALOMDA)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل المغادره بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA.."iven:Left:Bot"..ALOMDA)
 end
 if text == 'تعطيل المغادره' or text == '↫ تعطيل المغادره ⌁' then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل المغادره بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA.."Abs:Left:Bot"..ALOMDA,true) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل المغادره بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA.."iven:Left:Bot"..ALOMDA,true) 
 end 
 if text == 'تفعيل الاذاعه' or text == '↫ تفعيل الاذاعه ⌁' then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل الاذاعه بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA.."Abs:Send:Bot"..ALOMDA)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل الاذاعه بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA.."iven:Send:Bot"..ALOMDA)
 end
 if text == 'تعطيل الاذاعه' or text == '↫ تعطيل الاذاعه ⌁' then 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل الاذاعه بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA.."Abs:Send:Bot"..ALOMDA,true) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل الاذاعه بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA.."iven:Send:Bot"..ALOMDA,true) 
 end
 end
 --     Source ALOMDA     --
@@ -8201,14 +8201,14 @@ end
 if data.message_ == "CHAT_ADMIN_REQUIRED" then
 send(msg.chat_id_,msg.id_,"⌁︙ليست لدي صلاحية تغير معلومات المجموعه يرجى التحقق من الصلاحيات")  
 else
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تغير اسم المجموعه'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تغير اسم المجموعه'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end
 end,nil) 
 end
 --     Source ALOMDA     --
 if msg.content_.photo_ then
-if DevAbs:get(ALOMDA..'Abs:SetPhoto'..msg.chat_id_..':'..msg.sender_user_id_) then
+if Deviven:get(ALOMDA..'iven:SetPhoto'..msg.chat_id_..':'..msg.sender_user_id_) then
 if msg.content_.photo_.sizes_[3] then
 photo_id = msg.content_.photo_.sizes_[3].photo_.persistent_id_
 else
@@ -8217,22 +8217,22 @@ end
 tdcli_function ({ID = "ChangeChatPhoto",chat_id_ = msg.chat_id_,photo_ = getInputFile(photo_id) }, function(arg,data)   
 if data.code_ == 3 then
 send(msg.chat_id_, msg.id_,"⌁︙عذرا البوت ليس ادمن يرجى ترقيتي والمحاوله لاحقا") 
-DevAbs:del(ALOMDA..'Abs:SetPhoto'..msg.chat_id_..':'..msg.sender_user_id_)
+Deviven:del(ALOMDA..'iven:SetPhoto'..msg.chat_id_..':'..msg.sender_user_id_)
 return false  end
 if data.message_ == "CHAT_ADMIN_REQUIRED" then 
 send(msg.chat_id_, msg.id_,"⌁︙ليست لدي صلاحية تغير معلومات المجموعه يرجى التحقق من الصلاحيات") 
-DevAbs:del(ALOMDA..'Abs:SetPhoto'..msg.chat_id_..':'..msg.sender_user_id_)
+Deviven:del(ALOMDA..'iven:SetPhoto'..msg.chat_id_..':'..msg.sender_user_id_)
 else
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تغير صورة المجموعه'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تغير صورة المجموعه'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end
 end,nil) 
-DevAbs:del(ALOMDA..'Abs:SetPhoto'..msg.chat_id_..':'..msg.sender_user_id_)
+Deviven:del(ALOMDA..'iven:SetPhoto'..msg.chat_id_..':'..msg.sender_user_id_)
 end 
 end
 if text and text:match("^ضع صوره$") and ChCheck(msg) or text and text:match("^وضع صوره$") and ChCheck(msg) then
-Dev_Abs(msg.chat_id_,msg.id_, 1, '⌁︙ارسل صورة المجموعه الان', 1, 'md')
-DevAbs:set(ALOMDA..'Abs:SetPhoto'..msg.chat_id_..':'..msg.sender_user_id_,true)
+Dev_iven(msg.chat_id_,msg.id_, 1, '⌁︙ارسل صورة المجموعه الان', 1, 'md')
+Deviven:set(ALOMDA..'iven:SetPhoto'..msg.chat_id_..':'..msg.sender_user_id_,true)
 end
 --     Source ALOMDA     --
 if text and text:match("^حذف الصوره$") and ChCheck(msg) or text and text:match("^مسح الصوره$") and ChCheck(msg) then
@@ -8243,15 +8243,15 @@ end
 --     Source ALOMDA     --
 if Manager(msg) then
 if text and text:match("^الغاء تثبيت$") and ChCheck(msg) or text and text:match("^الغاء التثبيت$") and ChCheck(msg) then
-if DevAbs:sismember(ALOMDA.."Abs:Lock:Pinpin",msg.chat_id_) and not BasicConstructor(msg) then
-Dev_Abs(msg.chat_id_,msg.id_, 1, "⌁︙التثبيت والغاء واعادة التثبيت تم قفله من قبل المنشئين الاساسيين", 1, 'md')
+if Deviven:sismember(ALOMDA.."iven:Lock:Pinpin",msg.chat_id_) and not BasicConstructor(msg) then
+Dev_iven(msg.chat_id_,msg.id_, 1, "⌁︙التثبيت والغاء واعادة التثبيت تم قفله من قبل المنشئين الاساسيين", 1, 'md')
 return false  
 end
 tdcli_function({ID="UnpinChannelMessage",channel_id_ = msg.chat_id_:gsub("-100","")},function(arg,data) 
 if data.ID == "Ok" then
-DevAbs:del(ALOMDA..'Abs:PinnedMsg'..msg.chat_id_)
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم الغاء تثبيت الرساله'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:PinnedMsg'..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم الغاء تثبيت الرساله'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 return false  
 end
 if data.code_ == 6 then
@@ -8266,16 +8266,16 @@ end,nil)
 end
 --     Source ALOMDA     --
 if text and text:match("^الغاء تثبيت الكل$") then  
-if DevAbs:sismember(ALOMDA.."Abs:Lock:Pinpin",msg.chat_id_) and not BasicConstructor(msg) then
-Dev_Abs(msg.chat_id_,msg.id_, 1, "⌁︙التثبيت والغاء واعادة التثبيت تم قفله من قبل المنشئين الاساسيين", 1, 'md')
+if Deviven:sismember(ALOMDA.."iven:Lock:Pinpin",msg.chat_id_) and not BasicConstructor(msg) then
+Dev_iven(msg.chat_id_,msg.id_, 1, "⌁︙التثبيت والغاء واعادة التثبيت تم قفله من قبل المنشئين الاساسيين", 1, 'md')
 return false  
 end
 tdcli_function({ID="UnpinChannelMessage",channel_id_ = msg.chat_id_:gsub("-100","")},function(arg,data) 
 if data.ID == "Ok" then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم الغاء تثبيت الكل'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم الغاء تثبيت الكل'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 https.request('https://api.telegram.org/bot'..TokenBot..'/unpinAllChatMessages?chat_id='..msg.chat_id_)
-DevAbs:del(ALOMDA.."Abs:PinnedMsg"..msg.chat_id_)
+Deviven:del(ALOMDA.."iven:PinnedMsg"..msg.chat_id_)
 return false  
 end
 if data.code_ == 6 then
@@ -8290,15 +8290,15 @@ end,nil)
 end
 --     Source ALOMDA     --
 if text and text:match("^اعاده تثبيت$") and ChCheck(msg) or text and text:match("^اعاده التثبيت$") and ChCheck(msg) or text and text:match("^اعادة التثبيت$") and ChCheck(msg) then
-if DevAbs:sismember(ALOMDA.."Abs:Lock:Pinpin",msg.chat_id_) and not BasicConstructor(msg) then
-Dev_Abs(msg.chat_id_,msg.id_, 1, "⌁︙التثبيت والغاء واعادة التثبيت تم قفله من قبل المنشئين الاساسيين", 1, 'md')
+if Deviven:sismember(ALOMDA.."iven:Lock:Pinpin",msg.chat_id_) and not BasicConstructor(msg) then
+Dev_iven(msg.chat_id_,msg.id_, 1, "⌁︙التثبيت والغاء واعادة التثبيت تم قفله من قبل المنشئين الاساسيين", 1, 'md')
 return false  
 end
-local pin_id = DevAbs:get(ALOMDA..'Abs:PinnedMsg'..msg.chat_id_)
+local pin_id = Deviven:get(ALOMDA..'iven:PinnedMsg'..msg.chat_id_)
 if pin_id then
 pin(msg.chat_id_,pin_id,0)
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم اعادة تثبيت الرساله'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم اعادة تثبيت الرساله'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end end
 end
 --     Source ALOMDA     --
@@ -8318,13 +8318,13 @@ end
 if text and text:match("^مسح المحظورين$") or text and text:match("^حذف المحظورين$") and ChCheck(msg) or text and text:match("^مسح المطرودين$") or text and text:match("^حذف المطرودين$") and ChCheck(msg) then
 local function RemoveBlockList(extra, result)
 if tonumber(result.total_count_) == 0 then 
-Dev_Abs(msg.chat_id_, msg.id_, 0,'⌁︙*لا يوجد محظورين*', 1, 'md')
-DevAbs:del(ALOMDA..'Abs:Ban:'..msg.chat_id_)
+Dev_iven(msg.chat_id_, msg.id_, 0,'⌁︙*لا يوجد محظورين*', 1, 'md')
+Deviven:del(ALOMDA..'iven:Ban:'..msg.chat_id_)
 else
 local x = 0
 for x,y in pairs(result.members_) do
 changeChatMemberStatus(msg.chat_id_, y.user_id_, 'Left', dl_cb, nil)
-DevAbs:del(ALOMDA..'Abs:Ban:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Ban:'..msg.chat_id_)
 x = x + 1
 end
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف المحظورين")  
@@ -8335,10 +8335,10 @@ end
 end
 --     Source ALOMDA     --
 if text and text:match("^معلومات المجموعه$") and ChCheck(msg) or text and text:match("^عدد الاعضاء$") and ChCheck(msg) or text and text:match("^عدد الكروب$") and ChCheck(msg) or text and text:match("^عدد الادمنيه$") and ChCheck(msg) or text and text:match("^عدد المحظورين$") and ChCheck(msg) then
-local Muted = DevAbs:scard(ALOMDA.."Abs:Muted:"..msg.chat_id_) or "0"
+local Muted = Deviven:scard(ALOMDA.."iven:Muted:"..msg.chat_id_) or "0"
 tdcli_function({ID ="GetChat",chat_id_=msg.chat_id_},function(arg,dp) 
 tdcli_function({ID="GetChannelFull",channel_id_ = msg.chat_id_:gsub("-100","")},function(arg,data) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه ↫ ❨ '..dp.title_..' ❩\n⌁︙الايدي ↫ ❨ '..msg.chat_id_..' ❩\n⌁︙عدد الاعضاء ↫ ❨ *'..data.member_count_..'* ❩\n⌁︙عدد الادمنيه ↫ ❨ *'..data.administrator_count_..'* ❩\n⌁︙عدد المطرودين ↫ ❨ *'..data.kicked_count_..'* ❩\n⌁︙عدد المكتومين ↫ ❨ *'..Muted..'* ❩\n⌁︙عدد رسائل المجموعه ↫ ❨ *'..(msg.id_/2097152/0.5)..'* ❩\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه ↫ ❨ '..dp.title_..' ❩\n⌁︙الايدي ↫ ❨ '..msg.chat_id_..' ❩\n⌁︙عدد الاعضاء ↫ ❨ *'..data.member_count_..'* ❩\n⌁︙عدد الادمنيه ↫ ❨ *'..data.administrator_count_..'* ❩\n⌁︙عدد المطرودين ↫ ❨ *'..data.kicked_count_..'* ❩\n⌁︙عدد المكتومين ↫ ❨ *'..Muted..'* ❩\n⌁︙عدد رسائل المجموعه ↫ ❨ *'..(msg.id_/2097152/0.5)..'* ❩\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n', 1, 'md') 
 end,nil)
 end,nil)
 end
@@ -8346,15 +8346,15 @@ end
 if text and text:match('^كشف (-%d+)') then
 local ChatId = text:match('كشف (-%d+)') 
 if not SudoBot(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطورين فقط', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطورين فقط', 1, 'md')
 else
-local ConstructorList = DevAbs:scard(ALOMDA.."Abs:Constructor:"..ChatId) or 0
-local BanedList = DevAbs:scard(ALOMDA.."Abs:Ban:"..ChatId) or 0
-local ManagerList = DevAbs:scard(ALOMDA.."Abs:Managers:"..ChatId) or 0
-local MutedList = DevAbs:scard(ALOMDA.."Abs:Muted:"..ChatId) or 0
-local TkeedList = DevAbs:scard(ALOMDA.."Abs:Abs:Tkeed:"..ChatId) or 0
-local AdminsList = DevAbs:scard(ALOMDA.."Abs:Admins:"..ChatId) or 0
-local VipList = DevAbs:scard(ALOMDA.."Abs:VipMem:"..ChatId) or 0
+local ConstructorList = Deviven:scard(ALOMDA.."iven:Constructor:"..ChatId) or 0
+local BanedList = Deviven:scard(ALOMDA.."iven:Ban:"..ChatId) or 0
+local ManagerList = Deviven:scard(ALOMDA.."iven:Managers:"..ChatId) or 0
+local MutedList = Deviven:scard(ALOMDA.."iven:Muted:"..ChatId) or 0
+local TkeedList = Deviven:scard(ALOMDA.."iven:iven:Tkeed:"..ChatId) or 0
+local AdminsList = Deviven:scard(ALOMDA.."iven:Admins:"..ChatId) or 0
+local VipList = Deviven:scard(ALOMDA.."iven:VipMem:"..ChatId) or 0
 local LinkGp = json:decode(https.request('https://api.telegram.org/bot'..TokenBot..'/exportChatInviteLink?chat_id='..ChatId))
 if LinkGp.ok == true then LinkGroup = LinkGp.result else LinkGroup = 't.me/src_web' end
 tdcli_function({ID ="GetChat",chat_id_=ChatId},function(arg,dp)
@@ -8364,18 +8364,18 @@ local admins = data.members_
 for i=0 , #admins do
 if data.members_[i].status_.ID == "ChatMemberStatusCreator" then
 Manager_id = admins[i].user_id_
-tdcli_function ({ID = "GetUser",user_id_ = Manager_id},function(arg,Abs) 
-if Abs.first_name_ ~= false then
-ConstructorAbs = "["..Abs.first_name_.."](T.me/"..(Abs.username_ or "src_web")..")"
+tdcli_function ({ID = "GetUser",user_id_ = Manager_id},function(arg,iven) 
+if iven.first_name_ ~= false then
+Constructoriven = "["..iven.first_name_.."](T.me/"..(iven.username_ or "src_web")..")"
 else 
-ConstructorAbs = "حساب محذوف"
+Constructoriven = "حساب محذوف"
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙المجموعه ↫ ["..dp.title_.."]("..LinkGroup..")\n⌁︙الايدي ↫ ( `"..ChatId.."` )\n⌁︙المنشئ ↫ "..ConstructorAbs.."\n⌁︙عدد المدراء ↫ ( *"..ManagerList.."* )\n⌁︙عدد المنشئين ↫ ( *"..ConstructorList.."* )\n⌁︙عدد الادمنيه ↫ ( *"..AdminsList.."* )\n⌁︙عدد المميزين ↫ ( *"..VipList.."* )\n⌁︙عدد المحظورين ↫ ( *"..BanedList.."* )\n⌁︙عدد المقيدين ↫ ( *"..TkeedList.."* )\n⌁︙عدد المكتومين ↫ ( *"..MutedList.."* )", 1,"md")
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙المجموعه ↫ ["..dp.title_.."]("..LinkGroup..")\n⌁︙الايدي ↫ ( `"..ChatId.."` )\n⌁︙المنشئ ↫ "..Constructoriven.."\n⌁︙عدد المدراء ↫ ( *"..ManagerList.."* )\n⌁︙عدد المنشئين ↫ ( *"..ConstructorList.."* )\n⌁︙عدد الادمنيه ↫ ( *"..AdminsList.."* )\n⌁︙عدد المميزين ↫ ( *"..VipList.."* )\n⌁︙عدد المحظورين ↫ ( *"..BanedList.."* )\n⌁︙عدد المقيدين ↫ ( *"..TkeedList.."* )\n⌁︙عدد المكتومين ↫ ( *"..MutedList.."* )", 1,"md")
 end,nil)
 end
 end
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لم تتم اضافتي بها لاقوم بكشفها", 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لم تتم اضافتي بها لاقوم بكشفها", 1, "md")
 end
 end,nil)
 end,nil)
@@ -8385,16 +8385,16 @@ end
 if text and text:match("^غادر (-%d+)$")  then
 local Text = { string.match(text, "^(غادر) (-%d+)$")}
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط', 1, 'md')
 else 
 tdcli_function({ID ="GetChat",chat_id_=Text[2]},function(arg,dp) 
 if dp.id_ then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙المجموعه ↫ ["..dp.title_.."]\n⌁︙تمت المغادره منها بنجاح", 1, "md")
-Dev_Abs(Text[2], 0, 1, "⌁︙بامر المطور تم مغادرة هذه المجموعه ", 1, "md")  
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙المجموعه ↫ ["..dp.title_.."]\n⌁︙تمت المغادره منها بنجاح", 1, "md")
+Dev_iven(Text[2], 0, 1, "⌁︙بامر المطور تم مغادرة هذه المجموعه ", 1, "md")  
 ChatLeave(dp.id_, ALOMDA)
-DevAbs:srem(ALOMDA.."Abs:Groups", dp.id_)
+Deviven:srem(ALOMDA.."iven:Groups", dp.id_)
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لم تتم اضافتي بها لاقوم بمغادرتها", 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لم تتم اضافتي بها لاقوم بمغادرتها", 1, "md")
 end 
 end,nil)
 end 
@@ -8402,106 +8402,106 @@ end
 --     Source ALOMDA     --
 if text and text:match("^تعين عدد الاعضاء (%d+)$") and SecondSudo(msg) or text and text:match("^تعيين عدد الاعضاء (%d+)$") and SecondSudo(msg) then
 local Num = text:match("تعين عدد الاعضاء (%d+)$") or text:match("تعيين عدد الاعضاء (%d+)$")
-DevAbs:set(ALOMDA..'Abs:Num:Add:Bot',Num) 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم وضع عدد الاعضاء ↫ *'..Num..'* عضو', 1, 'md')
+Deviven:set(ALOMDA..'iven:Num:Add:Bot',Num) 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم وضع عدد الاعضاء ↫ *'..Num..'* عضو', 1, 'md')
 end
 --     Source ALOMDA     --
 if text == 'تفعيل البوت الخدمي' then 
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط', 1, 'md')
 else 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل البوت الخدمي'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Lock:FreeBot'..ALOMDA) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل البوت الخدمي'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Lock:FreeBot'..ALOMDA) 
 end 
 end
 if text == 'تعطيل البوت الخدمي' then 
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط', 1, 'md')
 else 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل البوت الخدمي'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Lock:FreeBot'..ALOMDA,true) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل البوت الخدمي'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Lock:FreeBot'..ALOMDA,true) 
 end 
 end
 if ChatType == 'sp' or ChatType == 'gp'  then
 if text == 'تفعيل الالعاب' and Manager(msg) and ChCheck(msg) or text == 'تفعيل اللعبه' and Manager(msg) and ChCheck(msg) then   
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل الالعاب بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA..'Abs:Lock:Games'..msg.chat_id_) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل الالعاب بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:Lock:Games'..msg.chat_id_) 
 end
 if text == 'تعطيل الالعاب' and Manager(msg) and ChCheck(msg) or text == 'تعطيل اللعبه' and Manager(msg) and ChCheck(msg) then  
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل الالعاب بنجاح'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA..'Abs:Lock:Games'..msg.chat_id_,true)  
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل الالعاب بنجاح'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA..'iven:Lock:Games'..msg.chat_id_,true)  
 end
 if text == "تفعيل الرابط" or text == "تفعيل جلب الرابط" then 
 if Admin(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تفعيل جلب رابط المجموعه'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:del(ALOMDA.."Abs:Lock:GpLinks"..msg.chat_id_)
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تفعيل جلب رابط المجموعه'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA.."iven:Lock:GpLinks"..msg.chat_id_)
 return false  
 end
 end
 if text == "تعطيل الرابط" or text == "تعطيل جلب الرابط" then 
 if Admin(msg) then
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم تعطيل جلب رابط المجموعه'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
-DevAbs:set(ALOMDA.."Abs:Lock:GpLinks"..msg.chat_id_,"ok")
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم تعطيل جلب رابط المجموعه'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:set(ALOMDA.."iven:Lock:GpLinks"..msg.chat_id_,"ok")
 return false  
 end
 end
 --     Source ALOMDA     --
 if text and text:match('^تفعيل$') and SudoBot(msg) and SourceCh(msg) then
 if ChatType ~= 'sp' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه عاديه وليست خارقه لا تستطيع تفعيلي يرجى ان تضع سجل رسائل المجموعه ضاهر وليس مخفي ومن بعدها يمكنك رفعي ادمن ثم تفعيلي', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه عاديه وليست خارقه لا تستطيع تفعيلي يرجى ان تضع سجل رسائل المجموعه ضاهر وليس مخفي ومن بعدها يمكنك رفعي ادمن ثم تفعيلي', 1, 'md')
 return false
 end
 if msg.can_be_deleted_ == false then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙البوت ليس ادمن يرجى ترقيتي !', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙البوت ليس ادمن يرجى ترقيتي !', 1, 'md')
 return false  
 end
 tdcli_function ({ ID = "GetChannelFull", channel_id_ = msg.chat_id_:gsub("-100","")}, function(arg,data)  
-if tonumber(data.member_count_) < tonumber(DevAbs:get(ALOMDA..'Abs:Num:Add:Bot') or 0) and not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عدد اعضاء المجموعه اقل من ↫ *'..(DevAbs:get(ALOMDA..'Abs:Num:Add:Bot') or 0)..'* عضو', 1, 'md')
+if tonumber(data.member_count_) < tonumber(Deviven:get(ALOMDA..'iven:Num:Add:Bot') or 0) and not SecondSudo(msg) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عدد اعضاء المجموعه اقل من ↫ *'..(Deviven:get(ALOMDA..'iven:Num:Add:Bot') or 0)..'* عضو', 1, 'md')
 return false
 end
 tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(extra,result,success)
 tdcli_function({ID ="GetChat",chat_id_=msg.chat_id_},function(arg,dp) 
-DevAbs:del(ALOMDA..'Abs:AbsConstructor:'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:ivenConstructor:'..msg.chat_id_)
 tdcli_function ({ID = "GetChannelMembers",channel_id_ = msg.chat_id_:gsub("-100",""),filter_ = {ID = "ChannelMembersAdministrators"},offset_ = 0,limit_ = 100},function(arg,abbas) 
 local admins = abbas.members_
 for i=0 , #admins do
 if abbas.members_[i].bot_info_ == false and abbas.members_[i].status_.ID == "ChatMemberStatusEditor" then
-DevAbs:sadd(ALOMDA..'Abs:Admins:'..msg.chat_id_, admins[i].user_id_)
+Deviven:sadd(ALOMDA..'iven:Admins:'..msg.chat_id_, admins[i].user_id_)
 tdcli_function ({ID = "GetUser",user_id_ = admins[i].user_id_},function(arg,ba) 
 if ba.first_name_ == false then
-DevAbs:srem(ALOMDA..'Abs:Admins:'..msg.chat_id_, admins[i].user_id_)
+Deviven:srem(ALOMDA..'iven:Admins:'..msg.chat_id_, admins[i].user_id_)
 end
 end,nil)
 else
-DevAbs:sadd(ALOMDA..'Abs:Admins:'..msg.chat_id_, admins[i].user_id_)
+Deviven:sadd(ALOMDA..'iven:Admins:'..msg.chat_id_, admins[i].user_id_)
 end
 if abbas.members_[i].status_.ID == "ChatMemberStatusCreator" then
-DevAbs:sadd(ALOMDA.."Abs:BasicConstructor:"..msg.chat_id_,admins[i].user_id_)
-DevAbs:sadd(ALOMDA.."Abs:AbsConstructor:"..msg.chat_id_,admins[i].user_id_)
+Deviven:sadd(ALOMDA.."iven:BasicConstructor:"..msg.chat_id_,admins[i].user_id_)
+Deviven:sadd(ALOMDA.."iven:ivenConstructor:"..msg.chat_id_,admins[i].user_id_)
 tdcli_function ({ID = "GetUser",user_id_ = admins[i].user_id_},function(arg,ba) 
 if ba.first_name_ == false then
-DevAbs:srem(ALOMDA.."Abs:BasicConstructor:"..msg.chat_id_,admins[i].user_id_)
-DevAbs:srem(ALOMDA.."Abs:AbsConstructor:"..msg.chat_id_,admins[i].user_id_)
+Deviven:srem(ALOMDA.."iven:BasicConstructor:"..msg.chat_id_,admins[i].user_id_)
+Deviven:srem(ALOMDA.."iven:ivenConstructor:"..msg.chat_id_,admins[i].user_id_)
 end
 end,nil)  
 end 
 end
 end,nil)
-if DevAbs:sismember(ALOMDA..'Abs:Groups',msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه بالتاكيد مفعله', 1, 'md')
+if Deviven:sismember(ALOMDA..'iven:Groups',msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه بالتاكيد مفعله', 1, 'md')
 else
 ReplyStatus(msg,result.id_,"ReplyBy","⌁︙تم تفعيل المجموعه "..dp.title_)  
-DevAbs:sadd(ALOMDA.."Abs:Groups",msg.chat_id_)
-if not DevAbs:get(ALOMDA..'Abs:SudosGp'..msg.sender_user_id_..msg.chat_id_) and not SecondSudo(msg) then 
-DevAbs:incrby(ALOMDA..'Abs:Sudos'..msg.sender_user_id_,1)
-DevAbs:set(ALOMDA..'Abs:SudosGp'..msg.sender_user_id_..msg.chat_id_,"abs")
+Deviven:sadd(ALOMDA.."iven:Groups",msg.chat_id_)
+if not Deviven:get(ALOMDA..'iven:SudosGp'..msg.sender_user_id_..msg.chat_id_) and not SecondSudo(msg) then 
+Deviven:incrby(ALOMDA..'iven:Sudos'..msg.sender_user_id_,1)
+Deviven:set(ALOMDA..'iven:SudosGp'..msg.sender_user_id_..msg.chat_id_,"iven")
 end
 local Name1 = result.first_name_
 local Name1 = Name1:gsub('"',"") 
@@ -8525,7 +8525,7 @@ LinkGroup = LinkGp.result
 else
 LinkGroup = 'لا يوجد'
 end
-DevAbs:set(ALOMDA.."Abs:Groups:Links"..msg.chat_id_,LinkGroup) 
+Deviven:set(ALOMDA.."iven:Groups:Links"..msg.chat_id_,LinkGroup) 
 if not Sudo(msg) then
 SendText(DevId,"⌁︙تم تفعيل مجموعه جديده ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙بواسطة ↫ "..Name.."\n⌁︙اسم المجموعه ↫ ["..NameChat.."]\n⌁︙عدد اعضاء المجموعه ↫ ❨ *"..NumMem.."* ❩\n⌁︙ايدي المجموعه ↫ ⤈ \n❨ `"..msg.chat_id_.."` ❩\n⌁︙رابط المجموعه ↫ ⤈\n❨ ["..LinkGroup.."] ❩\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙الوقت ↫ "..os.date("%I:%M%p").."\n⌁︙التاريخ ↫ "..os.date("%Y/%m/%d").."",0,'md')
 end
@@ -8537,11 +8537,11 @@ end
 if text == 'تعطيل' and SudoBot(msg) and ChCheck(msg) then
 tdcli_function ({ID = "GetUser",user_id_ = msg.sender_user_id_},function(extra,result,success)
 tdcli_function({ID ="GetChat",chat_id_=msg.chat_id_},function(arg,dp) 
-if not DevAbs:sismember(ALOMDA..'Abs:Groups',msg.chat_id_) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه بالتاكيد معطله', 1, 'md')
+if not Deviven:sismember(ALOMDA..'iven:Groups',msg.chat_id_) then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙المجموعه بالتاكيد معطله', 1, 'md')
 else
 ReplyStatus(msg,result.id_,"ReplyBy","⌁︙تم تعطيل المجموعه "..dp.title_)  
-DevAbs:srem(ALOMDA.."Abs:Groups",msg.chat_id_)
+Deviven:srem(ALOMDA.."iven:Groups",msg.chat_id_)
 local Name1 = result.first_name_
 local Name1 = Name1:gsub('"',"") 
 local Name1 = Name1:gsub("'","") 
@@ -8563,7 +8563,7 @@ LinkGroup = LinkGp.result
 else
 LinkGroup = 'لا يوجد'
 end
-DevAbs:set(ALOMDA.."Abs:Groups:Links"..msg.chat_id_,LinkGroup) 
+Deviven:set(ALOMDA.."iven:Groups:Links"..msg.chat_id_,LinkGroup) 
 if not Sudo(msg) then
 SendText(DevId,"⌁︙تم تعطيل مجموعه جديده ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙بواسطة ↫ "..Name.."\n⌁︙اسم المجموعه ↫ ["..NameChat.."]\n⌁︙ايدي المجموعه ↫ ⤈ \n❨ `"..msg.chat_id_.."` ❩\n⌁︙رابط المجموعه ↫ ⤈\n❨ ["..LinkGroup.."] ❩\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙الوقت ↫ "..os.date("%I:%M%p").."\n⌁︙التاريخ ↫ "..os.date("%Y/%m/%d").."",0,'md')
 end
@@ -8606,26 +8606,26 @@ end
 --     Source ALOMDA     --
 if text == 'جلب نسخه السورس' then
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
 sendDocument(DevId, 0, 0, 1, nil, './ALOMDA.lua', dl_cb, nil)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عزيزي المطور تم ارسال نسخة ملف السورس الى الخاص', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عزيزي المطور تم ارسال نسخة ملف السورس الى الخاص', 1, 'md')
 end end
 --     Source ALOMDA     --
 if text == 'روابط الكروبات' or text == 'روابط المجموعات' then
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
-local List = DevAbs:smembers(ALOMDA.."Abs:Groups")
+local List = Deviven:smembers(ALOMDA.."iven:Groups")
 if #List == 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لا يوجد مجموعات مفعله', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لا يوجد مجموعات مفعله', 1, 'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙جاري ارسال نسخه تحتوي على '..#List..' مجموعه', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙جاري ارسال نسخه تحتوي على '..#List..' مجموعه', 1, 'md')
 local text = "⌁︙Source ALOMDA\n⌁︙File Bot Groups\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 for k,v in pairs(List) do
-local GroupsManagers = DevAbs:scard(ALOMDA.."Abs:Managers:"..v) or 0
-local GroupsAdmins = DevAbs:scard(ALOMDA.."Abs:Admins:"..v) or 0
-local Groupslink = DevAbs:get(ALOMDA.."Abs:Groups:Links" ..v)
+local GroupsManagers = Deviven:scard(ALOMDA.."iven:Managers:"..v) or 0
+local GroupsAdmins = Deviven:scard(ALOMDA.."iven:Admins:"..v) or 0
+local Groupslink = Deviven:get(ALOMDA.."iven:Groups:Links" ..v)
 text = text..k.." ↬ ⤈ \n⌁︙Group ID ↬ "..v.."\n⌁︙Group Link ↬ "..(Groupslink or "Not Found").."\n⌁︙Group Managers ↬ "..GroupsManagers.."\n⌁︙Group Admins ↬ "..GroupsAdmins.."\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n"
 end
 local File = io.open('GroupsBot.txt', 'w')
@@ -8639,25 +8639,25 @@ end
 end
 --     Source ALOMDA     --
 if text == "اذاعه بالخاص" and msg.reply_to_message_id_ == 0 and SudoBot(msg) or text == "↫ اذاعه خاص ⌁" and msg.reply_to_message_id_ == 0 and SudoBot(msg) then 
-if DevAbs:get(ALOMDA.."Abs:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
+if Deviven:get(ALOMDA.."iven:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
 send(msg.chat_id_, msg.id_,"⌁︙الاذاعه معطله من قبل المطور الاساسي")
 return false
 end
-DevAbs:setex(ALOMDA.."Abs:Send:Pv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙ارسل لي سواء ↫ ⤈ \n❨ ملف • ملصق • متحركه • صوره\n • فيديو • بصمه • صوت • رساله ❩\n⌁︙للخروج ارسل ↫ ( الغاء ) \n ✓'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:setex(ALOMDA.."iven:Send:Pv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙ارسل لي سواء ↫ ⤈ \n❨ ملف • ملصق • متحركه • صوره\n • فيديو • بصمه • صوت • رساله ❩\n⌁︙للخروج ارسل ↫ ( الغاء ) \n ✓'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 return false
 end 
-if DevAbs:get(ALOMDA.."Abs:Send:Pv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then 
+if Deviven:get(ALOMDA.."iven:Send:Pv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then 
 if text == 'الغاء' then   
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء امر الاذاعه بنجاح", 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Send:Pv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء امر الاذاعه بنجاح", 1, 'md')
+Deviven:del(ALOMDA.."iven:Send:Pv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
 return false
 end 
-List = DevAbs:smembers(ALOMDA..'Abs:Users') 
+List = Deviven:smembers(ALOMDA..'iven:Users') 
 if msg.content_.text_ then
 for k,v in pairs(List) do 
-AbsText = "الرساله"
+ivenText = "الرساله"
 send(v, 0,"["..msg.content_.text_.."]") 
 end
 elseif msg.content_.photo_ then
@@ -8667,64 +8667,64 @@ elseif msg.content_.photo_.sizes_[1] then
 photo = msg.content_.photo_.sizes_[1].photo_.persistent_id_
 end
 for k,v in pairs(List) do 
-AbsText = "الصوره"
+ivenText = "الصوره"
 sendPhoto(v, 0, 0, 1, nil, photo,(msg.content_.caption_ or ''))
 end 
 elseif msg.content_.animation_ then
 for k,v in pairs(List) do 
-AbsText = "المتحركه"
+ivenText = "المتحركه"
 sendDocument(v, 0, 0, 1,nil, msg.content_.animation_.animation_.persistent_id_,(msg.content_.caption_ or ''))    
 end 
 elseif msg.content_.video_ then
 for k,v in pairs(List) do 
-AbsText = "الفيديو"
+ivenText = "الفيديو"
 sendVideo(v, 0, 0, 1, nil, msg.content_.video_.video_.persistent_id_,(msg.content_.caption_ or '')) 
 end 
 elseif msg.content_.voice_ then
 for k,v in pairs(List) do 
-AbsText = "البصمه"
+ivenText = "البصمه"
 sendVoice(v, 0, 0, 1, nil, msg.content_.voice_.voice_.persistent_id_,(msg.content_.caption_ or '')) 
 end 
 elseif msg.content_.audio_ then
 for k,v in pairs(List) do 
-AbsText = "الصوت"
+ivenText = "الصوت"
 sendAudio(v, 0, 0, 1, nil, msg.content_.audio_.audio_.persistent_id_,(msg.content_.caption_ or '')) 
 end 
 elseif msg.content_.document_ then
 for k,v in pairs(List) do 
-AbsText = "الملف"
+ivenText = "الملف"
 sendDocument(v, 0, 0, 1,nil, msg.content_.document_.document_.persistent_id_,(msg.content_.caption_ or ''))    
 end 
 elseif msg.content_.sticker_ then
 for k,v in pairs(List) do 
-AbsText = "الملصق"
+ivenText = "الملصق"
 sendSticker(v, 0, 0, 1, nil, msg.content_.sticker_.sticker_.persistent_id_)   
 end 
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم اذاعة "..AbsText.." بنجاح \n⌁︙‏الى ↫ ❨ "..#List.." ❩ مشترك \n ✓", 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Send:Pv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم اذاعة "..ivenText.." بنجاح \n⌁︙‏الى ↫ ❨ "..#List.." ❩ مشترك \n ✓", 1, 'md')
+Deviven:del(ALOMDA.."iven:Send:Pv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
 end
 --     Source ALOMDA     --
 if text == "اذاعه" and msg.reply_to_message_id_ == 0 and SudoBot(msg) or text == "↫ اذاعه عام ⌁" and msg.reply_to_message_id_ == 0 and SudoBot(msg) then 
-if DevAbs:get(ALOMDA.."Abs:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
+if Deviven:get(ALOMDA.."iven:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
 send(msg.chat_id_, msg.id_,"⌁︙الاذاعه معطله من قبل المطور الاساسي")
 return false
 end
-DevAbs:setex(ALOMDA.."Abs:Send:Gp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙ارسل لي سواء ↫ ⤈ \n❨ ملف • ملصق • متحركه • صوره\n • فيديو • بصمه • صوت • رساله ❩\n⌁︙للخروج ارسل ↫ ( الغاء ) \n ✓'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:setex(ALOMDA.."iven:Send:Gp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙ارسل لي سواء ↫ ⤈ \n❨ ملف • ملصق • متحركه • صوره\n • فيديو • بصمه • صوت • رساله ❩\n⌁︙للخروج ارسل ↫ ( الغاء ) \n ✓'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 return false
 end 
-if DevAbs:get(ALOMDA.."Abs:Send:Gp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then 
+if Deviven:get(ALOMDA.."iven:Send:Gp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then 
 if text == 'الغاء' then   
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء امر الاذاعه بنجاح", 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Send:Gp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء امر الاذاعه بنجاح", 1, 'md')
+Deviven:del(ALOMDA.."iven:Send:Gp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
 return false
 end 
-List = DevAbs:smembers(ALOMDA..'Abs:Groups') 
+List = Deviven:smembers(ALOMDA..'iven:Groups') 
 if msg.content_.text_ then
 for k,v in pairs(List) do 
-AbsText = "الرساله"
+ivenText = "الرساله"
 send(v, 0,"["..msg.content_.text_.."]") 
 end
 elseif msg.content_.photo_ then
@@ -8734,114 +8734,114 @@ elseif msg.content_.photo_.sizes_[1] then
 photo = msg.content_.photo_.sizes_[1].photo_.persistent_id_
 end
 for k,v in pairs(List) do 
-AbsText = "الصوره"
+ivenText = "الصوره"
 sendPhoto(v, 0, 0, 1, nil, photo,(msg.content_.caption_ or ''))
 end 
 elseif msg.content_.animation_ then
 for k,v in pairs(List) do 
-AbsText = "المتحركه"
+ivenText = "المتحركه"
 sendDocument(v, 0, 0, 1,nil, msg.content_.animation_.animation_.persistent_id_,(msg.content_.caption_ or ''))    
 end 
 elseif msg.content_.video_ then
 for k,v in pairs(List) do 
-AbsText = "الفيديو"
+ivenText = "الفيديو"
 sendVideo(v, 0, 0, 1, nil, msg.content_.video_.video_.persistent_id_,(msg.content_.caption_ or '')) 
 end 
 elseif msg.content_.voice_ then
 for k,v in pairs(List) do 
-AbsText = "البصمه"
+ivenText = "البصمه"
 sendVoice(v, 0, 0, 1, nil, msg.content_.voice_.voice_.persistent_id_,(msg.content_.caption_ or '')) 
 end 
 elseif msg.content_.audio_ then
 for k,v in pairs(List) do 
-AbsText = "الصوت"
+ivenText = "الصوت"
 sendAudio(v, 0, 0, 1, nil, msg.content_.audio_.audio_.persistent_id_,(msg.content_.caption_ or '')) 
 end 
 elseif msg.content_.document_ then
 for k,v in pairs(List) do 
-AbsText = "الملف"
+ivenText = "الملف"
 sendDocument(v, 0, 0, 1,nil, msg.content_.document_.document_.persistent_id_,(msg.content_.caption_ or ''))    
 end 
 elseif msg.content_.sticker_ then
 for k,v in pairs(List) do 
-AbsText = "الملصق"
+ivenText = "الملصق"
 sendSticker(v, 0, 0, 1, nil, msg.content_.sticker_.sticker_.persistent_id_)   
 end 
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم اذاعة "..AbsText.." بنجاح \n⌁︙‏في ↫ ❨ "..#List.." ❩ مجموعه \n ✓", 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Send:Gp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم اذاعة "..ivenText.." بنجاح \n⌁︙‏في ↫ ❨ "..#List.." ❩ مجموعه \n ✓", 1, 'md')
+Deviven:del(ALOMDA.."iven:Send:Gp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
 end
 --     Source ALOMDA     --
 if text == "اذاعه بالتوجيه" and msg.reply_to_message_id_ == 0 and SudoBot(msg) or text == "↫ اذاعه عام بالتوجيه ⌁" and msg.reply_to_message_id_ == 0 and SudoBot(msg) then 
-if DevAbs:get(ALOMDA.."Abs:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
+if Deviven:get(ALOMDA.."iven:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
 send(msg.chat_id_, msg.id_,"⌁︙الاذاعه معطله من قبل المطور الاساسي")
 return false
 end
-DevAbs:setex(ALOMDA.."Abs:Send:FwdGp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙ارسل الرساله الان لتوجيها \n⌁︙للخروج ارسل ↫ ( الغاء ) \n ✓'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:setex(ALOMDA.."iven:Send:FwdGp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙ارسل الرساله الان لتوجيها \n⌁︙للخروج ارسل ↫ ( الغاء ) \n ✓'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 return false
 end 
-if DevAbs:get(ALOMDA.."Abs:Send:FwdGp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then 
+if Deviven:get(ALOMDA.."iven:Send:FwdGp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then 
 if text == 'الغاء' then   
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء امر الاذاعه بنجاح", 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Send:FwdGp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء امر الاذاعه بنجاح", 1, 'md')
+Deviven:del(ALOMDA.."iven:Send:FwdGp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
 return false  
 end 
-local List = DevAbs:smembers(ALOMDA..'Abs:Groups')   
+local List = Deviven:smembers(ALOMDA..'iven:Groups')   
 for k,v in pairs(List) do  
 tdcli_function({ID="ForwardMessages", chat_id_ = v, from_chat_id_ = msg.chat_id_, message_ids_ = {[0] = msg.id_}, disable_notification_ = 0, from_background_ = 1},function(a,t) end,nil) 
 end   
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم اذاعة رسالتك بالتوجيه \n⌁︙‏في ↫ ❨ "..#List.." ❩ مجموعه \n ✓", 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Send:FwdGp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم اذاعة رسالتك بالتوجيه \n⌁︙‏في ↫ ❨ "..#List.." ❩ مجموعه \n ✓", 1, 'md')
+Deviven:del(ALOMDA.."iven:Send:FwdGp" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
 end
 --     Source ALOMDA     --
 if text == "اذاعه خاص بالتوجيه" and msg.reply_to_message_id_ == 0 and SudoBot(msg) or text == "↫ اذاعه خاص بالتوجيه ⌁" and msg.reply_to_message_id_ == 0 and SudoBot(msg) then 
-if DevAbs:get(ALOMDA.."Abs:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
+if Deviven:get(ALOMDA.."iven:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
 send(msg.chat_id_, msg.id_,"⌁︙الاذاعه معطله من قبل المطور الاساسي")
 return false
 end
-DevAbs:setex(ALOMDA.."Abs:Send:FwdPv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙ارسل الرساله الان لتوجيها \n⌁︙للخروج ارسل ↫ ( الغاء ) \n ✓'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:setex(ALOMDA.."iven:Send:FwdPv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙ارسل الرساله الان لتوجيها \n⌁︙للخروج ارسل ↫ ( الغاء ) \n ✓'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 return false
 end 
-if DevAbs:get(ALOMDA.."Abs:Send:FwdPv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then 
+if Deviven:get(ALOMDA.."iven:Send:FwdPv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then 
 if text == 'الغاء' then   
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء امر الاذاعه بنجاح", 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Send:FwdPv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء امر الاذاعه بنجاح", 1, 'md')
+Deviven:del(ALOMDA.."iven:Send:FwdPv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
 return false  
 end 
-local List = DevAbs:smembers(ALOMDA..'Abs:Users')   
+local List = Deviven:smembers(ALOMDA..'iven:Users')   
 for k,v in pairs(List) do  
 tdcli_function({ID="ForwardMessages", chat_id_ = v, from_chat_id_ = msg.chat_id_, message_ids_ = {[0] = msg.id_}, disable_notification_ = 0, from_background_ = 1},function(a,t) end,nil) 
 end   
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم اذاعة رسالتك بالتوجيه \n⌁︙‏الى ↫ ❨ "..#List.." ❩ مشترك \n ✓", 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Send:FwdPv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم اذاعة رسالتك بالتوجيه \n⌁︙‏الى ↫ ❨ "..#List.." ❩ مشترك \n ✓", 1, 'md')
+Deviven:del(ALOMDA.."iven:Send:FwdPv" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
 end
 --     Source ALOMDA     --
 if text == "اذاعه بالتثبيت" and msg.reply_to_message_id_ == 0 and SudoBot(msg) or text == "↫ اذاعه بالتثبيت ⌁" and msg.reply_to_message_id_ == 0 and SudoBot(msg) then 
-if DevAbs:get(ALOMDA.."Abs:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
+if Deviven:get(ALOMDA.."iven:Send:Bot"..ALOMDA) and not SecondSudo(msg) then 
 send(msg.chat_id_, msg.id_,"⌁︙الاذاعه معطله من قبل المطور الاساسي")
 return false
 end
-DevAbs:setex(ALOMDA.."Abs:Send:Gp:Pin" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙ارسل لي سواء ↫ ⤈ \n❨ ملف • ملصق • متحركه • صوره\n • فيديو • بصمه • صوت • رساله ❩\n⌁︙للخروج ارسل ↫ ( الغاء ) \n ✓'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:setex(ALOMDA.."iven:Send:Gp:Pin" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 600, true) 
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙ارسل لي سواء ↫ ⤈ \n❨ ملف • ملصق • متحركه • صوره\n • فيديو • بصمه • صوت • رساله ❩\n⌁︙للخروج ارسل ↫ ( الغاء ) \n ✓'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 return false
 end 
-if DevAbs:get(ALOMDA.."Abs:Send:Gp:Pin" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then 
+if Deviven:get(ALOMDA.."iven:Send:Gp:Pin" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) then 
 if text == "الغاء" then   
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء امر الاذاعه بنجاح", 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Send:Gp:Pin" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء امر الاذاعه بنجاح", 1, 'md')
+Deviven:del(ALOMDA.."iven:Send:Gp:Pin" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
 return false
 end 
-local List = DevAbs:smembers(ALOMDA.."Abs:Groups") 
+local List = Deviven:smembers(ALOMDA.."iven:Groups") 
 if msg.content_.text_ then
 for k,v in pairs(List) do 
-AbsText = "الرساله"
+ivenText = "الرساله"
 send(v, 0,"["..msg.content_.text_.."]") 
-DevAbs:set(ALOMDA..'Abs:PinnedMsgs'..v,msg.content_.text_) 
+Deviven:set(ALOMDA..'iven:PinnedMsgs'..v,msg.content_.text_) 
 end
 elseif msg.content_.photo_ then
 if msg.content_.photo_.sizes_[0] then
@@ -8850,114 +8850,114 @@ elseif msg.content_.photo_.sizes_[1] then
 photo = msg.content_.photo_.sizes_[1].photo_.persistent_id_
 end
 for k,v in pairs(List) do 
-AbsText = "الصوره"
+ivenText = "الصوره"
 sendPhoto(v, 0, 0, 1, nil, photo,(msg.content_.caption_ or ''))
-DevAbs:set(ALOMDA..'Abs:PinnedMsgs'..v,photo) 
+Deviven:set(ALOMDA..'iven:PinnedMsgs'..v,photo) 
 end 
 elseif msg.content_.animation_ then
 for k,v in pairs(List) do 
-AbsText = "المتحركه"
+ivenText = "المتحركه"
 sendDocument(v, 0, 0, 1,nil, msg.content_.animation_.animation_.persistent_id_,(msg.content_.caption_ or ''))    
-DevAbs:set(ALOMDA..'Abs:PinnedMsgs'..v,msg.content_.animation_.animation_.persistent_id_)
+Deviven:set(ALOMDA..'iven:PinnedMsgs'..v,msg.content_.animation_.animation_.persistent_id_)
 end 
 elseif msg.content_.video_ then
 for k,v in pairs(List) do 
-AbsText = "الفيديو"
+ivenText = "الفيديو"
 sendVideo(v, 0, 0, 1, nil, msg.content_.video_.video_.persistent_id_,(msg.content_.caption_ or '')) 
-DevAbs:set(ALOMDA..'Abs:PinnedMsgs'..v,msg.content_.video_.video_.persistent_id_)
+Deviven:set(ALOMDA..'iven:PinnedMsgs'..v,msg.content_.video_.video_.persistent_id_)
 end 
 elseif msg.content_.voice_ then
 for k,v in pairs(List) do 
-AbsText = "البصمه"
+ivenText = "البصمه"
 sendVoice(v, 0, 0, 1, nil, msg.content_.voice_.voice_.persistent_id_,(msg.content_.caption_ or '')) 
-DevAbs:set(ALOMDA..'Abs:PinnedMsgs'..v,msg.content_.voice_.voice_.persistent_id_)
+Deviven:set(ALOMDA..'iven:PinnedMsgs'..v,msg.content_.voice_.voice_.persistent_id_)
 end 
 elseif msg.content_.audio_ then
 for k,v in pairs(List) do 
-AbsText = "الصوت"
+ivenText = "الصوت"
 sendAudio(v, 0, 0, 1, nil, msg.content_.audio_.audio_.persistent_id_,(msg.content_.caption_ or '')) 
-DevAbs:set(ALOMDA..'Abs:PinnedMsgs'..v,msg.content_.audio_.audio_.persistent_id_)
+Deviven:set(ALOMDA..'iven:PinnedMsgs'..v,msg.content_.audio_.audio_.persistent_id_)
 end 
 elseif msg.content_.document_ then
 for k,v in pairs(List) do 
-AbsText = "الملف"
+ivenText = "الملف"
 sendDocument(v, 0, 0, 1,nil, msg.content_.document_.document_.persistent_id_,(msg.content_.caption_ or ''))    
-DevAbs:set(ALOMDA..'Abs:PinnedMsgs'..v,msg.content_.document_.document_.persistent_id_)
+Deviven:set(ALOMDA..'iven:PinnedMsgs'..v,msg.content_.document_.document_.persistent_id_)
 end 
 elseif msg.content_.sticker_ then
 for k,v in pairs(List) do 
-AbsText = "الملصق"
+ivenText = "الملصق"
 sendSticker(v, 0, 0, 1, nil, msg.content_.sticker_.sticker_.persistent_id_)   
-DevAbs:set(ALOMDA..'Abs:PinnedMsgs'..v,msg.content_.sticker_.sticker_.persistent_id_) 
+Deviven:set(ALOMDA..'iven:PinnedMsgs'..v,msg.content_.sticker_.sticker_.persistent_id_) 
 end 
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم اذاعة "..AbsText.." بالتثبيت \n⌁︙‏في ↫ ❨ "..#List.." ❩ مجموعه \n ✓", 1, 'md')
-DevAbs:del(ALOMDA.."Abs:Send:Gp:Pin" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم اذاعة "..ivenText.." بالتثبيت \n⌁︙‏في ↫ ❨ "..#List.." ❩ مجموعه \n ✓", 1, 'md')
+Deviven:del(ALOMDA.."iven:Send:Gp:Pin" .. msg.chat_id_ .. ":" .. msg.sender_user_id_) 
 return false
 end
 --     Source ALOMDA     --
 if text == 'حذف رد' and Manager(msg) and ChCheck(msg) or text == 'مسح رد' and  Manager(msg) and ChCheck(msg) then
-DevAbs:set(ALOMDA..'Abs:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_,'DelGpRed')
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙حسنا ارسل الكلمه لحذفها " ,  1, "md")
+Deviven:set(ALOMDA..'iven:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_,'DelGpRed')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙حسنا ارسل الكلمه لحذفها " ,  1, "md")
 return false
 end
 if text == 'اضف رد' and Manager(msg) and ChCheck(msg) then
-DevAbs:set(ALOMDA..'Abs:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_,'SetGpRed')
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙حسنا ارسل الكلمه الان " ,  1, "md")
+Deviven:set(ALOMDA..'iven:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_,'SetGpRed')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙حسنا ارسل الكلمه الان " ,  1, "md")
 return false
 end
 if text and text:match("^(.*)$") then
-local SetGpRed = DevAbs:get(ALOMDA..'Abs:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'')
+local SetGpRed = Deviven:get(ALOMDA..'iven:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'')
 if SetGpRed == 'SetGpRed' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل لي الرد سواء كان ↫ ⤈\n❨ ملف • ملصق • متحركه • صوره\n • فيديو • بصمه • صوت • رساله ❩\n⌁︙يمكنك اضافة الى النص ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n `#username` ↬ معرف المستخدم\n `#msgs` ↬ عدد الرسائل\n `#name` ↬ اسم المستخدم\n `#id` ↬ ايدي المستخدم\n `#stast` ↬ رتبة المستخدم\n `#edit` ↬ عدد السحكات\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙للخروج ارسل ↫ ( الغاء )\n ✓" ,  1, "md")
-DevAbs:set(ALOMDA..'Abs:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'','SaveGpRed')
-DevAbs:set(ALOMDA..'Abs:Add:GpText'..msg.sender_user_id_..''..msg.chat_id_..'',text)
-DevAbs:sadd(ALOMDA..'Abs:Manager:GpRed'..msg.chat_id_..'',text)
-DevAbs:set(ALOMDA..'DelManagerRep'..msg.chat_id_..'',text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل لي الرد سواء كان ↫ ⤈\n❨ ملف • ملصق • متحركه • صوره\n • فيديو • بصمه • صوت • رساله ❩\n⌁︙يمكنك اضافة الى النص ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n `#username` ↬ معرف المستخدم\n `#msgs` ↬ عدد الرسائل\n `#name` ↬ اسم المستخدم\n `#id` ↬ ايدي المستخدم\n `#stast` ↬ رتبة المستخدم\n `#edit` ↬ عدد السحكات\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙للخروج ارسل ↫ ( الغاء )\n ✓" ,  1, "md")
+Deviven:set(ALOMDA..'iven:Add:GpRed'..msg.sender_user_id_..''..msg.chat_id_..'','SaveGpRed')
+Deviven:set(ALOMDA..'iven:Add:GpText'..msg.sender_user_id_..''..msg.chat_id_..'',text)
+Deviven:sadd(ALOMDA..'iven:Manager:GpRed'..msg.chat_id_..'',text)
+Deviven:set(ALOMDA..'DelManagerRep'..msg.chat_id_..'',text)
 return false
 end
 end
 --     Source ALOMDA     --
 if text == 'حذف رد عام' and SecondSudo(msg) or text == '↫ حذف رد عام ⌁' and SecondSudo(msg) or text == 'مسح رد عام' and SecondSudo(msg) then
-DevAbs:set(ALOMDA.."Abs:Add:AllRed"..msg.sender_user_id_,'DelAllRed')
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙حسنا ارسل الكلمه لحذفها " ,  1, "md")
+Deviven:set(ALOMDA.."iven:Add:AllRed"..msg.sender_user_id_,'DelAllRed')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙حسنا ارسل الكلمه لحذفها " ,  1, "md")
 return false
 end
 if text == 'اضف رد عام' and SecondSudo(msg) or text == '↫ اضف رد عام ⌁' and SecondSudo(msg) then
-DevAbs:set(ALOMDA.."Abs:Add:AllRed"..msg.sender_user_id_,'SetAllRed')
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙حسنا ارسل الكلمه الان " ,  1, "md")
+Deviven:set(ALOMDA.."iven:Add:AllRed"..msg.sender_user_id_,'SetAllRed')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙حسنا ارسل الكلمه الان " ,  1, "md")
 return false
 end
 if text and text:match("^(.*)$") then
-local SetAllRed = DevAbs:get(ALOMDA.."Abs:Add:AllRed"..msg.sender_user_id_)
+local SetAllRed = Deviven:get(ALOMDA.."iven:Add:AllRed"..msg.sender_user_id_)
 if SetAllRed == 'SetAllRed' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل لي الرد سواء كان ↫ ⤈\n❨ ملف • ملصق • متحركه • صوره\n • فيديو • بصمه • صوت • رساله ❩\n⌁︙يمكنك اضافة الى النص ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n `#username` ↬ معرف المستخدم\n `#msgs` ↬ عدد الرسائل\n `#name` ↬ اسم المستخدم\n `#id` ↬ ايدي المستخدم\n `#stast` ↬ رتبة المستخدم\n `#edit` ↬ عدد السحكات\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙للخروج ارسل ↫ ( الغاء )\n ✓" ,  1, "md")
-DevAbs:set(ALOMDA.."Abs:Add:AllRed"..msg.sender_user_id_,'SaveAllRed')
-DevAbs:set(ALOMDA.."Abs:Add:AllText"..msg.sender_user_id_, text)
-DevAbs:sadd(ALOMDA.."Abs:Sudo:AllRed",text)
-DevAbs:set(ALOMDA.."DelSudoRep",text)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل لي الرد سواء كان ↫ ⤈\n❨ ملف • ملصق • متحركه • صوره\n • فيديو • بصمه • صوت • رساله ❩\n⌁︙يمكنك اضافة الى النص ↫ ⤈\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n `#username` ↬ معرف المستخدم\n `#msgs` ↬ عدد الرسائل\n `#name` ↬ اسم المستخدم\n `#id` ↬ ايدي المستخدم\n `#stast` ↬ رتبة المستخدم\n `#edit` ↬ عدد السحكات\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙للخروج ارسل ↫ ( الغاء )\n ✓" ,  1, "md")
+Deviven:set(ALOMDA.."iven:Add:AllRed"..msg.sender_user_id_,'SaveAllRed')
+Deviven:set(ALOMDA.."iven:Add:AllText"..msg.sender_user_id_, text)
+Deviven:sadd(ALOMDA.."iven:Sudo:AllRed",text)
+Deviven:set(ALOMDA.."DelSudoRep",text)
 return false 
 end end
 --     Source ALOMDA     --
 if text == 'الردود' and Manager(msg) and ChCheck(msg) or text == 'ردود المدير' and Manager(msg) and ChCheck(msg) then
-local redod = DevAbs:smembers(ALOMDA..'Abs:Manager:GpRed'..msg.chat_id_..'')
+local redod = Deviven:smembers(ALOMDA..'iven:Manager:GpRed'..msg.chat_id_..'')
 MsgRep = '⌁︙ردود المدير ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n'
 for k,v in pairs(redod) do
-if DevAbs:get(ALOMDA.."Abs:Gif:GpRed"..v..msg.chat_id_) then
+if Deviven:get(ALOMDA.."iven:Gif:GpRed"..v..msg.chat_id_) then
 dp = 'متحركه 🎭'
-elseif DevAbs:get(ALOMDA.."Abs:Voice:GpRed"..v..msg.chat_id_) then
+elseif Deviven:get(ALOMDA.."iven:Voice:GpRed"..v..msg.chat_id_) then
 dp = 'بصمه 🎙'
-elseif DevAbs:get(ALOMDA.."Abs:Stecker:GpRed"..v..msg.chat_id_) then
+elseif Deviven:get(ALOMDA.."iven:Stecker:GpRed"..v..msg.chat_id_) then
 dp = 'ملصق 🃏'
-elseif DevAbs:get(ALOMDA.."Abs:Text:GpRed"..v..msg.chat_id_) then
+elseif Deviven:get(ALOMDA.."iven:Text:GpRed"..v..msg.chat_id_) then
 dp = 'رساله ✉'
-elseif DevAbs:get(ALOMDA.."Abs:Photo:GpRed"..v..msg.chat_id_) then
+elseif Deviven:get(ALOMDA.."iven:Photo:GpRed"..v..msg.chat_id_) then
 dp = 'صوره 🎇'
-elseif DevAbs:get(ALOMDA.."Abs:Video:GpRed"..v..msg.chat_id_) then
+elseif Deviven:get(ALOMDA.."iven:Video:GpRed"..v..msg.chat_id_) then
 dp = 'فيديو 📽'
-elseif DevAbs:get(ALOMDA.."Abs:File:GpRed"..v..msg.chat_id_) then
+elseif Deviven:get(ALOMDA.."iven:File:GpRed"..v..msg.chat_id_) then
 dp = 'ملف 📁'
-elseif DevAbs:get(ALOMDA.."Abs:Audio:GpRed"..v..msg.chat_id_) then
+elseif Deviven:get(ALOMDA.."iven:Audio:GpRed"..v..msg.chat_id_) then
 dp = 'اغنيه 🎶'
 end
 MsgRep = MsgRep..''..k..'~ (`'..v..'`) ↫ {*'..dp..'*}\n' 
@@ -8969,20 +8969,20 @@ send(msg.chat_id_,msg.id_,MsgRep)
 end
 --     Source ALOMDA     --
 if text == 'حذف الردود' and Manager(msg) and ChCheck(msg) or text == 'مسح الردود' and Manager(msg) and ChCheck(msg) or text == 'حذف ردود المدير' and Manager(msg) and ChCheck(msg) or text == 'مسح ردود المدير' and Manager(msg) and ChCheck(msg) then
-local redod = DevAbs:smembers(ALOMDA..'Abs:Manager:GpRed'..msg.chat_id_..'')
+local redod = Deviven:smembers(ALOMDA..'iven:Manager:GpRed'..msg.chat_id_..'')
 if #redod == 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لا توجد ردود مضافه" ,  1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لا توجد ردود مضافه" ,  1, "md")
 else
 for k,v in pairs(redod) do
-DevAbs:del(ALOMDA..'Abs:Gif:GpRed'..v..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:Voice:GpRed'..v..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:Audio:GpRed'..v..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:Photo:GpRed'..v..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:Stecker:GpRed'..v..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:Video:GpRed'..v..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:File:GpRed'..v..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:Text:GpRed'..v..msg.chat_id_)
-DevAbs:del(ALOMDA..'Abs:Manager:GpRed'..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Gif:GpRed'..v..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Voice:GpRed'..v..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Audio:GpRed'..v..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Photo:GpRed'..v..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Stecker:GpRed'..v..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Video:GpRed'..v..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:File:GpRed'..v..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Text:GpRed'..v..msg.chat_id_)
+Deviven:del(ALOMDA..'iven:Manager:GpRed'..msg.chat_id_)
 end
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف ردود المدير")  
 return false
@@ -8990,24 +8990,24 @@ end
 end
 --     Source ALOMDA     --
 if  text == "ردود المطور" and SecondSudo(msg) or text == "الردود العام" and SecondSudo(msg) or text == "ردود العام" and SecondSudo(msg) or text == "↫ الردود العام ⌁" and SecondSudo(msg) then
-local redod = DevAbs:smembers(ALOMDA.."Abs:Sudo:AllRed")
+local redod = Deviven:smembers(ALOMDA.."iven:Sudo:AllRed")
 MsgRep = '⌁︙ردود المطور ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n'
 for k,v in pairs(redod) do
-if DevAbs:get(ALOMDA.."Abs:Gif:AllRed"..v) then
+if Deviven:get(ALOMDA.."iven:Gif:AllRed"..v) then
 dp = 'متحركه 🎭'
-elseif DevAbs:get(ALOMDA.."Abs:Voice:AllRed"..v) then
+elseif Deviven:get(ALOMDA.."iven:Voice:AllRed"..v) then
 dp = 'بصمه 🎙'
-elseif DevAbs:get(ALOMDA.."Abs:Stecker:AllRed"..v) then
+elseif Deviven:get(ALOMDA.."iven:Stecker:AllRed"..v) then
 dp = 'ملصق 🃏'
-elseif DevAbs:get(ALOMDA.."Abs:Text:AllRed"..v) then
+elseif Deviven:get(ALOMDA.."iven:Text:AllRed"..v) then
 dp = 'رساله ✉'
-elseif DevAbs:get(ALOMDA.."Abs:Photo:AllRed"..v) then
+elseif Deviven:get(ALOMDA.."iven:Photo:AllRed"..v) then
 dp = 'صوره 🎇'
-elseif DevAbs:get(ALOMDA.."Abs:Video:AllRed"..v) then
+elseif Deviven:get(ALOMDA.."iven:Video:AllRed"..v) then
 dp = 'فيديو 📽'
-elseif DevAbs:get(ALOMDA.."Abs:File:AllRed"..v) then
+elseif Deviven:get(ALOMDA.."iven:File:AllRed"..v) then
 dp = 'ملف 📁'
-elseif DevAbs:get(ALOMDA.."Abs:Audio:AllRed"..v) then
+elseif Deviven:get(ALOMDA.."iven:Audio:AllRed"..v) then
 dp = 'اغنيه 🎶'
 end
 MsgRep = MsgRep..''..k..'~ (`'..v..'`) ↫ {*'..dp..'*}\n' 
@@ -9019,21 +9019,21 @@ send(msg.chat_id_,msg.id_,MsgRep)
 end
 --     Source ALOMDA     --
 if text == "حذف ردود المطور" and SecondSudo(msg) or text == "حذف ردود العام" and SecondSudo(msg) or text == "مسح ردود المطور" and SecondSudo(msg) then
-local redod = DevAbs:smembers(ALOMDA.."Abs:Sudo:AllRed")
+local redod = Deviven:smembers(ALOMDA.."iven:Sudo:AllRed")
 if #redod == 0 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙لا توجد ردود مضافه" ,  1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙لا توجد ردود مضافه" ,  1, "md")
 else
 for k,v in pairs(redod) do
-DevAbs:del(ALOMDA.."Abs:Add:AllRed"..v)
-DevAbs:del(ALOMDA.."Abs:Gif:AllRed"..v)
-DevAbs:del(ALOMDA.."Abs:Voice:AllRed"..v)
-DevAbs:del(ALOMDA.."Abs:Audio:AllRed"..v)
-DevAbs:del(ALOMDA.."Abs:Photo:AllRed"..v)
-DevAbs:del(ALOMDA.."Abs:Stecker:AllRed"..v)
-DevAbs:del(ALOMDA.."Abs:Video:AllRed"..v)
-DevAbs:del(ALOMDA.."Abs:File:AllRed"..v)
-DevAbs:del(ALOMDA.."Abs:Text:AllRed"..v)
-DevAbs:del(ALOMDA.."Abs:Sudo:AllRed")
+Deviven:del(ALOMDA.."iven:Add:AllRed"..v)
+Deviven:del(ALOMDA.."iven:Gif:AllRed"..v)
+Deviven:del(ALOMDA.."iven:Voice:AllRed"..v)
+Deviven:del(ALOMDA.."iven:Audio:AllRed"..v)
+Deviven:del(ALOMDA.."iven:Photo:AllRed"..v)
+Deviven:del(ALOMDA.."iven:Stecker:AllRed"..v)
+Deviven:del(ALOMDA.."iven:Video:AllRed"..v)
+Deviven:del(ALOMDA.."iven:File:AllRed"..v)
+Deviven:del(ALOMDA.."iven:Text:AllRed"..v)
+Deviven:del(ALOMDA.."iven:Sudo:AllRed")
 end
 ReplyStatus(msg,msg.sender_user_id_,"ReplyBy","⌁︙تم حذف ردود المطور")  
 return false
@@ -9042,47 +9042,47 @@ end
 --     Source ALOMDA     --
 if text and text == "تغيير اسم البوت" or text and text == "وضع اسم البوت" or text and text == "تغير اسم البوت" then
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل لي اسم البوت الان" ,  1, "md") 
-DevAbs:set(ALOMDA..'Abs:NameBot'..msg.sender_user_id_..'', 'msg')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل لي اسم البوت الان" ,  1, "md") 
+Deviven:set(ALOMDA..'iven:NameBot'..msg.sender_user_id_..'', 'msg')
 return false 
 end
 end
 if text and text == 'حذف اسم البوت' or text == 'مسح اسم البوت' then
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
-DevAbs:del(ALOMDA..'Abs:NameBot')
-local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..AbsRank(msg)..' \n⌁︙تم حذف اسم البوت'
-absmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
+Deviven:del(ALOMDA..'iven:NameBot')
+local ALOMDATEAM = '⌁︙اهلا عزيزي ↫ '..ivenRank(msg)..' \n⌁︙تم حذف اسم البوت'
+ivenmoned(msg.chat_id_, msg.sender_user_id_, msg.id_, ALOMDATEAM, 14, string.len(msg.sender_user_id_))
 end end 
 --     Source ALOMDA     --
 if text and text:match("^استعاده الاوامر$") and SecondSudo(msg) or text and text:match("^استعادة كلايش الاوامر$") and SecondSudo(msg) then
-HelpList ={'Abs:Help','Abs:Help1','Abs:Help2','Abs:Help3','Abs:Help4','Abs:Help5','Abs:Help6'}
+HelpList ={'iven:Help','iven:Help1','iven:Help2','iven:Help3','iven:Help4','iven:Help5','iven:Help6'}
 for i,Help in pairs(HelpList) do
-DevAbs:del(ALOMDA..Help) 
+Deviven:del(ALOMDA..Help) 
 end
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم استعادة الكلايش الاصليه" ,  1, "md") 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم استعادة الكلايش الاصليه" ,  1, "md") 
 end
 if text == "تعيين الاوامر" and SecondSudo(msg) or text == "تعيين امر الاوامر" and SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (الاوامر) الان " ,  1, "md")
-DevAbs:set(ALOMDA..'Abs:Help0'..msg.sender_user_id_, 'msg')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (الاوامر) الان " ,  1, "md")
+Deviven:set(ALOMDA..'iven:Help0'..msg.sender_user_id_, 'msg')
 return false end
 if text and text:match("^(.*)$") then
-local ALOMDATEAM =  DevAbs:get(ALOMDA..'Abs:Help0'..msg.sender_user_id_)
+local ALOMDATEAM =  Deviven:get(ALOMDA..'iven:Help0'..msg.sender_user_id_)
 if ALOMDATEAM == 'msg' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده " ,  1, "md")
-DevAbs:del(ALOMDA..'Abs:Help0'..msg.sender_user_id_)
-DevAbs:set(ALOMDA..'Abs:Help', text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, text , 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده " ,  1, "md")
+Deviven:del(ALOMDA..'iven:Help0'..msg.sender_user_id_)
+Deviven:set(ALOMDA..'iven:Help', text)
+Dev_iven(msg.chat_id_, msg.id_, 1, text , 1, 'md')
 return false end
 end
 if text == "الاوامر" or text == "اوامر" or text == "مساعده" then
 if not Admin(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر يخص الرتب الاعلى فقط\n⌁︙ارسل ↫ (م6) لعرض اوامر الاعضاء', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر يخص الرتب الاعلى فقط\n⌁︙ارسل ↫ (م6) لعرض اوامر الاعضاء', 1, 'md')
 else
-local Help = DevAbs:get(ALOMDA..'Abs:Help')
+local Help = Deviven:get(ALOMDA..'iven:Help')
 local text =  [[
 ⌁︙اهلا بك في قائمة الاوامر ↫ ⤈ 
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
@@ -9095,27 +9095,27 @@ local text =  [[
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 ⌁︙[Source Channel](https://t.me/src_web)
 ]] 
-Dev_Abs(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
 end
 end
 if text == "تعيين امر م1" and SecondSudo(msg) or text == "تعيين امر م١" and SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م1) الان " ,  1, "md")
-DevAbs:set(ALOMDA..'Abs:Help01'..msg.sender_user_id_, 'msg')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م1) الان " ,  1, "md")
+Deviven:set(ALOMDA..'iven:Help01'..msg.sender_user_id_, 'msg')
 return false end
 if text and text:match("^(.*)$") then
-local ALOMDATEAM =  DevAbs:get(ALOMDA..'Abs:Help01'..msg.sender_user_id_)
+local ALOMDATEAM =  Deviven:get(ALOMDA..'iven:Help01'..msg.sender_user_id_)
 if ALOMDATEAM == 'msg' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده " ,  1, "md")
-DevAbs:del(ALOMDA..'Abs:Help01'..msg.sender_user_id_)
-DevAbs:set(ALOMDA..'Abs:Help1', text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, text , 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده " ,  1, "md")
+Deviven:del(ALOMDA..'iven:Help01'..msg.sender_user_id_)
+Deviven:set(ALOMDA..'iven:Help1', text)
+Dev_iven(msg.chat_id_, msg.id_, 1, text , 1, 'md')
 return false end
 end
 if text == "م1" or text == "م١" or text == "اوامر1" or text == "اوامر١" then
 if not Admin(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر يخص الرتب الاعلى فقط\n⌁︙ارسل ↫ (م6) لعرض اوامر الاعضاء', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر يخص الرتب الاعلى فقط\n⌁︙ارسل ↫ (م6) لعرض اوامر الاعضاء', 1, 'md')
 else
-local Help = DevAbs:get(ALOMDA..'Abs:Help1')
+local Help = Deviven:get(ALOMDA..'iven:Help1')
 local text =  [[
 ⌁︙اوامر حماية المجموعه ↫ ⤈
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
@@ -9164,26 +9164,26 @@ local text =  [[
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 ⌁︙[Source Channel](https://t.me/src_web)
 ]]
-Dev_Abs(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
 end end
 if text == "تعيين امر م2" and SecondSudo(msg) or text == "تعيين امر م٢" and SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م2) الان " ,  1, "md")
-DevAbs:set(ALOMDA..'Abs:Help21'..msg.sender_user_id_, 'msg')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م2) الان " ,  1, "md")
+Deviven:set(ALOMDA..'iven:Help21'..msg.sender_user_id_, 'msg')
 return false end
 if text and text:match("^(.*)$") then
-local ALOMDATEAM =  DevAbs:get(ALOMDA..'Abs:Help21'..msg.sender_user_id_)
+local ALOMDATEAM =  Deviven:get(ALOMDA..'iven:Help21'..msg.sender_user_id_)
 if ALOMDATEAM == 'msg' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده " ,  1, "md")
-DevAbs:del(ALOMDA..'Abs:Help21'..msg.sender_user_id_)
-DevAbs:set(ALOMDA..'Abs:Help2', text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, text , 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده " ,  1, "md")
+Deviven:del(ALOMDA..'iven:Help21'..msg.sender_user_id_)
+Deviven:set(ALOMDA..'iven:Help2', text)
+Dev_iven(msg.chat_id_, msg.id_, 1, text , 1, 'md')
 return false end
 end
 if text == "م2" or text == "م٢" or text == "اوامر2" or text == "اوامر٢" then
 if not Admin(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر يخص الرتب الاعلى فقط\n⌁︙ارسل ↫ (م6) لعرض اوامر الاعضاء', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر يخص الرتب الاعلى فقط\n⌁︙ارسل ↫ (م6) لعرض اوامر الاعضاء', 1, 'md')
 else
-local Help = DevAbs:get(ALOMDA..'Abs:Help2')
+local Help = Deviven:get(ALOMDA..'iven:Help2')
 local text =  [[
 ⌁︙اوامر الادمنيه ↫ ⤈
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
@@ -9239,26 +9239,26 @@ local text =  [[
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 ⌁︙[Source Channel](https://t.me/src_web)
 ]]
-Dev_Abs(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
 end end
 if text == "تعيين امر م3" and SecondSudo(msg) or text == "تعيين امر م٣" and SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م3) الان " ,  1, "md")
-DevAbs:set(ALOMDA..'Abs:Help31'..msg.sender_user_id_, 'msg')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م3) الان " ,  1, "md")
+Deviven:set(ALOMDA..'iven:Help31'..msg.sender_user_id_, 'msg')
 return false end
 if text and text:match("^(.*)$") then
-local ALOMDATEAM =  DevAbs:get(ALOMDA..'Abs:Help31'..msg.sender_user_id_)
+local ALOMDATEAM =  Deviven:get(ALOMDA..'iven:Help31'..msg.sender_user_id_)
 if ALOMDATEAM == 'msg' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده " ,  1, "md")
-DevAbs:del(ALOMDA..'Abs:Help31'..msg.sender_user_id_)
-DevAbs:set(ALOMDA..'Abs:Help3', text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, text , 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده " ,  1, "md")
+Deviven:del(ALOMDA..'iven:Help31'..msg.sender_user_id_)
+Deviven:set(ALOMDA..'iven:Help3', text)
+Dev_iven(msg.chat_id_, msg.id_, 1, text , 1, 'md')
 return false end
 end
 if text == "م3" or text == "م٣" or text == "اوامر3" or text == "اوامر٣" then
 if not Admin(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر يخص الرتب الاعلى فقط\n⌁︙ارسل ↫ (م6) لعرض اوامر الاعضاء', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر يخص الرتب الاعلى فقط\n⌁︙ارسل ↫ (م6) لعرض اوامر الاعضاء', 1, 'md')
 else
-local Help = DevAbs:get(ALOMDA..'Abs:Help3')
+local Help = Deviven:get(ALOMDA..'iven:Help3')
 local text =  [[
 ⌁︙اوامر المدراء ↫ ⤈
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
@@ -9300,26 +9300,26 @@ local text =  [[
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 ⌁︙[Source Channel](https://t.me/src_web)
 ]]
-Dev_Abs(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
 end end
 if text == "تعيين امر م4" and SecondSudo(msg) or text == "تعيين امر م٤" and SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م4) الان " ,  1, "md")
-DevAbs:set(ALOMDA..'Abs:Help41'..msg.sender_user_id_, 'msg')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م4) الان " ,  1, "md")
+Deviven:set(ALOMDA..'iven:Help41'..msg.sender_user_id_, 'msg')
 return false end
 if text and text:match("^(.*)$") then
-local ALOMDATEAM =  DevAbs:get(ALOMDA..'Abs:Help41'..msg.sender_user_id_)
+local ALOMDATEAM =  Deviven:get(ALOMDA..'iven:Help41'..msg.sender_user_id_)
 if ALOMDATEAM == 'msg' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده" ,  1, "md")
-DevAbs:del(ALOMDA..'Abs:Help41'..msg.sender_user_id_)
-DevAbs:set(ALOMDA..'Abs:Help4', text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, text , 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده" ,  1, "md")
+Deviven:del(ALOMDA..'iven:Help41'..msg.sender_user_id_)
+Deviven:set(ALOMDA..'iven:Help4', text)
+Dev_iven(msg.chat_id_, msg.id_, 1, text , 1, 'md')
 return false end
 end
 if text == "م٤" or text == "م4" or text == "اوامر4" or text == "اوامر٤" then
 if not Admin(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر يخص الرتب الاعلى فقط\n⌁︙ارسل ↫ (م6) لعرض اوامر الاعضاء', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر يخص الرتب الاعلى فقط\n⌁︙ارسل ↫ (م6) لعرض اوامر الاعضاء', 1, 'md')
 else
-local Help = DevAbs:get(ALOMDA..'Abs:Help4')
+local Help = Deviven:get(ALOMDA..'iven:Help4')
 local text =  [[
 ⌁︙اوامر المنشئين ↫ ⤈
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
@@ -9357,26 +9357,26 @@ local text =  [[
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 ⌁︙[Source Channel](https://t.me/src_web)
 ]]
-Dev_Abs(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
 end end
 if text == "تعيين امر م5" and SecondSudo(msg) or text == "تعيين امر م٥" and SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م5) الان " ,  1, "md")
-DevAbs:set(ALOMDA..'Abs:Help51'..msg.sender_user_id_, 'msg')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م5) الان " ,  1, "md")
+Deviven:set(ALOMDA..'iven:Help51'..msg.sender_user_id_, 'msg')
 return false end
 if text and text:match("^(.*)$") then
-local ALOMDATEAM =  DevAbs:get(ALOMDA..'Abs:Help51'..msg.sender_user_id_)
+local ALOMDATEAM =  Deviven:get(ALOMDA..'iven:Help51'..msg.sender_user_id_)
 if ALOMDATEAM == 'msg' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده " ,  1, "md")
-DevAbs:del(ALOMDA..'Abs:Help51'..msg.sender_user_id_)
-DevAbs:set(ALOMDA..'Abs:Help5', text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, text , 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده " ,  1, "md")
+Deviven:del(ALOMDA..'iven:Help51'..msg.sender_user_id_)
+Deviven:set(ALOMDA..'iven:Help5', text)
+Dev_iven(msg.chat_id_, msg.id_, 1, text , 1, 'md')
 return false end
 end
 if text == "م٥" or text == "م5" or text == "اوامر5" or text == "اوامر٥" then
 if not SudoBot(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر للمطورين فقط', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙هذا الامر للمطورين فقط', 1, 'md')
 else
-local Help = DevAbs:get(ALOMDA..'Abs:Help5')
+local Help = Deviven:get(ALOMDA..'iven:Help5')
 local text =  [[
 ⌁︙اوامر المطورين ↫ ⤈
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
@@ -9441,23 +9441,23 @@ local text =  [[
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 ⌁︙[Source Channel](https://t.me/src_web)
 ]]
-Dev_Abs(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
 end end
 if text == "تعيين امر م6" and SecondSudo(msg) or text == "تعيين امر م٦" and SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م6) الان " ,  1, "md")
-DevAbs:set(ALOMDA..'Abs:Help61'..msg.sender_user_id_, 'msg')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة (م6) الان " ,  1, "md")
+Deviven:set(ALOMDA..'iven:Help61'..msg.sender_user_id_, 'msg')
 return false end
 if text and text:match("^(.*)$") then
-local ALOMDATEAM =  DevAbs:get(ALOMDA..'Abs:Help61'..msg.sender_user_id_)
+local ALOMDATEAM =  Deviven:get(ALOMDA..'iven:Help61'..msg.sender_user_id_)
 if ALOMDATEAM == 'msg' then
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده" ,  1, "md")
-DevAbs:del(ALOMDA..'Abs:Help61'..msg.sender_user_id_)
-DevAbs:set(ALOMDA..'Abs:Help6', text)
-Dev_Abs(msg.chat_id_, msg.id_, 1, text , 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ الكليشه الجديده" ,  1, "md")
+Deviven:del(ALOMDA..'iven:Help61'..msg.sender_user_id_)
+Deviven:set(ALOMDA..'iven:Help6', text)
+Dev_iven(msg.chat_id_, msg.id_, 1, text , 1, 'md')
 return false end
 end
 if text == "م٦" or text == "م6" or text == "اوامر6" or text == "اوامر٦" then
-local Help = DevAbs:get(ALOMDA..'Abs:Help6')
+local Help = Deviven:get(ALOMDA..'iven:Help6')
 local text =  [[
 ⌁︙اوامر الاعضاء ↫ ⤈
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
@@ -9487,24 +9487,24 @@ local text =  [[
 ┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉
 ⌁︙[Source Channel](https://t.me/src_web)
 ]]
-Dev_Abs(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, (Help or text), 1, 'md')
 end
 --     Source ALOMDA     --
 if SecondSudo(msg) then
 if text == "تحديث السورس" or text == "تحديث سورس" then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙جاري تحديث سورس ديف العمده', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙جاري تحديث سورس ديف العمده', 1, 'md') 
 os.execute('rm -rf ALOMDA.lua') 
 os.execute('wget https://raw.githubusercontent.com/TeamAlomdA/ALOMDA/master/ALOMDA.lua') 
 dofile('ALOMDA.lua') 
 io.popen("rm -rf ../.telegram-cli/*")
 print("\27[31;47m\n          ( تم تحديث السورس )          \n\27[0;34;49m\n") 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم التحديث الى الاصدار الجديد', 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم التحديث الى الاصدار الجديد', 1, 'md') 
 end
 if text == 'تحديث' or text == 'تحديث البوت' or text == '↫ تحديث ⌁' then  
 dofile('ALOMDA.lua') 
 io.popen("rm -rf ../.telegram-cli/*")
 print("\27[31;47m\n        ( تم تحديث ملفات البوت )        \n\27[0;34;49m\n") 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم تحديث ملفات البوت", 1, "md")
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم تحديث ملفات البوت", 1, "md")
 end 
 if text == 'الملفات' then
 Files = '\n⌁︙الملفات المفعله في البوت ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n'
@@ -9580,113 +9580,113 @@ end
 end 
 --     Source ALOMDA     --
 if text and (text == 'حذف معلومات الترحيب' or text == 'مسح معلومات الترحيب') and SecondSudo(msg) then    
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف معلومات الترحيب', 1, 'md')   
-DevAbs:del(ALOMDA..'Abs:Text:BotWelcome')
-DevAbs:del(ALOMDA..'Abs:Photo:BotWelcome')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم حذف معلومات الترحيب', 1, 'md')   
+Deviven:del(ALOMDA..'iven:Text:BotWelcome')
+Deviven:del(ALOMDA..'iven:Photo:BotWelcome')
 return false
 end 
 if text and (text == 'تفعيل ترحيب البوت' or text == 'تفعيل معلومات الترحيب') and SecondSudo(msg) then    
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم تفعيل الترحيب عند اضافة البوت في المجموعه', 1, 'md')   
-DevAbs:del(ALOMDA..'Abs:Lock:BotWelcome')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم تفعيل الترحيب عند اضافة البوت في المجموعه', 1, 'md')   
+Deviven:del(ALOMDA..'iven:Lock:BotWelcome')
 return false
 end 
 if text and (text == 'تعطيل ترحيب البوت' or text == 'تعطيل معلومات الترحيب') and SecondSudo(msg) then    
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم تعطيل الترحيب عند اضافة البوت في المجموعه', 1, 'md')   
-DevAbs:set(ALOMDA..'Abs:Lock:BotWelcome',true)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم تعطيل الترحيب عند اضافة البوت في المجموعه', 1, 'md')   
+Deviven:set(ALOMDA..'iven:Lock:BotWelcome',true)
 return false
 end 
 if text and (text == 'تغير معلومات الترحيب' or text == 'تغيير معلومات الترحيب' or text == '↫ تغير معلومات الترحيب ⌁') and SecondSudo(msg) then    
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي نص الترحيب', 1, 'md') 
-DevAbs:del(ALOMDA..'Abs:Text:BotWelcome')
-DevAbs:del(ALOMDA..'Abs:Photo:BotWelcome')
-DevAbs:set(ALOMDA.."Abs:Set:BotWelcome"..msg.sender_user_id_,"Text") 
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙ارسل لي نص الترحيب', 1, 'md') 
+Deviven:del(ALOMDA..'iven:Text:BotWelcome')
+Deviven:del(ALOMDA..'iven:Photo:BotWelcome')
+Deviven:set(ALOMDA.."iven:Set:BotWelcome"..msg.sender_user_id_,"Text") 
 return false
 end 
-if text and DevAbs:get(ALOMDA.."Abs:Set:BotWelcome"..msg.sender_user_id_) == 'Text' then 
+if text and Deviven:get(ALOMDA.."iven:Set:BotWelcome"..msg.sender_user_id_) == 'Text' then 
 if text and text:match("^الغاء$") then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء الامر", 1, "md") 
-DevAbs:del(ALOMDA.."Abs:Set:BotWelcome"..msg.sender_user_id_)   
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء الامر", 1, "md") 
+Deviven:del(ALOMDA.."iven:Set:BotWelcome"..msg.sender_user_id_)   
 return false
 end 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ النص ارسل لي صورة الترحيب\n⌁︙ارسل ↫ الغاء لحفظ النص فقط", 1, 'md')   
-DevAbs:set(ALOMDA.."Abs:Text:BotWelcome",text) 
-DevAbs:set(ALOMDA.."Abs:Set:BotWelcome"..msg.sender_user_id_,"Photo") 
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ النص ارسل لي صورة الترحيب\n⌁︙ارسل ↫ الغاء لحفظ النص فقط", 1, 'md')   
+Deviven:set(ALOMDA.."iven:Text:BotWelcome",text) 
+Deviven:set(ALOMDA.."iven:Set:BotWelcome"..msg.sender_user_id_,"Photo") 
 return false 
 end 
-if DevAbs:get(ALOMDA.."Abs:Set:BotWelcome"..msg.sender_user_id_) == 'Photo' then 
+if Deviven:get(ALOMDA.."iven:Set:BotWelcome"..msg.sender_user_id_) == 'Photo' then 
 if text and text:match("^الغاء$") then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ النص والغاء حفظ صورة الترحيب", 1, "md") 
-DevAbs:del(ALOMDA.."Abs:Set:BotWelcome"..msg.sender_user_id_)    
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ النص والغاء حفظ صورة الترحيب", 1, "md") 
+Deviven:del(ALOMDA.."iven:Set:BotWelcome"..msg.sender_user_id_)    
 return false
 end 
 if msg.content_.photo_ and msg.content_.photo_.sizes_[1] then   
-DevAbs:set(ALOMDA.."Abs:Photo:BotWelcome",msg.content_.photo_.sizes_[1].photo_.persistent_id_)
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ النص وصورة الترحيب", 1, 'md')   
-DevAbs:del(ALOMDA.."Abs:Set:BotWelcome"..msg.sender_user_id_)   
+Deviven:set(ALOMDA.."iven:Photo:BotWelcome",msg.content_.photo_.sizes_[1].photo_.persistent_id_)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حفظ النص وصورة الترحيب", 1, 'md')   
+Deviven:del(ALOMDA.."iven:Set:BotWelcome"..msg.sender_user_id_)   
 end
 return false
 end
 --     Source ALOMDA     --
 if text and text:match("^ضع كليشه المطور$") or text and text:match("^وضع كليشه المطور$") or text and text:match("^تغيير كليشه المطور$") then
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة المطور الان ", 1, "md")
-DevAbs:setex(ALOMDA.."Abs:DevText" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 300, true)
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙ارسل كليشة المطور الان ", 1, "md")
+Deviven:setex(ALOMDA.."iven:DevText" .. msg.chat_id_ .. ":" .. msg.sender_user_id_, 300, true)
 end end
 if text and text:match("^مسح كليشه المطور$") or text and text:match("^حذف كليشه المطور$") then
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف كليشة المطور", 1, "md")
-DevAbs:del(ALOMDA.."DevText")
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم حذف كليشة المطور", 1, "md")
+Deviven:del(ALOMDA.."DevText")
 end end
 --     Source ALOMDA     --
-if DevAbs:get(ALOMDA.."textch:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_) then 
+if Deviven:get(ALOMDA.."textch:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_) then 
 if text and text:match("^الغاء$") then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء الامر", 1, "md") 
-DevAbs:del(ALOMDA.."textch:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
+Dev_iven(msg.chat_id_, msg.id_, 1, "⌁︙تم الغاء الامر", 1, "md") 
+Deviven:del(ALOMDA.."textch:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
 return false  end 
-DevAbs:del(ALOMDA.."textch:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
+Deviven:del(ALOMDA.."textch:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_)  
 local texxt = string.match(text, "(.*)") 
-DevAbs:set(ALOMDA..'Abs:textch:user',texxt)
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙تم تغيير كليشة الاشتراك الاجباري', 1, 'md')
+Deviven:set(ALOMDA..'iven:textch:user',texxt)
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙تم تغيير كليشة الاشتراك الاجباري', 1, 'md')
 end
 if text and text:match("^تغير كليشه الاشتراك$") and SecondSudo(msg) or text and text:match("^تغيير كليشه الاشتراك$") and SecondSudo(msg) then  
-DevAbs:setex(ALOMDA.."textch:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_, 300, true)  
+Deviven:setex(ALOMDA.."textch:user" .. msg.chat_id_ .. "" .. msg.sender_user_id_, 300, true)  
 local text = '⌁︙حسنا ارسل كليشة الاشتراك الجديده'  
-Dev_Abs(msg.chat_id_, msg.id_, 1,text, 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1,text, 1, 'md') 
 end
 if text == "حذف كليشه الاشتراك الاجباري" or text == "حذف كليشه الاشتراك" then  
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
-DevAbs:del(ALOMDA..'Abs:textch:user')
+Deviven:del(ALOMDA..'iven:textch:user')
 textt = "⌁︙تم حذف كليشة الاشتراك الاجباري"
-Dev_Abs(msg.chat_id_, msg.id_, 1,textt, 1, 'md') 
+Dev_iven(msg.chat_id_, msg.id_, 1,textt, 1, 'md') 
 end end
 if text == 'كليشه الاشتراك' or text == 'جلب كليشه الاشتراك' then
 if not SecondSudo(msg) then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙للمطور الاساسي فقط ', 1, 'md')
 else
-local chtext = DevAbs:get(ALOMDA.."Abs:textch:user")
+local chtext = Deviven:get(ALOMDA.."iven:textch:user")
 if chtext then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙كليشة الاشتراك ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n['..chtext..']', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙كليشة الاشتراك ↫ ⤈ \n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n['..chtext..']', 1, 'md')
 else
-local DevAbs6 = DevAbs:get(ALOMDA.."DevAbs3")
-if DevAbs6 then
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙عليك الاشتراك في قناة البوت \n⌁︙قناة البوت ↫ '..DevAbs6, 1, "html")
+local Deviven6 = Deviven:get(ALOMDA.."Deviven3")
+if Deviven6 then
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙عليك الاشتراك في قناة البوت \n⌁︙قناة البوت ↫ '..Deviven6, 1, "html")
 else
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙لم يتم تعيين قناة الاشتراك الاجباري \n⌁︙ارسل ↫ تعيين قناة الاشتراك للتعيين ', 1, 'md')
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙لم يتم تعيين قناة الاشتراك الاجباري \n⌁︙ارسل ↫ تعيين قناة الاشتراك للتعيين ', 1, 'md')
 end end end end
 --     Source ALOMDA     --
 if text == 'القناة' or text == 'قناة السورس' or text == 'قناه السورس' or text == 'قنات السورس' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, '⌁︙Channel ↬ @src_web', 1, 'html')    
+Dev_iven(msg.chat_id_, msg.id_, 1, '⌁︙Channel ↬ @src_web', 1, 'html')    
 end 
 --     Source ALOMDA     --
 if Sudo(msg) then 
 if text == 'معلومات السيرفر' or text == 'السيرفر' then 
-Dev_Abs(msg.chat_id_, msg.id_, 1, io.popen([[
+Dev_iven(msg.chat_id_, msg.id_, 1, io.popen([[
 LinuxVersion=`lsb_release -ds`
 MemoryUsage=`free -m | awk 'NR==2{printf "%s/%sMB {%.2f%%}\n", $3,$2,$3*100/$2 }'`
 HardDisk=`df -lh | awk '{if ($6 == "/") { print $3"/"$2" ~ {"$5"}" }}'`
@@ -9707,10 +9707,10 @@ ALOMDAFiles(msg)
 elseif (data.ID == "UpdateMessageEdited") then
 local msg = data
 tdcli_function ({ID = "GetMessage",chat_id_ = msg.chat_id_,message_id_ = tonumber(msg.message_id_)},function(extra, result, success)
-DevAbs:incr(ALOMDA..'Abs:EditMsg'..result.chat_id_..result.sender_user_id_)
+Deviven:incr(ALOMDA..'iven:EditMsg'..result.chat_id_..result.sender_user_id_)
 local text = result.content_.text_ or result.content_.caption_
 local Text = result.content_.text_
-if DevAbs:get(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_) and not Text and not BasicConstructor(result) then
+if Deviven:get(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_) and not Text and not BasicConstructor(result) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_})
 Media = 'الميديا'
 if result.content_.ID == "MessagePhoto" then Media = 'الصوره'
@@ -9721,10 +9721,10 @@ elseif result.content_.ID == "MessageVideo" then Media = 'الفيديو'
 elseif result.content_.ID == "MessageAnimation" then Media = 'المتحركه'
 end
 tdcli_function ({ID = "GetUser",user_id_ = result.sender_user_id_},function(arg,dp) 
-local absname = '⌁︙العضو ↫ ['..CatchName(dp.first_name_,15)..'](tg://user?id='..dp.id_..')'
-local absid = '⌁︙ايديه ↫ `'..dp.id_..'`'
-local abstext = '⌁︙قام بالتعديل على '..Media
-local abstxt = '┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙تعالو يامشرفين اكو مخرب'
+local ivenname = '⌁︙العضو ↫ ['..CatchName(dp.first_name_,15)..'](tg://user?id='..dp.id_..')'
+local ivenid = '⌁︙ايديه ↫ `'..dp.id_..'`'
+local iventext = '⌁︙قام بالتعديل على '..Media
+local iventxt = '┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n⌁︙تعالو يامشرفين اكو مخرب'
 tdcli_function ({ID = "GetChannelMembers",channel_id_ = msg.chat_id_:gsub("-100",""),filter_ = {ID = "ChannelMembersAdministrators"},offset_ = 0,limit_ = 100},function(arg,abbas) 
 local admins = abbas.members_  
 text = '\n┉ ≈ ┉ ≈ ┉ ≈ ┉ ≈ ┉\n'
@@ -9734,7 +9734,7 @@ if data.first_name_ ~= false then
 text = text.."~ [@"..data.username_.."]\n"
 end
 if #admins == i then 
-SendText(msg.chat_id_, absname..'\n'..absid..'\n'..abstext..text..abstxt,0,'md') 
+SendText(msg.chat_id_, ivenname..'\n'..ivenid..'\n'..iventext..text..iventxt,0,'md') 
 end
 end,nil)
 end
@@ -9744,7 +9744,7 @@ end
 if not VipMem(result) then
 Filters(result, text)
 if text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Mm][Ee]") or text:match("[Tt][Ll][Gg][Rr][Mm].[Mm][Ee]") or text:match("[Tt].[Mm][Ee]") or text:match("[Tt][Ee][Ll][Ee][Gg][Rr][Aa][Mm].[Dd][Oo][Gg]") or text:match("#") or text:match("@") or text:match("[Hh][Tt][Tt][Pp][Ss]://") or text:match("[Hh][Tt][Tt][Pp]://") or text:match(".[Cc][Oo][Mm]") or text:match(".[Oo][Rr][Gg]") or text:match("[Ww][Ww][Ww].") or text:match(".[Xx][Yy][Zz]") then
-if DevAbs:get(ALOMDA..'Abs:Lock:EditMsgs'..msg.chat_id_) then
+if Deviven:get(ALOMDA..'iven:Lock:EditMsgs'..msg.chat_id_) then
 DeleteMessage(msg.chat_id_,{[0] = data.message_id_})
 end end end 
 end,nil)
@@ -9752,18 +9752,18 @@ end,nil)
 elseif (data.ID == "UpdateMessageSendSucceeded") then
 local msg = data.message_
 local text = msg.content_.text_
-local GetMsgPin = DevAbs:get(ALOMDA..'Abs:PinnedMsgs'..msg.chat_id_)
+local GetMsgPin = Deviven:get(ALOMDA..'iven:PinnedMsgs'..msg.chat_id_)
 if GetMsgPin ~= nil then
 if text == GetMsgPin then
-tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub('-100',''),message_id_ = msg.id_,disable_notification_ = 0},function(arg,dp) if dp.ID == 'Ok' then;DevAbs:del(ALOMDA..'Abs:PinnedMsgs'..msg.chat_id_);end;end,nil)   
+tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub('-100',''),message_id_ = msg.id_,disable_notification_ = 0},function(arg,dp) if dp.ID == 'Ok' then;Deviven:del(ALOMDA..'iven:PinnedMsgs'..msg.chat_id_);end;end,nil)   
 elseif (msg.content_.sticker_) then 
 if GetMsgPin == msg.content_.sticker_.sticker_.persistent_id_ then
-tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub('-100',''),message_id_ = msg.id_,disable_notification_ = 0},function(arg,dp) DevAbs:del(ALOMDA..'Abs:PinnedMsgs'..msg.chat_id_) end,nil)   
+tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub('-100',''),message_id_ = msg.id_,disable_notification_ = 0},function(arg,dp) Deviven:del(ALOMDA..'iven:PinnedMsgs'..msg.chat_id_) end,nil)   
 end
 end
 if (msg.content_.animation_) then 
 if msg.content_.animation_.animation_.persistent_id_ == GetMsgPin then
-tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub('-100',''),message_id_ = msg.id_,disable_notification_ = 0},function(arg,dp) DevAbs:del(ALOMDA..'Abs:PinnedMsgs'..msg.chat_id_) end,nil)   
+tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub('-100',''),message_id_ = msg.id_,disable_notification_ = 0},function(arg,dp) Deviven:del(ALOMDA..'iven:PinnedMsgs'..msg.chat_id_) end,nil)   
 end
 end
 if (msg.content_.photo_) then
@@ -9780,33 +9780,33 @@ if msg.content_.photo_.sizes_[3] then
 id_photo = msg.content_.photo_.sizes_[3].photo_.persistent_id_
 end
 if id_photo == GetMsgPin then
-tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub('-100',''),message_id_ = msg.id_,disable_notification_ = 0},function(arg,dp) DevAbs:del(ALOMDA..'Abs:PinnedMsgs'..msg.chat_id_) end,nil)   
+tdcli_function ({ID = "PinChannelMessage",channel_id_ = msg.chat_id_:gsub('-100',''),message_id_ = msg.id_,disable_notification_ = 0},function(arg,dp) Deviven:del(ALOMDA..'iven:PinnedMsgs'..msg.chat_id_) end,nil)   
 end end end
 --     Source ALOMDA     --
 elseif (data.ID == "UpdateOption" and data.name_ == "my_id") then
 print('\27[30;32mجاري تنظيف المجموعات الوهميه يرجى الانتظار\n\27[1;37m')
-local PvList = DevAbs:smembers(ALOMDA..'Abs:Users')  
+local PvList = Deviven:smembers(ALOMDA..'iven:Users')  
 for k,v in pairs(PvList) do 
 tdcli_function({ID='GetChat',chat_id_ = v},function(arg,data) end,nil) 
 end 
-local GpList = DevAbs:smembers(ALOMDA..'Abs:Groups') 
+local GpList = Deviven:smembers(ALOMDA..'iven:Groups') 
 for k,v in pairs(GpList) do 
 tdcli_function({ID='GetChat',chat_id_ = v},function(arg,data)
 if data and data.type_ and data.type_.channel_ and data.type_.channel_.status_ and data.type_.channel_.status_.ID == "ChatMemberStatusMember" then
 tdcli_function({ID = "ChangeChatMemberStatus",chat_id_=v,user_id_=ALOMDA,status_={ID = "ChatMemberStatusLeft"},},function(e,g) end, nil) 
-DevAbs:srem(ALOMDA..'Abs:Groups',v)  
+Deviven:srem(ALOMDA..'iven:Groups',v)  
 end
 if data and data.type_ and data.type_.channel_ and data.type_.channel_.status_ and data.type_.channel_.status_.ID == "ChatMemberStatusLeft" then
-DevAbs:srem(ALOMDA..'Abs:Groups',v)  
+Deviven:srem(ALOMDA..'iven:Groups',v)  
 end
 if data and data.type_ and data.type_.channel_ and data.type_.channel_.status_ and data.type_.channel_.status_.ID == "ChatMemberStatusKicked" then
-DevAbs:srem(ALOMDA..'Abs:Groups',v)  
+Deviven:srem(ALOMDA..'iven:Groups',v)  
 end
 if data and data.code_ and data.code_ == 400 then
-DevAbs:srem(ALOMDA..'Abs:Groups',v)  
+Deviven:srem(ALOMDA..'iven:Groups',v)  
 end
 if data and data.type_ and data.type_.channel_ and data.type_.channel_.status_ and data.type_.channel_.status_.ID == "ChatMemberStatusEditor" then
-DevAbs:sadd(ALOMDA..'Abs:Groups',v)  
+Deviven:sadd(ALOMDA..'iven:Groups',v)  
 end end,nil) end
 end
 --     Source ALOMDA     --
